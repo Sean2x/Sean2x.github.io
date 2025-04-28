@@ -31,7 +31,7 @@
 
   <!-- Hero Section -->
   <section class="text-center py-16">
-    <h1 class="text-4xl font-bold mb-4">Caden Kraft</h1>
+    <h1 class="text-4xl font-bold mb-4">Sean Lirazan</h1>
     <h2 class="text-2xl text-gray-600 mb-6">Mechanical Engineer</h2>
     <p class="max-w-2xl mx-auto text-gray-700">
       I am currently a mechanical engineering undergraduate at Iowa State University. I enjoy working on personal projects involving motors, robotics, and contributing to the PRISUM Solar Car Club.
