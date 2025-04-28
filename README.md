@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Caden Kraft</title>
+  <title>Sean Lirazan</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -17,7 +17,7 @@
   <!-- Navbar -->
   <nav class="bg-white shadow-md">
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-      <div class="text-2xl font-bold">Caden Kraft</div>
+      <div class="text-2xl font-bold">Sean Lirazan</div>
       <div class="flex space-x-6">
         <a href="#" class="hover:underline">Home</a>
         <a href="#" class="hover:underline">Posts</a>
