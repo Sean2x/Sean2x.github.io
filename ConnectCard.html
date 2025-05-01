@@ -23,9 +23,17 @@
                             900: '#30415b',
                         },
                         dark: {
-                            900: '#0a0a0a',
-                            800: '#121212',
-                            700: '#1a1a1a',
+                            950: '#050505',
+                            900: '#080808',
+                            800: '#0e0e0e',
+                            700: '#141414',
+                        },
+                        purple: {
+                            900: '#3a0ca3',
+                            800: '#480ca8',
+                            700: '#560bad',
+                            600: '#7209b7',
+                            500: '#b5179e',
                         }
                     },
                     fontFamily: {
@@ -48,46 +56,78 @@
     </script>
     <style>
         body {
-            @apply bg-dark-900 text-metal-200 font-sans antialiased;
+            @apply bg-dark-950 text-metal-200 font-sans antialiased;
             background-image: 
-                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.03) 0%, transparent 50%),
-                linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.9));
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.02) 0%, transparent 50%),
+                linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.95));
             min-height: 100vh;
             overflow-x: hidden;
         }
 
         .metal-card {
-            background: rgba(24, 24, 27, 0.6);
+            background: rgba(14, 14, 14, 0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 1px rgba(255, 255, 255, 0.05);
         }
 
         .social-card {
-            background: linear-gradient(135deg, rgba(48, 65, 91, 0.3) 0%, rgba(24, 24, 27, 0.6) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: linear-gradient(135deg, rgba(30, 30, 33, 0.9) 0%, rgba(14, 14, 16, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .social-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 0.75rem;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(100, 9, 183, 1), rgba(200, 23, 158, 1));
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
 
         .social-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .contact-btn {
-            background: linear-gradient(135deg, rgba(144, 153, 167, 0.2) 0%, rgba(72, 87, 110, 0.4) 100%);
+            background: linear-gradient(135deg, rgba(100, 9, 183, 0.3), rgba(200, 23, 158, 0.3));
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .contact-btn:hover::before {
+            left: 100%;
         }
 
         .contact-btn:hover {
-            background: linear-gradient(135deg, rgba(144, 153, 167, 0.3) 0%, rgba(72, 87, 110, 0.5) 100%);
+            background: linear-gradient(135deg, rgba(114, 9, 183, 0.3), rgba(181, 23, 158, 0.4));
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(114, 9, 183, 0.2);
         }
 
         .divider {
@@ -121,17 +161,17 @@
                 
                 <!-- Name -->
                 <h1 class="text-3xl md:text-4xl font-bold text-center text-metal-100 mb-2 tracking-tight">
-                    ALEXANDER KANE
+                    Sean Lirazan
                 </h1>
                 
                 <!-- Title -->
                 <p class="text-metal-400 text-center mb-6 font-mono text-sm tracking-wider">
-                    DIGITAL PRODUCT DESIGNER & DEVELOPER
+                    Mechanical Engineer
                 </p>
                 
                 <!-- Tagline -->
                 <p class="text-metal-300 text-center text-sm mb-8 italic">
-                    "Crafting intuitive experiences at the intersection of design and technology"
+                    "You don’t need a cape. Just a wrench, a brain, and a reason."
                 </p>
                 
                 <!-- Contact Button -->
@@ -149,39 +189,52 @@
                 </h2>
                 
                 <div class="space-y-3">
-                    <!-- Twitter -->
-                    <a href="https://twitter.com/yourhandle" target="_blank" class="social-card flex items-center p-4 rounded-xl">
-                        <div class="w-8 h-8 rounded-full bg-metal-800 flex items-center justify-center mr-4">
-                            <i class="fab fa-twitter text-metal-300"></i>
-                        </div>
-                        <div>
-                            <p class="text-metal-400 text-xs font-mono">@alexkane_design</p>
-                        </div>
-                        <div class="ml-auto">
-                            <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
-                        </div>
-                    </a>
-                    
                     <!-- LinkedIn -->
-                    <a href="https://linkedin.com/in/yourhandle" target="_blank" class="social-card flex items-center p-4 rounded-xl">
+                    <a href="https://www.linkedin.com/in/seanlirazan/" target="_blank" class="social-card flex items-center p-4 rounded-xl">
                         <div class="w-8 h-8 rounded-full bg-metal-800 flex items-center justify-center mr-4">
                             <i class="fab fa-linkedin-in text-metal-300"></i>
                         </div>
                         <div>
-                            <p class="text-metal-400 text-xs font-mono">in/alexanderkane</p>
+                            <p class="text-metal-400 text-xs font-mono">in/seanlirazan</p>
                         </div>
                         <div class="ml-auto">
                             <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
                         </div>
                     </a>
                     
-                    <!-- Dribbble -->
-                    <a href="https://dribbble.com/yourhandle" target="_blank" class="social-card flex items-center p-4 rounded-xl">
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/sirpent12_" target="_blank" class="social-card flex items-center p-4 rounded-xl">
                         <div class="w-8 h-8 rounded-full bg-metal-800 flex items-center justify-center mr-4">
-                            <i class="fab fa-dribbble text-metal-300"></i>
+                            <i class="fab fa-instagram text-metal-300"></i>
                         </div>
                         <div>
-                            <p class="text-metal-400 text-xs font-mono">dribbble.com/alexkane</p>
+                            <p class="text-metal-400 text-xs font-mono">@Sirpent12_</p>
+                        </div>
+                        <div class="ml-auto">
+                            <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
+                        </div>
+                    </a>
+
+                    <!-- Snapchat -->
+                    <a href="snapchat.com/add/seanlirazan" target="_blank" class="social-card flex items-center p-4 rounded-xl">
+                        <div class="w-8 h-8 rounded-full bg-metal-800 flex items-center justify-center mr-4">
+                            <i class="fab fa-snapchat text-metal-300"></i>
+                        </div>
+                        <div>
+                            <p class="text-metal-400 text-xs font-mono">Add me on Snapchat!</p>
+                        </div>
+                        <div class="ml-auto">
+                            <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- Youtube -->
+                    <a href="https://www.youtube.com" target="_blank" class="social-card flex items-center p-4 rounded-xl">
+                        <div class="w-8 h-8 rounded-full bg-metal-800 flex items-center justify-center mr-4">
+                            <i class="fab fa-youtube text-metal-300"></i>
+                        </div>
+                        <div>
+                            <p class="text-metal-400 text-xs font-mono">Youtube.com/@Engineer</p>
                         </div>
                         <div class="ml-auto">
                             <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
@@ -189,17 +242,21 @@
                     </a>
                     
                     <!-- GitHub -->
-                    <a href="index.html" target="_blank" class="social-card flex items-center p-4 rounded-xl">
+                    <a href="https://github.com/Sean2x" target="_blank" class="social-card flex items-center p-4 rounded-xl">
                         <div class="w-8 h-8 rounded-full bg-metal-800 flex items-center justify-center mr-4">
                             <i class="fab fa-github text-metal-300"></i>
                         </div>
                         <div>
-                            <p class="text-metal-400 text-xs font-mono">github.com/alexkane</p>
+                            <p class="text-metal-400 text-xs font-mono">Github.com/Sean2x</p>
                         </div>
                         <div class="ml-auto">
                             <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
                         </div>
                     </a>
+
+                     
+
+
                 </div>
             </div>
             
@@ -211,13 +268,13 @@
                 
                 <form class="space-y-4">
                     <div>
-                        <input type="text" placeholder="Your Name" class="w-full bg-metal-900/50 border border-metal-800 rounded-lg px-4 py-3 text-metal-200 placeholder-metal-600 focus:outline-none focus:ring-1 focus:ring-metal-600 focus:border-metal-600 text-sm">
+                        <input type="text" placeholder="Your Name" class="w-full bg-metal-900/50 border border-metal-800 rounded-lg px-4 py-3 text-metal-200 placeholder-metal-600 focus:outline-none focus:ring-1 focus:ring-purple-600 focus:border-purple-600 text-sm">
                     </div>
                     <div>
-                        <input type="email" placeholder="Your Email" class="w-full bg-metal-900/50 border border-metal-800 rounded-lg px-4 py-3 text-metal-200 placeholder-metal-600 focus:outline-none focus:ring-1 focus:ring-metal-600 focus:border-metal-600 text-sm">
+                        <input type="email" placeholder="Your Email" class="w-full bg-metal-900/50 border border-metal-800 rounded-lg px-4 py-3 text-metal-200 placeholder-metal-600 focus:outline-none focus:ring-1 focus:ring-purple-600 focus:border-purple-600 text-sm">
                     </div>
                     <div>
-                        <textarea placeholder="Your Message" rows="4" class="w-full bg-metal-900/50 border border-metal-800 rounded-lg px-4 py-3 text-metal-200 placeholder-metal-600 focus:outline-none focus:ring-1 focus:ring-metal-600 focus:border-metal-600 text-sm"></textarea>
+                        <textarea placeholder="Your Message" rows="4" class="w-full bg-metal-900/50 border border-metal-800 rounded-lg px-4 py-3 text-metal-200 placeholder-metal-600 focus:outline-none focus:ring-1 focus:ring-purple-600 focus:border-purple-600 text-sm"></textarea>
                     </div>
                     <button type="submit" class="w-full contact-btn rounded-lg px-4 py-3 text-metal-100 text-sm font-medium">
                         SEND MESSAGE
