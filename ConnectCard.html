@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Business Card</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        metal: {
+                            100: '#f0f1f3',
+                            200: '#d8dbe0',
+                            300: '#c0c5cd',
+                            400: '#a8afba',
+                            500: '#9099a7',
+                            600: '#788394',
+                            700: '#606d81',
+                            800: '#48576e',
+                            900: '#30415b',
+                        },
+                        dark: {
+                            900: '#0a0a0a',
+                            800: '#121212',
+                            700: '#1a1a1a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            @apply bg-dark-900 text-metal-200 font-sans antialiased;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.03) 0%, transparent 50%),
+                linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.9));
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .metal-card {
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .social-card {
+            background: linear-gradient(135deg, rgba(48, 65, 91, 0.3) 0%, rgba(24, 24, 27, 0.6) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .social-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .contact-btn {
+            background: linear-gradient(135deg, rgba(144, 153, 167, 0.2) 0%, rgba(72, 87, 110, 0.4) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .contact-btn:hover {
+            background: linear-gradient(135deg, rgba(144, 153, 167, 0.3) 0%, rgba(72, 87, 110, 0.5) 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+        }
+
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        @media (max-width: 768px) {
+            .parallax-bg {
+                background-attachment: scroll;
+            }
+        }
+    </style>
+</head>
+<body class="parallax-bg">
+    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-md mx-auto">
+            <!-- Main Card -->
+            <div class="metal-card rounded-2xl p-8 mb-8 animate-float">
+                <!-- Profile Image -->
+                <div class="w-24 h-24 mx-auto mb-6 rounded-full overflow-hidden border-2 border-metal-700 shadow-lg">
+                    <img src="https://via.placeholder.com/128" alt="Profile" class="w-full h-full object-cover">
+                </div>
+                
+                <!-- Name -->
+                <h1 class="text-3xl md:text-4xl font-bold text-center text-metal-100 mb-2 tracking-tight">
+                    ALEXANDER KANE
+                </h1>
+                
+                <!-- Title -->
+                <p class="text-metal-400 text-center mb-6 font-mono text-sm tracking-wider">
+                    DIGITAL PRODUCT DESIGNER & DEVELOPER
+                </p>
+                
+                <!-- Tagline -->
+                <p class="text-metal-300 text-center text-sm mb-8 italic">
+                    "Crafting intuitive experiences at the intersection of design and technology"
+                </p>
+                
+                <!-- Contact Button -->
+                <div class="flex justify-center">
+                    <a href="#contact" class="contact-btn rounded-full px-6 py-2 text-metal-100 text-sm font-medium flex items-center">
+                        <i class="fas fa-envelope mr-2"></i> CONTACT ME
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Social Media Section -->
+            <div class="metal-card rounded-2xl p-6">
+                <h2 class="text-metal-300 text-center text-xs uppercase tracking-widest mb-4 font-mono">
+                    Connect With Me
+                </h2>
+                
+                <div class="space-y-3">
+                    <!-- Twitter -->
+                    <a href="https://twitter.com/yourhandle" target="_blank" class="social-card flex items-center p-4 rounded-xl">
+                        <div class="w-8 h-8 rounded-full bg-metal-800 flex items-center justify-center mr-4">
+                            <i class="fab fa-twitter text-metal-300"></i>
+                        </div>
+                        <div>
+                            <p class="text-metal-400 text-xs font-mono">@alexkane_design</p>
+                        </div>
+                        <div class="ml-auto">
+                            <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- LinkedIn -->
+                    <a href="https://linkedin.com/in/yourhandle" target="_blank" class="social-card flex items-center p-4 rounded-xl">
+                        <div class="w-8 h-8 rounded-full bg-metal-800 flex items-center justify-center mr-4">
+                            <i class="fab fa-linkedin-in text-metal-300"></i>
+                        </div>
+                        <div>
+                            <p class="text-metal-400 text-xs font-mono">in/alexanderkane</p>
+                        </div>
+                        <div class="ml-auto">
+                            <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- Dribbble -->
+                    <a href="https://dribbble.com/yourhandle" target="_blank" class="social-card flex items-center p-4 rounded-xl">
+                        <div class="w-8 h-8 rounded-full bg-metal-800 flex items-center justify-center mr-4">
+                            <i class="fab fa-dribbble text-metal-300"></i>
+                        </div>
+                        <div>
+                            <p class="text-metal-400 text-xs font-mono">dribbble.com/alexkane</p>
+                        </div>
+                        <div class="ml-auto">
+                            <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
+                        </div>
+                    </a>
+                    
+                    <!-- GitHub -->
+                    <a href="https://github.com/yourhandle" target="_blank" class="social-card flex items-center p-4 rounded-xl">
+                        <div class="w-8 h-8 rounded-full bg-metal-800 flex items-center justify-center mr-4">
+                            <i class="fab fa-github text-metal-300"></i>
+                        </div>
+                        <div>
+                            <p class="text-metal-400 text-xs font-mono">github.com/alexkane</p>
+                        </div>
+                        <div class="ml-auto">
+                            <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Contact Form (Hidden by default) -->
+            <div id="contact" class="metal-card rounded-2xl p-6 mt-8 hidden">
+                <h2 class="text-metal-300 text-center text-xs uppercase tracking-widest mb-4 font-mono">
+                    Direct Message
+                </h2>
+                
+                <form class="space-y-4">
+                    <div>
+                        <input type="text" placeholder="Your Name" class="w-full bg-metal-900/50 border border-metal-800 rounded-lg px-4 py-3 text-metal-200 placeholder-metal-600 focus:outline-none focus:ring-1 focus:ring-metal-600 focus:border-metal-600 text-sm">
+                    </div>
+                    <div>
+                        <input type="email" placeholder="Your Email" class="w-full bg-metal-900/50 border border-metal-800 rounded-lg px-4 py-3 text-metal-200 placeholder-metal-600 focus:outline-none focus:ring-1 focus:ring-metal-600 focus:border-metal-600 text-sm">
+                    </div>
+                    <div>
+                        <textarea placeholder="Your Message" rows="4" class="w-full bg-metal-900/50 border border-metal-800 rounded-lg px-4 py-3 text-metal-200 placeholder-metal-600 focus:outline-none focus:ring-1 focus:ring-metal-600 focus:border-metal-600 text-sm"></textarea>
+                    </div>
+                    <button type="submit" class="w-full contact-btn rounded-lg px-4 py-3 text-metal-100 text-sm font-medium">
+                        SEND MESSAGE
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle contact form
+        document.querySelector('a[href="#contact"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('contact').classList.toggle('hidden');
+            
+            // Smooth scroll to contact form
+            if (!document.getElementById('contact').classList.contains('hidden')) {
+                document.getElementById('contact').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+            }
+        });
+
+        // Simple parallax effect
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.pageYOffset;
+            const backgroundPosition = scrollPosition * 0.3;
+            document.body.style.backgroundPosition = `center ${backgroundPosition}px`;
+        });
+
+        // Add subtle pulse animation to social cards on hover
+        document.querySelectorAll('.social-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.animation = 'pulse-slow 2s';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.animation = '';
+            });
+        });
+    </script>
+</body>
+</html>
