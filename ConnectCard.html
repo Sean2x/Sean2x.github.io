@@ -56,7 +56,7 @@
     </script>
     <style>
         body {
-             @apply bg-dark-950 text-metal-200 font-sans antialiased;
+            @apply bg-dark-950 text-metal-200 font-sans antialiased;
             background-image: 
                 radial-gradient(circle at 25% 25%, rgba(255,255,255,0.02) 0%, transparent 50%),
                 linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.95));
@@ -66,10 +66,8 @@
             overflow-x: hidden;
             margin: 0;
             padding: 0;
-
-            
         }
-
+        
         .metal-card {
             background: rgba(14, 14, 14, 0.7);
             backdrop-filter: blur(12px);
@@ -79,14 +77,14 @@
                 0 8px 32px rgba(0, 0, 0, 0.4),
                 inset 0 1px 1px rgba(255, 255, 255, 0.05);
         }
-
+        
         .social-card {
             background: linear-gradient(135deg, rgba(30, 30, 33, 0.9) 0%, rgba(14, 14, 16, 0.9) 100%);
             border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
-
+        
         .social-card::before {
             content: '';
             position: absolute;
@@ -101,12 +99,12 @@
             mask-composite: exclude;
             pointer-events: none;
         }
-
+        
         .social-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
-
+        
         .contact-btn {
             background: linear-gradient(135deg, rgba(100, 9, 183, 0.3), rgba(200, 23, 158, 0.3));
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -114,7 +112,7 @@
             position: relative;
             overflow: hidden;
         }
-
+        
         .contact-btn::before {
             content: '';
             position: absolute;
@@ -125,29 +123,61 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             transition: all 0.5s ease;
         }
-
+        
         .contact-btn:hover::before {
             left: 100%;
         }
-
+        
         .contact-btn:hover {
             background: linear-gradient(135deg, rgba(114, 9, 183, 0.3), rgba(181, 23, 158, 0.4));
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(114, 9, 183, 0.2);
         }
-
+        
         .divider {
             height: 1px;
             background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
         }
-
+        
         .parallax-bg {
             background-attachment: fixed;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
         }
-
+        
+        /* Matrix Rain Effect Styles */
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+        }
+        
+        .matrix-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(72, 12, 168, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 9999px;
+            padding: 8px 16px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .matrix-toggle:hover {
+            background: rgba(114, 9, 183, 0.8);
+            transform: translateY(-2px);
+        }
+        
         @media (max-width: 768px) {
             .parallax-bg {
                 background-attachment: scroll;
@@ -156,7 +186,16 @@
     </style>
 </head>
 <body class="parallax-bg">
-    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+    <!-- Matrix Rain Canvas -->
+    <canvas id="matrixCanvas"></canvas>
+    
+    <!-- Matrix Toggle Button -->
+    <button id="matrixToggle" class="matrix-toggle">
+        <i class="fas fa-code mr-1"></i> Matrix Effect
+    </button>
+    
+    <!-- Your Business Card Content -->
+    <div class="min-h-screen flex items-center justify-center px-4 py-12 relative z-10">
         <div class="w-full max-w-md mx-auto">
             <!-- Main Card -->
             <div class="metal-card rounded-2xl p-8 mb-8 animate-float">
@@ -177,7 +216,7 @@
                 
                 <!-- Tagline -->
                 <p class="text-metal-300 text-center text-sm mb-8 italic">
-                    "You don’t need a cape. Just a wrench, a brain, and a reason."
+                    "You don't need a cape. Just a wrench, a brain, and a reason."
                 </p>
                 
                 <!-- Contact Button -->
@@ -220,7 +259,7 @@
                             <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
                         </div>
                     </a>
-
+                    
                     <!-- Snapchat -->
                     <a href="https://www.snapchat.com/t/ayYvhvwP" target="_blank" class="social-card flex items-center p-4 rounded-xl">
                         <div class="w-8 h-8 rounded-full bg-metal-800 flex items-center justify-center mr-4">
@@ -259,10 +298,6 @@
                             <i class="fas fa-external-link-alt text-metal-600 text-xs"></i>
                         </div>
                     </a>
-
-                     
-
-
                 </div>
             </div>
             
@@ -291,6 +326,92 @@
     </div>
 
     <script>
+        // Matrix Rain Effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            let animationId;
+            let isRunning = true;
+            
+            // Set canvas to full window size
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Matrix characters - using symbols that fit the tech theme
+            const chars = "01アカサタナハマヤラワｱｶｻﾀﾅﾊﾏﾔﾗﾜABCDEFGHIJKLMNOPQRSTUVWXYZ<>/\\{}[]()*&^%$#@!~";
+            
+            // Calculate font size and columns
+            const fontSize = 14;
+            const columns = Math.floor(canvas.width / fontSize);
+            
+            // Create drops array
+            const drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops[i] = Math.floor(Math.random() * -100);
+            }
+            
+            // Draw function
+            function draw() {
+                // Semi-transparent black background for trail effect
+                ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Purple gradient for the matrix characters
+                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradient.addColorStop(0, '#b5179e');
+                gradient.addColorStop(1, '#7209b7');
+                ctx.fillStyle = gradient;
+                
+                ctx.font = `${fontSize}px monospace`;
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    
+                    // Draw character
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    // Randomly reset drops to top of screen
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    
+                    // Increment Y coordinate
+                    drops[i]++;
+                }
+                
+                if (isRunning) {
+                    animationId = requestAnimationFrame(draw);
+                }
+            }
+            
+            // Start animation
+            draw();
+            
+            // Toggle button
+            const toggleBtn = document.getElementById('matrixToggle');
+            toggleBtn.addEventListener('click', function() {
+                isRunning = !isRunning;
+                toggleBtn.innerHTML = isRunning 
+                    ? '<i class="fas fa-code mr-1"></i> Matrix Effect' 
+                    : '<i class="fas fa-eye-slash mr-1"></i> Matrix Effect';
+                
+                if (isRunning) {
+                    draw();
+                } else {
+                    cancelAnimationFrame(animationId);
+                    // Clear canvas when paused
+                    ctx.fillStyle = 'rgba(5, 5, 5, 1)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        });
+        
         // Toggle contact form
         document.querySelector('a[href="#contact"]').addEventListener('click', function(e) {
             e.preventDefault();
@@ -303,14 +424,14 @@
                 });
             }
         });
-
+        
         // Simple parallax effect
         window.addEventListener('scroll', function() {
             const scrollPosition = window.pageYOffset;
             const backgroundPosition = scrollPosition * 0.3;
             document.body.style.backgroundPosition = `center ${backgroundPosition}px`;
         });
-
+        
         // Add subtle pulse animation to social cards on hover
         document.querySelectorAll('.social-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
