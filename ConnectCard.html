@@ -388,14 +388,14 @@
             draw();
             
             // Toggle button
-            //const toggleBtn = document.getElementById('matrixToggle');
-            //toggleBtn.addEventListener('click', function() {
-                //isRunning = !isRunning;
-                //toggleBtn.innerHTML = isRunning 
-                    //? '<i class="fas fa-code mr-1"></i> Matrix Effect' 
-                    //: '<i class="fas fa-eye-slash mr-1"></i> Matrix Effect';
+            const toggleBtn = document.getElementById('matrixToggle');
+            toggleBtn.addEventListener('click', function() {
+                isRunning = !isRunning;
+                toggleBtn.innerHTML = isRunning 
+                    ? '<i class="fas fa-code mr-1"></i> Matrix Effect' 
+                    : '<i class="fas fa-eye-slash mr-1"></i> Matrix Effect';
                 
-                if (true) {
+                if (isRunning) {
                     draw();
                 } else {
                     cancelAnimationFrame(animationId);
