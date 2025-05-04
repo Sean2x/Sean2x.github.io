@@ -3,143 +3,828 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Printing & Design Club</title>
+    <title>NeonGrid 3D | Retro-Futurism Printing Club</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap');
+        
+        :root {
+            --neon-orange: #ff7b25;
+            --deep-orange: #e67e22;
+            --dark-bg: #1a1a1a;
+            --grid-line: rgba(255, 123, 37, 0.1);
+        }
+        
         body {
-            margin: 0;
-            font-family: 'Orbitron', sans-serif;
-            background: linear-gradient(135deg, #ff9966, #ff5e62);
-            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: white;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 30px 30px;
+            position: relative;
             overflow-x: hidden;
         }
-        header {
-            text-align: center;
-            padding: 30px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
         }
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            background: rgba(0,0,0,0.4);
-            padding: 10px;
-            position: sticky;
+        
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
             top: 0;
-            z-index: 10;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 26, 26, 0.7);
         }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            padding: 8px 12px;
-            border: 1px solid #ffa540;
-            border-radius: 10px;
-            transition: background 0.3s;
+        
+        .neon-text {
+            text-shadow: 0 0 5px var(--neon-orange), 0 0 10px var(--neon-orange), 0 0 20px var(--neon-orange);
         }
-        nav a:hover {
-            background: #ffa540;
+        
+        .neon-border {
+            border: 2px solid var(--neon-orange);
+            box-shadow: 0 0 10px var(--neon-orange), inset 0 0 10px var(--neon-orange);
         }
-        section {
-            margin: 40px auto;
-            max-width: 900px;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            background: rgba(0,0,0,0.3);
+        
+        .neon-button {
+            transition: all 0.3s ease;
         }
-        #about, #current {
-            display: block;
+        
+        .neon-button:hover {
+            box-shadow: 0 0 15px var(--neon-orange), 0 0 30px var(--neon-orange);
+            transform: translateY(-2px);
         }
-        #past, #team, #signup {
-            display: none;
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--neon-orange);
+            box-shadow: 0 0 10px var(--neon-orange);
         }
-        section h2 {
-            text-align: center;
-            font-size: 2em;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #ffa540;
-            padding-bottom: 10px;
+        
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(255, 123, 37, 0.3);
         }
-        .past-style {
-            background: rgba(30,0,60,0.5);
+        
+        .glow {
+            animation: glow 2s infinite alternate;
         }
-        .team-style {
-            background: rgba(0,60,30,0.5);
-        }
-        .signup-style {
-            background: rgba(60,30,0,0.5);
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: rgba(0,0,0,0.6);
-            font-size: 0.9em;
-        }
-        @media (max-width: 600px) {
-            nav {
-                flex-wrap: wrap;
+        
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px var(--neon-orange);
             }
-            section {
-                margin: 20px;
-                padding: 20px;
+            to {
+                box-shadow: 0 0 20px var(--neon-orange);
             }
+        }
+        
+        .section-divider {
+            height: 5px;
+            background: linear-gradient(90deg, transparent, var(--neon-orange), transparent);
         }
     </style>
 </head>
 <body>
-    <header>
-        3D Printing & Design Club
-    </header>
-
-    <nav>
-        <a href="#about">About</a>
-        <a href="#current">Current Project</a>
-        <a href="#past">Past Projects</a>
-        <a href="#team">Team</a>
-        <a href="#signup">Join</a>
+    <!-- Navigation -->
+    <nav class="bg-black bg-opacity-90 border-b border-orange-500 fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-cube text-orange-500 text-2xl mr-2"></i>
+                        <span class="text-orange-500 font-bold text-xl font-mono neon-text">NEONGRID 3D</span>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="#about" class="text-orange-300 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300">About</a>
+                    <a href="#projects" class="text-orange-300 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300">Projects</a>
+                    <a href="#calendar" class="text-orange-300 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300">Calendar</a>
+                    <a href="#team" class="text-orange-300 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300">Team</a>
+                    <a href="#join" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-md text-sm font-medium neon-button">Join Us</a>
+                </div>
+                <div class="-mr-2 flex items-center md:hidden">
+                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-orange-400 hover:text-white focus:outline-none" aria-controls="mobile-menu" aria-expanded="false" id="mobile-menu-button">
+                        <span class="sr-only">Open main menu</span>
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-black bg-opacity-95">
+                <a href="#about" class="text-orange-300 hover:text-orange-500 block px-3 py-2 rounded-md text-base font-medium">About</a>
+                <a href="#projects" class="text-orange-300 hover:text-orange-500 block px-3 py-2 rounded-md text-base font-medium">Projects</a>
+                <a href="#calendar" class="text-orange-300 hover:text-orange-500 block px-3 py-2 rounded-md text-base font-medium">Calendar</a>
+                <a href="#team" class="text-orange-300 hover:text-orange-500 block px-3 py-2 rounded-md text-base font-medium">Team</a>
+                <a href="#join" class="bg-orange-600 hover:bg-orange-700 text-white block px-3 py-2 rounded-md text-base font-medium text-center">Join Us</a>
+            </div>
+        </div>
     </nav>
 
-    <section id="about">
-        <h2>About Us</h2>
-        <p>Welcome to the cutting edge of creation! We’re a retrofuturistic collective of 3D printing, electronics, and robotics enthusiasts bringing tomorrow’s ideas to life today. From mechatronics to design innovation, we empower members to push boundaries and turn concepts into reality.</p>
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center pt-16">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 text-orange-400 neon-text">NEONGRID 3D</h1>
+                <p class="text-xl md:text-2xl mb-8 text-orange-200">Where retro-futurism meets cutting-edge 3D printing technology</p>
+                <div class="flex justify-center space-x-4">
+                    <a href="#join" class="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-full text-lg font-bold neon-button glow">Join the Club</a>
+                    <a href="#projects" class="border-2 border-orange-500 text-orange-400 hover:bg-orange-900 hover:bg-opacity-30 px-8 py-3 rounded-full text-lg font-bold neon-button">Our Projects</a>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section id="current">
-        <h2>Current Project</h2>
-        <p>We’re building an autonomous rover using ESP32 controllers, brushless motors, and custom-printed chassis parts. The goal? Navigate complex environments with precision—and look good doing it.</p>
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-black bg-opacity-90 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10">
+            <div class="grid grid-cols-4 grid-rows-4 h-full">
+                <div class="border-r border-b border-orange-500"></div>
+                <div class="border-r border-b border-orange-500"></div>
+                <div class="border-r border-b border-orange-500"></div>
+                <div class="border-b border-orange-500"></div>
+                <div class="border-r border-orange-500"></div>
+                <div class="border-r border-orange-500"></div>
+                <div class="border-r border-orange-500"></div>
+                <div class=""></div>
+                <div class="border-r border-orange-500"></div>
+                <div class="border-r border-orange-500"></div>
+                <div class="border-r border-orange-500"></div>
+                <div class=""></div>
+                <div class="border-r border-orange-500"></div>
+                <div class="border-r border-orange-500"></div>
+                <div class="border-r border-orange-500"></div>
+                <div class=""></div>
+            </div>
+        </div>
+        <div class="container mx-auto px-6 relative">
+            <h2 class="text-4xl font-bold text-center mb-16 text-orange-400 neon-text">ABOUT OUR CLUB</h2>
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+                    <div class="neon-border p-1 rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1615789591457-74a63395c990?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80" alt="3D Printing Club" class="rounded-lg w-full h-auto">
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl font-bold mb-4 text-orange-300">Welcome to NeonGrid 3D</h3>
+                    <p class="mb-4 text-gray-300">Founded in 2018, NeonGrid 3D is a collective of makers, designers, and futurists passionate about pushing the boundaries of 3D printing technology while embracing the aesthetic of retro-futurism.</p>
+                    <p class="mb-4 text-gray-300">Our club combines the nostalgia of 80s sci-fi visions with cutting-edge additive manufacturing techniques to create unique, functional, and artistic pieces that bridge past and future.</p>
+                    <div class="mt-8">
+                        <h4 class="text-xl font-bold mb-4 text-orange-300">Our Mission</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-robot text-orange-500 mt-1 mr-3"></i>
+                                <span class="text-gray-300">To explore the intersection of retro-futurism design and modern 3D printing technology</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-users text-orange-500 mt-1 mr-3"></i>
+                                <span class="text-gray-300">Build a community of makers who share knowledge and inspire each other</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-lightbulb text-orange-500 mt-1 mr-3"></i>
+                                <span class="text-gray-300">Develop innovative solutions to real-world problems using additive manufacturing</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section id="past" class="past-style">
-        <h2>Past Projects</h2>
-        <ul>
-            <li>Saturn V Rocket Model with motion and lighting</li>
-            <li>LED Interactive Wall Art for student showcases</li>
-            <li>Custom prosthetics designed for local outreach</li>
-            <li>Fully 3D-printed mechanical keyboard builds</li>
-        </ul>
+    <div class="section-divider"></div>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-black bg-opacity-80">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-orange-400 neon-text">OUR PROJECTS</h2>
+            
+            <!-- Current Project -->
+            <div class="mb-20">
+                <h3 class="text-3xl font-bold mb-8 text-orange-300 flex items-center">
+                    <i class="fas fa-bolt mr-3"></i> Current Project
+                </h3>
+                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border">
+                    <div class="flex flex-col lg:flex-row">
+                        <div class="lg:w-1/3 mb-6 lg:mb-0 lg:pr-6">
+                            <img src="https://images.unsplash.com/photo-1581093458171-4a21e56b3417?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80" alt="Current Project" class="rounded-lg w-full h-auto">
+                        </div>
+                        <div class="lg:w-2/3">
+                            <h4 class="text-2xl font-bold mb-4 text-orange-300">Retro-Futurist Smart Lamp</h4>
+                            <p class="mb-4 text-gray-300">Inspired by 1960s sci-fi aesthetics, this smart lamp combines vintage design with modern technology. The 3D-printed housing features geometric patterns that cast beautiful shadows when lit.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <h5 class="font-bold text-orange-400 mb-2">Features</h5>
+                                    <ul class="text-gray-300 space-y-1">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-orange-500 mr-2 mt-1"></i>
+                                            <span>Voice control integration</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-orange-500 mr-2 mt-1"></i>
+                                            <span>Customizable color temperatures</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-check text-orange-500 mr-2 mt-1"></i>
+                                            <span>Modular design for easy upgrades</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-orange-400 mb-2">Progress</h5>
+                                    <div class="w-full bg-gray-700 rounded-full h-4 mb-2">
+                                        <div class="bg-orange-600 h-4 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                    <p class="text-sm text-gray-400">75% complete - Finalizing electronics integration</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="px-3 py-1 bg-orange-900 bg-opacity-50 text-orange-300 rounded-full text-sm">3D Printing</span>
+                                <span class="px-3 py-1 bg-orange-900 bg-opacity-50 text-orange-300 rounded-full text-sm">IoT</span>
+                                <span class="px-3 py-1 bg-orange-900 bg-opacity-50 text-orange-300 rounded-full text-sm">LED</span>
+                                <span class="px-3 py-1 bg-orange-900 bg-opacity-50 text-orange-300 rounded-full text-sm">Retro Design</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Past Projects -->
+            <div>
+                <h3 class="text-3xl font-bold mb-8 text-orange-300 flex items-center">
+                    <i class="fas fa-history mr-3"></i> Past Projects
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Project 1 -->
+                    <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border hover:bg-opacity-90 transition duration-300">
+                        <div class="mb-4">
+                            <img src="https://images.unsplash.com/photo-1618247136471-ef1cf4d591d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80" alt="Project 1" class="rounded-lg w-full h-auto">
+                        </div>
+                        <h4 class="text-xl font-bold mb-2 text-orange-300">Cyberpunk Cityscape</h4>
+                        <p class="text-gray-300 mb-4">A modular 3D-printed cityscape inspired by 1980s cyberpunk aesthetics, complete with LED lighting effects.</p>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="px-2 py-1 bg-orange-900 bg-opacity-50 text-orange-300 rounded-full text-xs">Architecture</span>
+                            <span class="px-2 py-1 bg-orange-900 bg-opacity-50 text-orange-300 rounded-full text-xs">LED</span>
+                        </div>
+                        <a href="#" class="text-orange-400 hover:text-orange-300 text-sm font-medium flex items-center">
+                            View Details <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Project 2 -->
+                    <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border hover:bg-opacity-90 transition duration-300">
+                        <div class="mb-4">
+                            <img src="https://images.unsplash.com/photo-1623874514711-0f5996f8f8b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80" alt="Project 2" class="rounded-lg w-full h-auto">
+                        </div>
+                        <h4 class="text-xl font-bold mb-2 text-orange-300">Retro Game Console</h4>
+                        <p class="text-gray-300 mb-4">A fully functional retro-style game console housing with Raspberry Pi core, featuring 3D-printed tactile buttons.</p>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="px-2 py-1 bg-orange-900 bg-opacity-50 text-orange-300 rounded-full text-xs">Electronics</span>
+                            <span class="px-2 py-1 bg-orange-900 bg-opacity-50 text-orange-300 rounded-full text-xs">Gaming</span>
+                        </div>
+                        <a href="#" class="text-orange-400 hover:text-orange-300 text-sm font-medium flex items-center">
+                            View Details <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Project 3 -->
+                    <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border hover:bg-opacity-90 transition duration-300">
+                        <div class="mb-4">
+                            <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80" alt="Project 3" class="rounded-lg w-full h-auto">
+                        </div>
+                        <h4 class="text-xl font-bold mb-2 text-orange-300">Solar-Powered Rover</h4>
+                        <p class="text-gray-300 mb-4">A Mars rover prototype with 3D-printed chassis and solar panel array, designed for educational purposes.</p>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="px-2 py-1 bg-orange-900 bg-opacity-50 text-orange-300 rounded-full text-xs">Robotics</span>
+                            <span class="px-2 py-1 bg-orange-900 bg-opacity-50 text-orange-300 rounded-full text-xs">Renewable Energy</span>
+                        </div>
+                        <a href="#" class="text-orange-400 hover:text-orange-300 text-sm font-medium flex items-center">
+                            View Details <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-12">
+                    <a href="#" class="inline-flex items-center px-6 py-3 border border-orange-500 text-orange-400 font-medium rounded-full hover:bg-orange-900 hover:bg-opacity-30 transition duration-300 neon-button">
+                        View All Projects <i class="fas fa-long-arrow-alt-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section id="team" class="team-style">
-        <h2>Meet the Team</h2>
-        <p>President: Alex | alex@example.com</p>
-        <p>VP: Jamie | jamie@example.com</p>
-        <p>Electronics Lead: Riley | riley@example.com</p>
-        <p>Mechanical Lead: Taylor | taylor@example.com</p>
-        <p>Design Lead: Casey | casey@example.com</p>
+    <div class="section-divider"></div>
+
+    <!-- Calendar Section -->
+    <section id="calendar" class="py-20 bg-black bg-opacity-80">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-orange-400 neon-text">CLUB CALENDAR</h2>
+            
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Upcoming Events -->
+                <div class="lg:w-2/3">
+                    <h3 class="text-2xl font-bold mb-6 text-orange-300 flex items-center">
+                        <i class="far fa-calendar-alt mr-3"></i> Upcoming Events
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Event 1 -->
+                        <div class="bg-gray-900 bg-opacity-70 rounded-lg p-6 neon-border">
+                            <div class="flex flex-col md:flex-row">
+                                <div class="md:w-1/4 mb-4 md:mb-0">
+                                    <div class="bg-orange-900 bg-opacity-50 text-center py-3 px-4 rounded-lg">
+                                        <div class="text-2xl font-bold text-orange-300">15</div>
+                                        <div class="text-orange-200 uppercase text-sm">July</div>
+                                        <div class="text-orange-400 text-xs mt-1">6:30 PM</div>
+                                    </div>
+                                </div>
+                                <div class="md:w-3/4 md:pl-6">
+                                    <h4 class="text-xl font-bold mb-2 text-orange-300">3D Modeling Workshop</h4>
+                                    <p class="text-gray-300 mb-3">Learn Blender basics for 3D printing with our expert instructor. Bring your laptop with Blender installed.</p>
+                                    <div class="flex flex-wrap items-center text-sm">
+                                        <span class="mr-4 text-orange-400"><i class="fas fa-map-marker-alt mr-1"></i> MakerSpace Lab</span>
+                                        <span class="text-gray-400"><i class="fas fa-user mr-1"></i> Max 15 participants</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Event 2 -->
+                        <div class="bg-gray-900 bg-opacity-70 rounded-lg p-6 neon-border">
+                            <div class="flex flex-col md:flex-row">
+                                <div class="md:w-1/4 mb-4 md:mb-0">
+                                    <div class="bg-orange-900 bg-opacity-50 text-center py-3 px-4 rounded-lg">
+                                        <div class="text-2xl font-bold text-orange-300">22</div>
+                                        <div class="text-orange-200 uppercase text-sm">July</div>
+                                        <div class="text-orange-400 text-xs mt-1">7:00 PM</div>
+                                    </div>
+                                </div>
+                                <div class="md:w-3/4 md:pl-6">
+                                    <h4 class="text-xl font-bold mb-2 text-orange-300">Print Night & Showcase</h4>
+                                    <p class="text-gray-300 mb-3">Bring your current projects for feedback and troubleshooting. We'll also showcase completed works from members.</p>
+                                    <div class="flex flex-wrap items-center text-sm">
+                                        <span class="mr-4 text-orange-400"><i class="fas fa-map-marker-alt mr-1"></i> Club Workshop</span>
+                                        <span class="text-gray-400"><i class="fas fa-user mr-1"></i> Open to all members</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Event 3 -->
+                        <div class="bg-gray-900 bg-opacity-70 rounded-lg p-6 neon-border">
+                            <div class="flex flex-col md:flex-row">
+                                <div class="md:w-1/4 mb-4 md:mb-0">
+                                    <div class="bg-orange-900 bg-opacity-50 text-center py-3 px-4 rounded-lg">
+                                        <div class="text-2xl font-bold text-orange-300">5</div>
+                                        <div class="text-orange-200 uppercase text-sm">August</div>
+                                        <div class="text-orange-400 text-xs mt-1">6:00 PM</div>
+                                    </div>
+                                </div>
+                                <div class="md:w-3/4 md:pl-6">
+                                    <h4 class="text-xl font-bold mb-2 text-orange-300">Advanced Slicing Techniques</h4>
+                                    <p class="text-gray-300 mb-3">Deep dive into advanced slicing settings for perfect prints every time. Prerequisite: Basic 3D printing knowledge.</p>
+                                    <div class="flex flex-wrap items-center text-sm">
+                                        <span class="mr-4 text-orange-400"><i class="fas fa-map-marker-alt mr-1"></i> Tech Lab B</span>
+                                        <span class="text-gray-400"><i class="fas fa-user mr-1"></i> Max 10 participants</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Monthly Calendar -->
+                <div class="lg:w-1/3">
+                    <h3 class="text-2xl font-bold mb-6 text-orange-300 flex items-center">
+                        <i class="far fa-calendar mr-3"></i> July 2023
+                    </h3>
+                    
+                    <div class="bg-gray-900 bg-opacity-70 rounded-lg p-4 neon-border">
+                        <div class="grid grid-cols-7 gap-1 text-center mb-2">
+                            <div class="text-orange-400 text-sm font-medium">S</div>
+                            <div class="text-orange-400 text-sm font-medium">M</div>
+                            <div class="text-orange-400 text-sm font-medium">T</div>
+                            <div class="text-orange-400 text-sm font-medium">W</div>
+                            <div class="text-orange-400 text-sm font-medium">T</div>
+                            <div class="text-orange-400 text-sm font-medium">F</div>
+                            <div class="text-orange-400 text-sm font-medium">S</div>
+                        </div>
+                        
+                        <div class="grid grid-cols-7 gap-1 text-center">
+                            <!-- Empty days -->
+                            <div class="py-2 opacity-30"></div>
+                            <div class="py-2 opacity-30"></div>
+                            <div class="py-2 opacity-30"></div>
+                            <div class="py-2 opacity-30"></div>
+                            <div class="py-2 opacity-30"></div>
+                            <div class="py-2 opacity-30">1</div>
+                            <div class="py-2 opacity-30">2</div>
+                            
+                            <!-- Week 1 -->
+                            <div class="py-2">3</div>
+                            <div class="py-2">4</div>
+                            <div class="py-2">5</div>
+                            <div class="py-2">6</div>
+                            <div class="py-2">7</div>
+                            <div class="py-2">8</div>
+                            <div class="py-2">9</div>
+                            
+                            <!-- Week 2 -->
+                            <div class="py-2">10</div>
+                            <div class="py-2">11</div>
+                            <div class="py-2">12</div>
+                            <div class="py-2">13</div>
+                            <div class="py-2">14</div>
+                            <div class="py-2 bg-orange-900 bg-opacity-50 rounded-full text-orange-300 font-bold">15</div>
+                            <div class="py-2">16</div>
+                            
+                            <!-- Week 3 -->
+                            <div class="py-2">17</div>
+                            <div class="py-2">18</div>
+                            <div class="py-2">19</div>
+                            <div class="py-2">20</div>
+                            <div class="py-2">21</div>
+                            <div class="py-2 bg-orange-900 bg-opacity-50 rounded-full text-orange-300 font-bold">22</div>
+                            <div class="py-2">23</div>
+                            
+                            <!-- Week 4 -->
+                            <div class="py-2">24</div>
+                            <div class="py-2">25</div>
+                            <div class="py-2">26</div>
+                            <div class="py-2">27</div>
+                            <div class="py-2">28</div>
+                            <div class="py-2">29</div>
+                            <div class="py-2">30</div>
+                            
+                            <!-- Week 5 -->
+                            <div class="py-2">31</div>
+                            <div class="py-2 opacity-30"></div>
+                            <div class="py-2 opacity-30"></div>
+                            <div class="py-2 opacity-30"></div>
+                            <div class="py-2 opacity-30"></div>
+                            <div class="py-2 opacity-30"></div>
+                            <div class="py-2 opacity-30"></div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="text-lg font-bold mb-3 text-orange-300">Regular Meetups</h4>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-circle text-xs text-orange-500 mt-2 mr-2"></i>
+                                    <span><strong>Every Tuesday</strong> - Open Workshop (6pm-9pm)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-circle text-xs text-orange-500 mt-2 mr-2"></i>
+                                    <span><strong>Every 1st Saturday</strong> - Beginner Training (10am-12pm)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-circle text-xs text-orange-500 mt-2 mr-2"></i>
+                                    <span><strong>Every 3rd Sunday</strong> - Project Showcase (2pm-4pm)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section id="signup" class="signup-style">
-        <h2>Join Us</h2>
-        <p>Sign up to become part of the club! <a href="https://your-signup-link.com" target="_blank" style="color: #ffa540; font-weight: bold;">Click here to join</a>.</p>
+    <div class="section-divider"></div>
+
+    <!-- Team Section -->
+    <section id="team" class="py-20 bg-black bg-opacity-80">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-orange-400 neon-text">MEET THE TEAM</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Team Member 1 -->
+                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border team-card transition duration-300">
+                    <div class="flex justify-center mb-4">
+                        <div class="relative">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Team Member" class="w-32 h-32 rounded-full border-4 border-orange-500 object-cover">
+                            <div class="absolute -bottom-2 -right-2 bg-orange-600 rounded-full p-1">
+                                <i class="fas fa-crown text-white text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-1 text-orange-300">Alex Rivera</h3>
+                    <p class="text-orange-500 text-center text-sm font-medium mb-4">Club President</p>
+                    <p class="text-gray-300 text-center text-sm mb-4">Industrial designer with 8 years of 3D printing experience. Specializes in functional prototypes.</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border team-card transition duration-300">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Team Member" class="w-32 h-32 rounded-full border-4 border-orange-500 object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-1 text-orange-300">Jamie Chen</h3>
+                    <p class="text-orange-500 text-center text-sm font-medium mb-4">Technical Lead</p>
+                    <p class="text-gray-300 text-center text-sm mb-4">Mechanical engineer focused on printer modifications and advanced materials.</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border team-card transition duration-300">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Team Member" class="w-32 h-32 rounded-full border-4 border-orange-500 object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-1 text-orange-300">Sam Wilson</h3>
+                    <p class="text-orange-500 text-center text-sm font-medium mb-4">Creative Director</p>
+                    <p class="text-gray-300 text-center text-sm mb-4">Concept artist bringing retro-futurism visions to life through 3D printing.</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fab fa-artstation"></i></a>
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 4 -->
+                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border team-card transition duration-300">
+                    <div class="flex justify-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Team Member" class="w-32 h-32 rounded-full border-4 border-orange-500 object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-1 text-orange-300">Taylor Smith</h3>
+                    <p class="text-orange-500 text-center text-sm font-medium mb-4">Community Manager</p>
+                    <p class="text-gray-300 text-center text-sm mb-4">Organizes workshops and outreach programs to grow our maker community.</p>
+                    <div class="flex justify-center space-x-3">
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16">
+                <h3 class="text-2xl font-bold mb-6 text-center text-orange-300">Club Roles & Responsibilities</h3>
+                
+                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Role 1 -->
+                        <div>
+                            <h4 class="text-lg font-bold mb-3 text-orange-400 flex items-center">
+                                <i class="fas fa-print mr-2"></i> Printing Specialists
+                            </h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-orange-500 mt-1 mr-2"></i>
+                                    <span>Maintain and repair club printers</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-orange-500 mt-1 mr-2"></i>
+                                    <span>Assist members with print troubleshooting</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-orange-500 mt-1 mr-2"></i>
+                                    <span>Research new printing technologies</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Role 2 -->
+                        <div>
+                            <h4 class="text-lg font-bold mb-3 text-orange-400 flex items-center">
+                                <i class="fas fa-paint-brush mr-2"></i> Design Team
+                            </h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-orange-500 mt-1 mr-2"></i>
+                                    <span>Create 3D models for club projects</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-orange-500 mt-1 mr-2"></i>
+                                    <span>Run modeling workshops</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-orange-500 mt-1 mr-2"></i>
+                                    <span>Develop retro-futurism design language</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Role 3 -->
+                        <div>
+                            <h4 class="text-lg font-bold mb-3 text-orange-400 flex items-center">
+                                <i class="fas fa-users mr-2"></i> Outreach Team
+                            </h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-orange-500 mt-1 mr-2"></i>
+                                    <span>Organize community events</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-orange-500 mt-1 mr-2"></i>
+                                    <span>Manage social media presence</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-caret-right text-orange-500 mt-1 mr-2"></i>
+                                    <span>Coordinate with local schools</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <footer>
-        <p>Follow us:
-            <a href="https://instagram.com/yourclub" target="_blank" style="color: #ffa540;">Instagram</a> |
-            <a href="https://discord.gg/yourclub" target="_blank" style="color: #ffa540;">Discord</a> |
-            <a href="https://youtube.com/yourclub" target="_blank" style="color: #ffa540;">YouTube</a>
-        </p>
-        <p>&copy; 2025 3D Printing & Design Club. All rights reserved.</p>
+    <div class="section-divider"></div>
+
+    <!-- Join Section -->
+    <section id="join" class="py-20 bg-black bg-opacity-80">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-orange-400 neon-text">JOIN OUR CLUB</h2>
+            
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="lg:w-1/2">
+                    <div class="neon-border p-1 rounded-lg mb-8 lg:mb-0">
+                        <img src="https://images.unsplash.com/photo-1623874510101-6afdac4f01d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80" alt="Join Our Club" class="rounded-lg w-full h-auto">
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-bold mb-6 text-orange-300">Become Part of NeonGrid 3D</h3>
+                    <p class="text-gray-300 mb-6">Whether you're a seasoned maker or just starting your 3D printing journey, we welcome all skill levels. Our community thrives on sharing knowledge and pushing creative boundaries together.</p>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-xl font-bold mb-4 text-orange-300">Membership Benefits</h4>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-orange-500 mt-1 mr-3"></i>
+                                <span>Access to our workshop with professional-grade 3D printers</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-orange-500 mt-1 mr-3"></i>
+                                <span>Free entry to all workshops and training sessions</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-orange-500 mt-1 mr-3"></i>
+                                <span>Discounts on filament and materials</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-orange-500 mt-1 mr-3"></i>
+                                <span>Priority registration for special events</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-orange-500 mt-1 mr-3"></i>
+                                <span>Showcase your work in our exhibitions</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border">
+                        <h4 class="text-xl font-bold mb-4 text-orange-300 text-center">Sign Up Now</h4>
+                        <form class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-orange-300 mb-1">Full Name</label>
+                                <input type="text" id="name" class="w-full bg-gray-800 border border-orange-500 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-orange-300 mb-1">Email</label>
+                                <input type="email" id="email" class="w-full bg-gray-800 border border-orange-500 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+                            </div>
+                            <div>
+                                <label for="experience" class="block text-sm font-medium text-orange-300 mb-1">3D Printing Experience</label>
+                                <select id="experience" class="w-full bg-gray-800 border border-orange-500 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                    <option value="beginner">Beginner</option>
+                                    <option value="intermediate">Intermediate</option>
+                                    <option value="advanced">Advanced</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="newsletter" class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-orange-500 rounded bg-gray-800">
+                                <label for="newsletter" class="ml-2 block text-sm text-gray-300">Subscribe to our newsletter</label>
+                            </div>
+                            <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-lg neon-button">Submit Application</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Media -->
+    <section class="py-12 bg-black bg-opacity-90">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-8 text-orange-400">CONNECT WITH US</h2>
+            <div class="flex justify-center space-x-8">
+                <a href="#" class="text-orange-400 hover:text-orange-300 text-3xl"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-orange-400 hover:text-orange-300 text-3xl"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-orange-400 hover:text-orange-300 text-3xl"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-orange-400 hover:text-orange-300 text-3xl"><i class="fab fa-discord"></i></a>
+                <a href="#" class="text-orange-400 hover:text-orange-300 text-3xl"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="text-orange-400 hover:text-orange-300 text-3xl"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-8 border-t border-orange-900">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center">
+                        <i class="fas fa-cube text-orange-500 text-2xl mr-2"></i>
+                        <span class="text-orange-500 font-bold text-xl font-mono">NEONGRID 3D</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mt-2">© 2023 NeonGrid 3D Printing Club. All rights reserved.</p>
+                </div>
+                <div class="flex flex-col md:flex-row md:space-x-8 space-y-4 md:space-y-0 text-sm">
+                    <a href="#" class="text-gray-400 hover:text-orange-400">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-orange-400">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-orange-400">FAQ</a>
+                    <a href="#" class="text-gray-400 hover:text-orange-400">Contact</a>
+                </div>
+            </div>
+        </div>
     </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                    
+                    // Scroll to target
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add glow effect to current section in navigation
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section');
+            const navItems = document.querySelectorAll('nav a');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 300)) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            navItems.forEach(item => {
+                item.classList.remove('text-orange-500');
+                item.classList.add('text-orange-300');
+                if (item.getAttribute('href') === `#${currentSection}`) {
+                    item.classList.remove('text-orange-300');
+                    item.classList.add('text-orange-500');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
