@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Printing & Design Club</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+            color: #fff;
+            overflow-x: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            background: rgba(0,0,0,0.4);
+            padding: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 12px;
+            border: 1px solid #ffa540;
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+        nav a:hover {
+            background: #ffa540;
+        }
+        section {
+            margin: 40px auto;
+            max-width: 900px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.3);
+        }
+        #about, #current {
+            display: block;
+        }
+        #past, #team, #signup {
+            display: none;
+        }
+        section h2 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ffa540;
+            padding-bottom: 10px;
+        }
+        .past-style {
+            background: rgba(30,0,60,0.5);
+        }
+        .team-style {
+            background: rgba(0,60,30,0.5);
+        }
+        .signup-style {
+            background: rgba(60,30,0,0.5);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.6);
+            font-size: 0.9em;
+        }
+        @media (max-width: 600px) {
+            nav {
+                flex-wrap: wrap;
+            }
+            section {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        3D Printing & Design Club
+    </header>
+
+    <nav>
+        <a href="#about">About</a>
+        <a href="#current">Current Project</a>
+        <a href="#past">Past Projects</a>
+        <a href="#team">Team</a>
+        <a href="#signup">Join</a>
+    </nav>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <p>Welcome to the cutting edge of creation! We’re a retrofuturistic collective of 3D printing, electronics, and robotics enthusiasts bringing tomorrow’s ideas to life today. From mechatronics to design innovation, we empower members to push boundaries and turn concepts into reality.</p>
+    </section>
+
+    <section id="current">
+        <h2>Current Project</h2>
+        <p>We’re building an autonomous rover using ESP32 controllers, brushless motors, and custom-printed chassis parts. The goal? Navigate complex environments with precision—and look good doing it.</p>
+    </section>
+
+    <section id="past" class="past-style">
+        <h2>Past Projects</h2>
+        <ul>
+            <li>Saturn V Rocket Model with motion and lighting</li>
+            <li>LED Interactive Wall Art for student showcases</li>
+            <li>Custom prosthetics designed for local outreach</li>
+            <li>Fully 3D-printed mechanical keyboard builds</li>
+        </ul>
+    </section>
+
+    <section id="team" class="team-style">
+        <h2>Meet the Team</h2>
+        <p>President: Alex | alex@example.com</p>
+        <p>VP: Jamie | jamie@example.com</p>
+        <p>Electronics Lead: Riley | riley@example.com</p>
+        <p>Mechanical Lead: Taylor | taylor@example.com</p>
+        <p>Design Lead: Casey | casey@example.com</p>
+    </section>
+
+    <section id="signup" class="signup-style">
+        <h2>Join Us</h2>
+        <p>Sign up to become part of the club! <a href="https://your-signup-link.com" target="_blank" style="color: #ffa540; font-weight: bold;">Click here to join</a>.</p>
+    </section>
+
+    <footer>
+        <p>Follow us:
+            <a href="https://instagram.com/yourclub" target="_blank" style="color: #ffa540;">Instagram</a> |
+            <a href="https://discord.gg/yourclub" target="_blank" style="color: #ffa540;">Discord</a> |
+            <a href="https://youtube.com/yourclub" target="_blank" style="color: #ffa540;">YouTube</a>
+        </p>
+        <p>&copy; 2025 3D Printing & Design Club. All rights reserved.</p>
+    </footer>
+</body>
+</html>
