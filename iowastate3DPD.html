@@ -101,9 +101,25 @@
             height: 5px;
             background: linear-gradient(90deg, transparent, var(--neon-orange), transparent);
         }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 165, 0, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 165, 0, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 165, 0, 0);
+            }
+        }
     </style>
 </head>
-<body>
+<body class="bg-gray-900 text-white">
     <!-- Navigation -->
     <nav class="bg-black bg-opacity-90 border-b border-orange-500 fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -183,8 +199,12 @@
             <h2 class="text-4xl font-bold text-center mb-16 text-orange-400 neon-text">ABOUT OUR CLUB</h2>
             <div class="flex flex-col md:flex-row items-center">
                 <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
-                    <div class="neon-border p-1 rounded-lg">
-                        <img src="IMG_9515.PNG" alt="3D Printing Club" class="rounded-lg w-full h-auto">
+                    <div class="neon-border p-1 rounded-lg bg-gradient-to-br from-orange-900/20 to-transparent h-full flex items-center justify-center">
+                        <div class="text-center p-8">
+                            <i class="fas fa-cube text-6xl text-orange-500 mb-4"></i>
+                            <h3 class="text-2xl font-bold text-orange-300 mb-2">3D Printing Community</h3>
+                            <p class="text-gray-300">Join our passionate group of makers and innovators</p>
+                        </div>
                     </div>
                 </div>
                 <div class="md:w-1/2">
@@ -291,7 +311,7 @@
                             View Details <i class="fas fa-arrow-right ml-2"></i>
                         </a>
                     </div>
-                    
+                                    
                     <!-- Project 2 -->
                     <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border hover:bg-opacity-90 transition duration-300">
                         <div class="mb-4">
@@ -307,7 +327,7 @@
                             View Details <i class="fas fa-arrow-right ml-2"></i>
                         </a>
                     </div>
-                    
+                                    
                     <!-- Project 3 -->
                     <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border hover:bg-opacity-90 transition duration-300">
                         <div class="mb-4">
@@ -347,7 +367,7 @@
                     <h3 class="text-2xl font-bold mb-6 text-orange-300 flex items-center">
                         <i class="far fa-calendar-alt mr-3"></i> Upcoming Events
                     </h3>
-                    
+                                    
                     <div class="space-y-4">
                         <!-- Event 1 -->
                         <div class="bg-gray-900 bg-opacity-70 rounded-lg p-6 neon-border">
@@ -369,7 +389,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+                                                
                         <!-- Event 2 -->
                         <div class="bg-gray-900 bg-opacity-70 rounded-lg p-6 neon-border">
                             <div class="flex flex-col md:flex-row">
@@ -390,7 +410,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+                                                
                         <!-- Event 3 -->
                         <div class="bg-gray-900 bg-opacity-70 rounded-lg p-6 neon-border">
                             <div class="flex flex-col md:flex-row">
@@ -419,7 +439,7 @@
                     <h3 class="text-2xl font-bold mb-6 text-orange-300 flex items-center">
                         <i class="far fa-calendar mr-3"></i> July 2023
                     </h3>
-                    
+                                    
                     <div class="bg-gray-900 bg-opacity-70 rounded-lg p-4 neon-border">
                         <div class="grid grid-cols-7 gap-1 text-center mb-2">
                             <div class="text-orange-400 text-sm font-medium">S</div>
@@ -430,7 +450,7 @@
                             <div class="text-orange-400 text-sm font-medium">F</div>
                             <div class="text-orange-400 text-sm font-medium">S</div>
                         </div>
-                        
+                                                
                         <div class="grid grid-cols-7 gap-1 text-center">
                             <!-- Empty days -->
                             <div class="py-2 opacity-30"></div>
@@ -440,7 +460,7 @@
                             <div class="py-2 opacity-30"></div>
                             <div class="py-2 opacity-30">1</div>
                             <div class="py-2 opacity-30">2</div>
-                            
+                                                        
                             <!-- Week 1 -->
                             <div class="py-2">3</div>
                             <div class="py-2">4</div>
@@ -449,7 +469,7 @@
                             <div class="py-2">7</div>
                             <div class="py-2">8</div>
                             <div class="py-2">9</div>
-                            
+                                                        
                             <!-- Week 2 -->
                             <div class="py-2">10</div>
                             <div class="py-2">11</div>
@@ -458,7 +478,7 @@
                             <div class="py-2">14</div>
                             <div class="py-2 bg-orange-900 bg-opacity-50 rounded-full text-orange-300 font-bold">15</div>
                             <div class="py-2">16</div>
-                            
+                                                        
                             <!-- Week 3 -->
                             <div class="py-2">17</div>
                             <div class="py-2">18</div>
@@ -467,7 +487,7 @@
                             <div class="py-2">21</div>
                             <div class="py-2 bg-orange-900 bg-opacity-50 rounded-full text-orange-300 font-bold">22</div>
                             <div class="py-2">23</div>
-                            
+                                                        
                             <!-- Week 4 -->
                             <div class="py-2">24</div>
                             <div class="py-2">25</div>
@@ -476,7 +496,7 @@
                             <div class="py-2">28</div>
                             <div class="py-2">29</div>
                             <div class="py-2">30</div>
-                            
+                                                        
                             <!-- Week 5 -->
                             <div class="py-2">31</div>
                             <div class="py-2 opacity-30"></div>
@@ -486,7 +506,7 @@
                             <div class="py-2 opacity-30"></div>
                             <div class="py-2 opacity-30"></div>
                         </div>
-                        
+                                                
                         <div class="mt-6">
                             <h4 class="text-lg font-bold mb-3 text-orange-300">Regular Meetups</h4>
                             <ul class="space-y-2 text-gray-300">
@@ -537,7 +557,7 @@
                         <a href="mailto:seanlirazan@gmail.com" class="text-orange-400 hover:text-orange-300"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
-                
+                                
                 <!-- Team Member 2 -->
                 <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border team-card transition duration-300">
                     <div class="flex justify-center mb-4">
@@ -545,9 +565,9 @@
                             <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Team Member" class="w-32 h-32 rounded-full border-4 border-orange-500 object-cover">
                             <div class="absolute -bottom-2 -right-2 bg-orange-600 rounded-full p-1">
                                 <i class="fa-solid fa-wrench text-white text-sm"></i>
-                         </div>
+                          </div>
                     </div>
-                         </div>
+                          </div>
                     <h3 class="text-xl font-bold text-center mb-1 text-orange-300">Matthew Markey</h3>
                     <p class="text-orange-500 text-center text-sm font-medium mb-4">Vice President</p>
                     <p class="text-gray-300 text-center text-sm mb-4">Mechanical engineer focused on Robotics and Materials.</p>
@@ -557,7 +577,7 @@
                         <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
-                
+                                
                 <!-- Team Member 3 -->
                <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border team-card transition duration-300">
                     <div class="flex justify-center mb-4">
@@ -565,9 +585,9 @@
                             <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Team Member" class="w-32 h-32 rounded-full border-4 border-orange-500 object-cover">
                             <div class="absolute -bottom-2 -right-2 bg-orange-600 rounded-full p-1">
                                 <i class="fa-solid fa-wrench text-white text-sm"></i>
-                         </div>
+                          </div>
                     </div>
-                         </div>
+                          </div>
                     <h3 class="text-xl font-bold text-center mb-1 text-orange-300">Adrian Rolan</h3>
                     <p class="text-orange-500 text-center text-sm font-medium mb-4">Inventory Manager</p>
                     <p class="text-gray-300 text-center text-sm mb-4">Aerospace engineer in airfoil research.</p>
@@ -575,9 +595,9 @@
                         <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fab fa-artstation"></i></a>
                         <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fas fa-envelope"></i></a>
-                    </div>                       
-                </div>
-                
+                    </div>
+                                  </div>
+                                
                 <!-- Team Member 4 -->
                 <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border team-card transition duration-300">
                     <div class="flex justify-center mb-4">
@@ -597,12 +617,12 @@
                         <a href="#" class="text-orange-400 hover:text-orange-300"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
-                     
+                                 
             </div>
             
             <div class="mt-16">
                 <h3 class="text-2xl font-bold mb-6 text-center text-orange-300">Club Roles & Responsibilities</h3>
-                
+                                
                 <div class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- Role 1 -->
@@ -625,7 +645,7 @@
                                 </li>
                             </ul>
                         </div>
-                        
+                                                
                         <!-- Role 2 -->
                         <div>
                             <h4 class="text-lg font-bold mb-3 text-orange-400 flex items-center">
@@ -646,7 +666,7 @@
                                 </li>
                             </ul>
                         </div>
-                        
+                                                
                         <!-- Role 3 -->
                         <div>
                             <h4 class="text-lg font-bold mb-3 text-orange-400 flex items-center">
@@ -678,31 +698,14 @@
     <!-- Join Section -->
     <section id="join" class="py-20 bg-black bg-opacity-80">
         <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-16 text-orange-400 neon-text"></h2>
+            <h2 class="text-4xl font-bold text-center mb-16 text-orange-400 neon-text">JOIN OUR CLUB</h2>
             
-            <div class="flex flex-col lg:flex-row gap-1 items-center">
-               
-                
-                
-                    
-                    
-                    
-                    <body class="bg-gray-900 text-white">
-    <section class="py-16 px-4">
-        <div class="max-w-4xl mx-auto">
-            <div class="flex flex-col items-center justify-center">
-                <div class="w-full md:w-2/3 lg:w-1/2">
-                    <div class="bg-gray-900 bg-opacity-70 rounded-xl p-8 neon-border">
-                        <h4 class="text-4xl font-bold text-center mb-16 text-orange-400 neon-text"">
-                            </i> JOIN OUR CLUB
-                        </h4>
-
-                        <div class="lg:w-1/2">
-                    <h3 class="text-2xl font-bold mb-6 text-orange-300">Become Part of NeonGrid 3D</h3>
+            <div class="flex flex-col lg:flex-row gap-8 items-center">
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-bold mb-6 text-orange-300">Become Part of 3DPD</h3>
                     <p class="text-gray-300 mb-6">Whether you're a seasoned maker or just starting your 3D printing journey, we welcome all skill levels. Our community thrives on sharing knowledge and pushing creative boundaries together.</p>
-                        
-                        <div class="space-y-6 mb-8">
-                            <div class="mb-8">
+                    
+                    <div class="mb-8">
                         <h4 class="text-xl font-bold mb-4 text-orange-300">Membership Benefits</h4>
                         <ul class="space-y-3 text-gray-300">
                             <li class="flex items-start">
@@ -727,13 +730,12 @@
                             </li>
                         </ul>
                     </div>
-                            
-                            <div class="flex justify-center">
-                                <div class="w-24 h-1 bg-orange-500 rounded-full"></div>
-                            </div>
-                            
-                            
-                        </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <div class="bg-gray-900 bg-opacity-70 rounded-xl p-8 neon-border text-center">
+                        <h3 class="text-2xl font-bold mb-6 text-orange-300">Ready to Join?</h3>
+                        <p class="text-gray-300 mb-8">Click the button below to contact us and start your 3D printing journey!</p>
                         
                         <div class="text-center">
                             <a href="https://www.stuorg.iastate.edu/2541/join" 
@@ -742,33 +744,21 @@
                             </a>
                         </div>
                         
-                        <div class="mt-8 flex justify-center space-x-4">
-                            <a href="#" class="text-gray-400 hover:text-orange-400 transition-colors">
-                                <i class="fab fa-discord text-2xl"></i>
-                            </a>
-                            <a href="#" class="text-gray-400 hover:text-orange-400 transition-colors">
-                                <i class="fab fa-twitter text-2xl"></i>
-                            </a>
-                            <a href="#" class="text-gray-400 hover:text-orange-400 transition-colors">
-                                <i class="fab fa-instagram text-2xl"></i>
-                            </a>
+                        <div class="mt-8">
+                            <p class="text-gray-400 mb-4">Or connect with us on social media:</p>
+                            <div class="flex justify-center space-x-4">
+                                <a href="#" class="text-gray-400 hover:text-orange-400 transition-colors">
+                                    <i class="fab fa-discord text-2xl"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-orange-400 transition-colors">
+                                    <i class="fab fa-twitter text-2xl"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-orange-400 transition-colors">
+                                    <i class="fab fa-instagram text-2xl"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <script>
-        // Add click animation to the button
-        document.querySelector('.neon-button').addEventListener('click', function() {
-            this.classList.add('animate-ping');
-            setTimeout(() => {
-                this.classList.remove('animate-ping');
-            }, 500);
-        });
-    </script>
-</body>
                 </div>
             </div>
         </div>
@@ -867,6 +857,14 @@
                     item.classList.add('text-orange-500');
                 }
             });
+        });
+
+        // Add click animation to the email button
+        document.querySelector('.neon-button').addEventListener('click', function() {
+            this.classList.add('animate-ping');
+            setTimeout(() => {
+                this.classList.remove('animate-ping');
+            }, 500);
         });
     </script>
 </body>
