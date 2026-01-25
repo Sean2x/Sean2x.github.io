@@ -1,1 +1,1 @@
-Hi this is just an ametuer first journey
+Hi this is just an ametuer's first journey
