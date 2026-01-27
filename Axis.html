@@ -59,7 +59,10 @@
     }
 
     .link:hover {
-      color: #976aff;
+      background: linear-gradient(90deg, #b5179e, #7209b7);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       transform: translateY(-4px);
     }
 
@@ -91,16 +94,27 @@
       -webkit-text-fill-color: transparent;
       /* make text itself transparent */
     }
+
+    .gradient-border {
+      border: 4px solid;
+      /* border width */
+      border-image: linear-gradient(90deg, #b5179e, #7209b7) 1;
+      padding: 20px;
+      /* space inside container */
+      border-radius: 12px;
+      /* optional rounded corners */
+    }
   </style>
 </head>
 
 
 <body style="background-color: #181818" ;>
 
-  <header class="Vgradient">
+  <header class="Vgradient gradient-border">
     <div class="top-container mx-auto my-auto px-4 py-3">
 
-      <h1 class="top-text gradient-text" style="font-size: 2rem; font-weight: bold; font-family: Trebuchet MS;">The Axis</h1>
+      <h1 class="top-text gradient-text" style="font-size: 2rem; font-weight: bold; font-family: Trebuchet MS;">The Axis
+      </h1>
 
       <div class="nav-bar items-center flex">
         <a href="https://sean2x.github.io/ConnectCard.html" class="top-text link" style="font-size: 1rem">Connect
