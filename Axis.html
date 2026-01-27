@@ -2,119 +2,135 @@
 
 
 <html lang="en">
-  <head>
-    <title>Welcome to the Terrarium</title>
-    <meta charset="utf-8">
-    <meta name="viewport", content="width=device-width, initial-scale=1">
-    <link rel="stylesheet", href="">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-      }
 
-      .container {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-top: 50px;
-      }
+<head>
+  <title>Welcome to the Terrarium</title>
+  <meta charset="utf-8">
+  <meta name="viewport" , content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" , href="">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
 
-      .top-container {
-        display: flex;
-        justify-content: left;
-        align-items: center;
-        gap: 20px;
-        height: 80px;
-      }
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 50px;
+    }
 
-      .plant-holder {
-        background-color: #4CAF50;
-        padding: 20px;
-        border-radius: 10px;
-      }
+    .top-container {
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      gap: 20px;
+      height: 80px;
+    }
 
-      .plant {
-        width: 150px;
-        height: auto;
-      }
+    .plant-holder {
+      background-color: #4CAF50;
+      padding: 20px;
+      border-radius: 10px;
+    }
 
-      .Vgradient {
-        background: linear-gradient(135deg, #000000 50%, #45258f 100%);
-      }
+    .plant {
+      width: 150px;
+      height: auto;
+    }
 
-      .top-text {
-        color: white;
-        font-weight: bold;
-        text-align: left;
+    .Vgradient {
+      background: linear-gradient(135deg, #000000 50%, #45258f 100%);
+    }
 
-      }
+    .top-text {
+      color: white;
+      font-weight: bold;
+      text-align: left;
 
-      .link {
+    }
+
+    .link {
       transition:
-      background-color 0.5s ease,
-      transform 0.35s ease,
-      }
+        background-color 0.5s ease,
+        transform 0.35s ease,
+    }
 
-      .link:hover {
+    .link:hover {
       color: #976aff;
       transform: translateY(-4px);
-      }
+    }
 
-      .nav-bar{
-         display: flex;          /* enable flex layout */
-          justify-content: flex-start; /* push items to the left horizontally */
-          align-items: center;    /* vertically center items */
-          height: 100%;          /* or whatever height you want */
-          border: 1px solid #cccccc00; /* just to visualize */
-          flex-grow: 1;           /* take up remaining space */
-          gap: 32px;         /* space between each child */
-          padding: 0 40px;  /* space from left & right edges */
-      }
+    .nav-bar {
+      display: flex;
+      /* enable flex layout */
+      justify-content: flex-start;
+      /* push items to the left horizontally */
+      align-items: center;
+      /* vertically center items */
+      height: 100%;
+      /* or whatever height you want */
+      border: 1px solid #cccccc00;
+      /* just to visualize */
+      flex-grow: 1;
+      /* take up remaining space */
+      gap: 32px;
+      /* space between each child */
+      padding: 0 40px;
+      /* space from left & right edges */
+    }
 
-      
-    </style>
-  </head>
+    .gradient-text {
+      background: linear-gradient(90deg, #b5179e, #7209b7);
+      /* left-to-right gradient */
+      -webkit-background-clip: text;
+      /* clip background to text */
+      -webkit-text-fill-color: transparent;
+      /* make text itself transparent */
+    }
+  </style>
+</head>
 
 
-  <body style="background-color: #181818";>
+<body style="background-color: #181818" ;>
 
-    <header class="Vgradient">
-        <div class="top-container mx-auto my-auto px-4 py-3">
+  <header class="Vgradient">
+    <div class="top-container mx-auto my-auto px-4 py-3">
 
-             <h1 class="top-text" style="font-size: 2rem; font-weight: bold; font-family: Trebuchet MS;">The Axis</h1>
+      <h1 class="top-text" style="font-size: 2rem; font-weight: bold; font-family: Trebuchet MS;">The Axis</h1>
 
-              <div class="nav-bar items-center flex">
-                <a href="https://sean2x.github.io/ConnectCard.html" class="top-text link" style="font-size: 1rem">Connect Card</a>
-                <a href="https://sean2x.github.io/ConnectCard.html" class="top-text link" style="font-size: 1rem">Projects</a>
-              </div>             
-        </div>
-    </header>
-
-
-
-    <h1 style="color: #5d28d8">My Terrarium</h1>
-    <div id="page">
-      <div class="container">
-
-        <div class="plant-holder">  
-          <img class="plant" id="plant1" alt="a smallr plant" src="./images/plant1.png">
-        </div>
-
-        <div class="plant-holder">
-          <img class="plant" id="plant1" alt="a small cactus plant" src="./images/plant2.png">
-        </div>
-
+      <div class="nav-bar items-center flex">
+        <a href="https://sean2x.github.io/ConnectCard.html" class="top-text link" style="font-size: 1rem">Connect
+          Card</a>
+        <a href="https://sean2x.github.io/ConnectCard.html" class="top-text link" style="font-size: 1rem">Projects</a>
       </div>
     </div>
+  </header>
+
+
+
+  <h1 style="color: #5d28d8">My Terrarium</h1>
+  <div id="page">
+    <div class="container">
+
+      <div class="plant-holder">
+        <img class="plant" id="plant1" alt="a smallr plant" src="./images/plant1.png">
+      </div>
+
+      <div class="plant-holder">
+        <img class="plant" id="plant1" alt="a small cactus plant" src="./images/plant2.png">
+      </div>
+
+    </div>
+  </div>
 
 
 
 
 
 
-  </body>
+</body>
 
 </html>
-
