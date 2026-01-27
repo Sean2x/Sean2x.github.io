@@ -66,10 +66,11 @@
          display: flex;          /* enable flex layout */
           justify-content: flex-start; /* push items to the left horizontally */
           align-items: center;    /* vertically center items */
-          height: 100px;          /* or whatever height you want */
+          height: 100%;          /* or whatever height you want */
           border: 1px solid #ccc; /* just to visualize */
           flex-grow: 1;           /* take up remaining space */
-        
+          gap: 16px;         /* space between each child */
+          padding: 0 20px;  /* space from left & right edges */
       }
 
       
@@ -85,7 +86,7 @@
              <h1 class="top-text link">The Axis</h1>
 
               <div class="nav-bar items-center flex">
-                <a href="https://sean2x.github.io/ConnectCard.html" class="top-text link">Visit Connect Card</a>
+                <a href="https://sean2x.github.io/ConnectCard.html" class="top-text link" style="font-size: .8rem">Visit Connect Card</a>
 
               </div>             
         </div>
