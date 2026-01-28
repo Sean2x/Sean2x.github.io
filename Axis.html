@@ -93,25 +93,40 @@
 
       .dashboard {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 10px;
         grid-template-rows: repeat(5, 1fr);
         padding: 20px;
-        outline: 2px dashed red;
+        height: 90vh;
       }
 
-      .main-card {
-        border: 1px solid #d936df;
+      .content-card {
+        background-color: #141414;
+        border: 2px solid #850872;
         border-radius: 8px;
         padding: 20px;
         text-align: left;
-        grid-column: 2 / 5;
-        grid-row: 1 / 5;
+      }
+
+      .main {
+        grid-column: 2 / 4;
+        grid-row: 1 / 6;
+      }
+
+      .left {
+        text-align: left;
+        grid-column: 1 / 2;
+        grid-row: 1 / 6;
+      }
+
+      .right {
+        grid-column: 4 / 4;
+        grid-row: 1 / 6;
       }
     </style>
   </head>
 
-  <body style="background-color: #181818" ;>
+  <body style="background-color: #252525" ;>
     <header class="Vgradient gradient-border-bottom">
       <div
         class="top-container mx-auto my-auto px-4 py-3"
@@ -168,7 +183,46 @@
     </header>
 
     <div class="dashboard">
-      <div class="main-card">Main</div>
+      <div class="main content-card">
+        <p
+          class="gradient-text"
+          style="
+            font-size: 1.5rem;
+            font-weight: bold;
+            font-family: Trebuchet MS;
+          "
+        >
+          Main
+        </p>
+        
+      </div>
+
+      <div class="left content-card">
+        <p
+          class="gradient-text"
+          style="
+            font-size: 1.5rem;
+            font-weight: bold;
+            font-family: Trebuchet MS;
+          "
+        >
+          Info
+        </p>
+
+          
+      </div>
+      <div class="right content-card">
+        <p
+          class="gradient-text"
+          style="
+            font-size: 1.5rem;
+            font-weight: bold;
+            font-family: Trebuchet MS;
+          "
+        >
+          Notifications
+        </p>
+      </div>
     </div>
   </body>
 </html>
