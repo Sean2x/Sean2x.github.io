@@ -17,12 +17,17 @@
 
 
 
+ section, header, footer {
+  border: 2px solid #8b8b8b;       
+}
 
+div {
+  border: 2px solid #c183ff2d;       
+}
 
-
-
-
-
+/*h1, h2, p {
+  border: 2px solid #ffffff00;       /* visible border for each section 
+} */
 
 
 
@@ -32,14 +37,20 @@
   </head>
   <body style="background-color: #252525">
    <!-- Header with Gradient Background -->
-    <header class="header">
+    <header class="header" style="margin: 0; display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;">
+
+    <div>
       <div class="logo">MyLogo</div>
 
-      <nav class="nav">
+      <nav class="nav" style="border: 2px solid #c183ff2d">
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
       </nav>
+    </div>
 
       <div class="socials">
         <a href="#">Instagram</a>
