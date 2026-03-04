@@ -232,32 +232,60 @@
       </section>
 
       <!-- Youtube -->
-      <section id="youtube" style="height: 70vh;">
-  <div style="display: flex; height: 100%;">
-    <!-- Left -->
-    <div style="flex: 0 0 20%; display: flex; align-items: center; justify-content: center;">
-      <h2>@SeanAppliesEngineering</h2>
-    </div>
+      <section id="youtube" style="height: 70vh">
+        <!--BG-->
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            height: 100%;
+          "
+        >
+          <!--left-->
+          <div style="flex: 0 0 20%">
+            <h2>@SeanAppliesEngineering</h2>
+          </div>
+          <!--YT center-->
+          <div style="flex: 0 0 60%; max-width: 800px;">
+            <div
+              class="video-container"
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+              "
+            >
+              <h1>My Latest Video</h1>
 
-    <!-- Center -->
-    <div style="flex: 0 0 60%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-      <h1>My Latest Video</h1>
-      <div style="width: 100%;">
-        <iframe
-          src="https://www.youtube.com/embed/9oTIuknrMB4"
-          style="width: 100%; aspect-ratio: 16/9;"
-          frameborder="0"
-          allowfullscreen>
-        </iframe>
-      </div>
-    </div>
-
-    <!-- Right -->
-    <div style="flex: 0 0 20%; display: flex; align-items: center; justify-content: center;">
-      <p>Check out this super cool video!</p>
-    </div>
-  </div>
-</section>
+              <div
+                style="
+                  margin-bottom: 70px;
+                  width: 100%;
+                  height: 100%;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <iframe
+                  src="https://www.youtube.com/embed/9oTIuknrMB4"
+                  style="width: 100%; height: 70%"
+                  frameborder="0"
+                  allowfullscreen
+                >
+                </iframe>
+              </div>
+            </div>
+          </div>
+          <!--right-->
+          <div style="flex: 0 0 20%">
+            <p>Check out this super cool video!</p>
+          </div>
+        </div>
+      </section>
 
       <!-- Projects Section -->
       <section id="projects">
