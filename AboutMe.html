@@ -1,424 +1,902 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <base target="_self" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sean Lirazan | Portfolio</title>
-    <meta
-      name="description"
-      content="Professional portfolio with internship carousel and project showcase"
-    />
-    <script src=""></script>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="" />
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM://PORTFOLIO_V2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+   
     <style>
-      p, a {
-        font-family: "Courier New", Courier, monospace;
-        color: #b5179e;
-        font-weight: 1000;
-      }
-
-      h1,
-      h2,
-      h3 {
-        font-family: monospace;
-        color: #b5179e;
-        font-weight: 1000;
-      }
-      .nav a {
-        color: #b5179e; /* custom font color */
-        text-decoration: none;
-        font-weight: bold;
-        transition: color 0.2s;
-      }
-
-      .image-box {
-        width: 100%;
-        aspect-ratio: 1 / 1; /* square image area */
-        overflow: hidden;
-        border-radius: 8px;
-        background: #11111100; /* optional background */
-      }
-
-      .image-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain; /* shows whole image */
-      }
-
-      .square {
-        width: 300px; /* or 100%, or whatever */
-        aspect-ratio: 1 / 1; /* height = width */
-        overflow: hidden; /* prevents image spill */
-      }
-
-      #matrixCanvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        opacity: 0.5;
-      }
-
-      .slide {
-        flex: 0 0 300px; /* fixed width, prevents flex from shrinking */
-        aspect-ratio: 1 / 1; /* forces height = width */
-        overflow: hidden; /* hides image overflow */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: start;
-        background: #11111131; /* optional, so you see the square */
-        border-radius: 8px; /* optional styling */
-        scroll-snap-align: center; /* snap each slide */
-        /* background-color: #f5f5f5; */
-      }
-    </style>
-  </head>
-
-  <canvas id="matrixCanvas"></canvas>
-
-  <body style="background-color: #000000">
-    <!-- Header with Gradient Background -->
-    <header
-      class="header"
-      style="
-        margin: 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 2rem;
-        background: linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 1),
-          rgba(0, 0, 0, 0)
-        );
-      "
-    >
-      <div style="display: flex; gap: 1.5rem">
-        <i class="logo bi bi-instagram" style="font-size: 2rem"></i>
-
-        <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
-          <a href="#about">About</a>
-          <a href="#projects">Projects</a>
-          <a href="#contact">Contact</a>
-          <a href="#contact">Resume</a>
-        </nav>
-      </div>
-
-      <div class="socials" style="gap: 2rem; display: flex">
-        <a href="#" class="logo bi bi-instagram" style="font-size: 2rem"></a>
-        <a href="#" class="logo bi bi-github" style="font-size: 2rem"></a>
-        <a href="#" class="logo bi bi-youtube" style="font-size: 2rem"></a>
-      </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="mx-auto px-0 py-8">
-      <!-- About Me Section -->
-      <section id="about me" style="height: 40vh; display: flex; gap: 1rem">
-        <!-- Cover photo -->
-        <div style="display: flex; align-items: center">
-          <img
-            src="Images/Headshot.jpeg"
-            alt=""
-            style="height: 300px; margin: 50px"
-          />
-        </div>
-        <!-- Text About Me -->
-        <div
-          style="
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: left;
-          "
-        >
-          <h1>Sean Lirazan</h1>
-          <h2>
-            Mechanical Engineer | Robotics Systems | Building the Magic of
-            Creation
-          </h2>
-          <p style="max-width: 50vw; overflow: hidden">
-            I'm an engineer who mixes Mechanical, Electrical and Software to
-            build fantastical projects that will one day inspire others. I
-            believe science is genuinely magical, and just scraping the surface
-            can expose you to a world of fantasy
-          </p>
-        </div>
-      </section>
-
-      <!-- Internship Carousel Section - TOP -->
-      <section id="carosel" style="height: 50vh">
-        <h2 style="display: flex; justify-content: center">Internships</h2>
-
-        <div
-          class="carousel-viewport"
-          style="
-            overflow-x: auto; /* allows horizontal scroll */
-            display: flex; /* arrange slides in a row */
-            gap: 20px; /* spacing between slides */
-            justify-content: center; /* center slides horizontally */
-            scroll-snap-type: x mandatory; /* nice snap effect when scrolling */
-            padding: 20px 0;
-          "
-        >
-          <!-- slide 1 -->
-          <div class="slide">
-            <div class="image-box">
-              <img
-                src="Images/Siaton_Farms.png"
-                alt="Internship 1"
-                style="width: 100%"
-              />
-            </div>
-            <h3>Siaton Farms</h3>
-            <p>Controls Engineer | Winter 2023</p>
-          </div>
-
-          <!-- slide 2 -->
-          <div class="slide">
-            <div class="image-box">
-              <img
-                src="Images/MrDeere.png"
-                alt="Internship 2"
-                style="padding: 20px"
-              />
-            </div>
-            <h3>John Deere</h3>
-            <p>Robotics Engineer | Summer 2025</p>
-          </div>
-
-          <!-- slide 3 -->
-          <div class="slide">
-            <div class="image-box">
-              <img
-                src="Images/Lspace.png"
-                alt="Internship 3"
-                style="
-                  padding: 20px;
-                  filter: brightness(0) saturate(100%) invert(14%) sepia(100%)
-                    saturate(1000%) hue-rotate(250deg);
-                "
-              />
-            </div>
-            <h3>NASA L'Space</h3>
-            <p>Lead Researcher | Fall 2025</p>
-          </div>
-
-          <!-- slide 4 -->
-          <div class="slide">
-            <div class="image-box">
-              <img
-                src="Images/RTX.png"
-                alt="Internship 4"
-                style="
-                  padding: 20px;
-                  filter: brightness(0) saturate(100%) invert(14%) sepia(100%)
-                    saturate(1000%) hue-rotate(250deg);
-                "
-              />
-            </div>
-            <h3>Collins Aerospace</h3>
-            <p>Systems Engineer | Spring 2026</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Youtube -->
-      <section
-        id="youtube"
-        style="
-          height: 70vh;
-          background-color: rgb(1, 1, 1);
-          border-top: #b5179e 2px solid;
-          border-bottom: #b5179e 2px solid;
-          border-radius: 8px;
-          padding: 20px;
-        "
-      >
-        <!--BG-->
-        <div
-          style="
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            height: 100%;
-          "
-        >
-          <!--left-->
-          <div style="flex: 1; min-width: 0">
-            <h2>@SeanAppliesEngineering</h2>
-          </div>
-          <!--YT center-->
-          <div style="flex: 3; min-width: 0">
-            <div
-              class="video-container"
-              style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-                height: 100%;
-              "
-            >
-              <h1>My Latest Video</h1>
-
-              <div
-                style="
-                  margin-bottom: 70px;
-                  width: 100%;
-                  height: 100%;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                "
-              >
-                <iframe
-                  src="https://www.youtube.com/embed/9oTIuknrMB4"
-                  style="
-                    width: 100%;
-                    aspect-ratio: 16/9;
-                    max-width: 800px;
-                    border-radius: 16px;
-                  "
-                  frameborder="0"
-                  allowfullscreen
-                >
-                </iframe>
-              </div>
-            </div>
-          </div>
-          <!--right-->
-          <div style="flex: 1; min-width: 0">
-            <p>Check out this super cool video!</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Projects Section -->
-      <section id="projects">
-        <h2 style="display: flex; justify-content: center">Projects</h2>
-        <div
-          class="grid-container"
-          style="
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-          "
-        >
-          <div
-            class="grid-item"
-            style="height: 300px; display: flex; flex-direction: row"
-          >
-            <div style="display: flex; align-items: center">
-              <img
-                src=""
-                alt="Project 1"
-                style="height: 200px; width: 200px; margin: 20px"
-              />
-            </div>
-            <!-- Text About Me -->
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: left;
-              "
-            >
-              <h1>Portfolio Website</h1>
-              <h2></h2>
-              <p>This was my first deep dive into HTML/CSS/JS and GitHub,</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Connect Information -->
-      <section
-        id="contact"
-        style="
-          display: flex;
-          height: 80vh;
-          align-items: center;
-          justify-content: space-between;
-        "
-      >
-        <div>
-          <h1 style="font-size: 8rem">Colaborate?</h1>
-          <h1 style="font-size: 8rem">Sponsor?</h1>
-          <h1 style="font-size: 8rem">Or just ask questions</h1>
-          <p style="font-size: 3rem">My DMs are always open!</p>
-        </div>
-        <div
-          style="
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-right: 50px;
-          "
-        >
-          <a href="#" class="logo bi bi-instagram" style="font-size: 10rem"></a>
-          <a href="#" class="logo bi bi-linkedin" style="font-size: 10rem"></a>
-          <a href="#" class="logo bi bi-envelope" style="font-size: 10rem"></a>
-        </div>
-      </section>
-    </main>
-
-    <!-- Footer -->
-  </body>
-
-  <script>
-    const canvas = document.getElementById("matrixCanvas");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const fontSize = 19;
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops = Array(columns).fill(1);
-
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, "#b5179e44");
-      gradient.addColorStop(1, "#7209b744");
-      ctx.fillStyle = gradient;
-      ctx.font = fontSize + "px monospace";
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
+        :root {
+            --primary-orange: #ff6600;
+            --secondary-orange: #ff9500;
+            --dark-bg: #0a0a0f;
+            --grid-color: rgba(255, 102, 0, 0.3);
+            --glow: 0 0 10px rgba(255, 102, 0, 0.8), 0 0 20px rgba(255, 102, 0, 0.4), 0 0 30px rgba(255, 102, 0, 0.2);
         }
-
-        drops[i]++;
-      }
-    }
-
-    setInterval(draw, 33);
-
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-  </script>
+ 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ 
+        body {
+            background-color: var(--dark-bg);
+            color: var(--primary-orange);
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: hidden;
+            position: relative;
+        }
+ 
+        /* CRT Scanline Effect */
+        .crt::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 50;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+ 
+        .crt::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(18, 16, 16, 0.1);
+            opacity: 0;
+            z-index: 50;
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+ 
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+ 
+        @keyframes flicker {
+            0% { opacity: 0.02; }
+            50% { opacity: 0.05; }
+            100% { opacity: 0.02; }
+        }
+ 
+        /* Laser Grid Background */
+        .laser-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center center;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: center top;
+            opacity: 0.4;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+ 
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+ 
+        /* Glow Effects */
+        .text-glow {
+            text-shadow: var(--glow);
+        }
+ 
+        .box-glow {
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.5), inset 0 0 10px rgba(255, 102, 0, 0.1);
+        }
+ 
+        .border-glow {
+            border: 1px solid var(--primary-orange);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.5), inset 0 0 20px rgba(255, 102, 0, 0.1);
+        }
+ 
+        /* Terminal Window */
+        .terminal-window {
+            background: rgba(10, 10, 15, 0.9);
+            border: 2px solid var(--primary-orange);
+            box-shadow: var(--glow);
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .terminal-window::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(90deg, transparent, rgba(255, 102, 0, 0.1), transparent);
+            border-bottom: 1px solid var(--primary-orange);
+        }
+ 
+        .terminal-header {
+            background: rgba(255, 102, 0, 0.1);
+            border-bottom: 1px solid var(--primary-orange);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+ 
+        .terminal-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid var(--primary-orange);
+        }
+ 
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+            animation: glitch-skew 1s infinite;
+        }
+ 
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+ 
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00ff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+ 
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 #00ffff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+ 
+        @keyframes glitch-anim {
+            0% { clip: rect(31px, 9999px, 94px, 0); }
+            20% { clip: rect(78px, 9999px, 20px, 0); }
+            40% { clip: rect(12px, 9999px, 6px, 0); }
+            60% { clip: rect(65px, 9999px, 89px, 0); }
+            80% { clip: rect(23px, 9999px, 67px, 0); }
+            100% { clip: rect(91px, 9999px, 34px, 0); }
+        }
+ 
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 99px, 0); }
+            20% { clip: rect(12px, 9999px, 45px, 0); }
+            40% { clip: rect(78px, 9999px, 23px, 0); }
+            60% { clip: rect(34px, 9999px, 67px, 0); }
+            80% { clip: rect(89px, 9999px, 12px, 0); }
+            100% { clip: rect(45px, 9999px, 78px, 0); }
+        }
+ 
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            10% { transform: skew(-2deg); }
+            20% { transform: skew(2deg); }
+            30% { transform: skew(0deg); }
+            100% { transform: skew(0deg); }
+        }
+ 
+        /* Cursor Blink */
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background-color: var(--primary-orange);
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            box-shadow: var(--glow);
+        }
+ 
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+ 
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+ 
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+            border-left: 1px solid var(--primary-orange);
+        }
+ 
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-orange);
+            box-shadow: var(--glow);
+        }
+ 
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-orange);
+        }
+ 
+        /* Progress Bars */
+        .progress-bar {
+            background: rgba(255, 102, 0, 0.2);
+            border: 1px solid var(--primary-orange);
+            height: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-orange), var(--secondary-orange));
+            box-shadow: var(--glow);
+            transition: width 2s ease-out;
+            position: relative;
+        }
+ 
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+ 
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+ 
+        /* Hover Effects */
+        .hover-glow:hover {
+            text-shadow: var(--glow);
+            transform: translateX(5px);
+            transition: all 0.3s ease;
+        }
+ 
+        .nav-item {
+            position: relative;
+            padding-left: 20px;
+        }
+ 
+        .nav-item::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+ 
+        .nav-item:hover::before {
+            opacity: 1;
+            left: 5px;
+        }
+ 
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .laser-grid {
+                background-size: 30px 30px;
+            }
+        }
+    </style>
+</head>
+<body class="crt min-h-screen">
+    <!-- Laser Grid Background -->
+    <div class="laser-grid"></div>
+ 
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-40 bg-black/80 border-b border-orange-600 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="terminal" class="w-6 h-6 text-orange-600"></i>
+                    <span class="text-xl font-bold text-glow font-['VT323']">SYSTEM_ROOT</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-item hover-glow text-orange-500 hover:text-orange-400 transition-colors">HOME</a>
+                    <a href="#about" class="nav-item hover-glow text-orange-500 hover:text-orange-400 transition-colors">ABOUT</a>
+                    <a href="#projects" class="nav-item hover-glow text-orange-500 hover:text-orange-400 transition-colors">PROJECTS</a>
+                    <a href="#skills" class="nav-item hover-glow text-orange-500 hover:text-orange-400 transition-colors">SKILLS</a>
+                    <a href="#contact" class="nav-item hover-glow text-orange-500 hover:text-orange-400 transition-colors">CONTACT</a>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-orange-600 hover:text-orange-400">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black/95 border-b border-orange-600">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#home" class="block px-3 py-2 text-orange-500 hover:text-orange-400 hover:bg-orange-900/20">HOME</a>
+                <a href="#about" class="block px-3 py-2 text-orange-500 hover:text-orange-400 hover:bg-orange-900/20">ABOUT</a>
+                <a href="#projects" class="block px-3 py-2 text-orange-500 hover:text-orange-400 hover:bg-orange-900/20">PROJECTS</a>
+                <a href="#skills" class="block px-3 py-2 text-orange-500 hover:text-orange-400 hover:bg-orange-900/20">SKILLS</a>
+                <a href="#contact" class="block px-3 py-2 text-orange-500 hover:text-orange-400 hover:bg-orange-900/20">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+ 
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative pt-16 px-4">
+        <div class="max-w-4xl w-full">
+            <div class="terminal-window p-8 md:p-12">
+                <div class="terminal-header mb-6 -mx-8 -mt-8 md:-mx-12 md:-mt-12">
+                    <div class="terminal-btn bg-orange-600"></div>
+                    <div class="terminal-btn border-orange-600"></div>
+                    <div class="terminal-btn border-orange-600"></div>
+                    <span class="ml-4 text-sm opacity-70">user@portfolio:~</span>
+                </div>
+               
+                <div class="space-y-4">
+                    <div class="text-sm opacity-70 mb-4">
+                        <span id="timestamp"></span> | SYSTEM INITIALIZED<br>
+                        LOADING PORTFOLIO_MODULE...
+                    </div>
+                   
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 font-['VT323']">
+                        <span class="glitch text-glow" data-text="> NEON_DEVELOPER_">> NEON_DEVELOPER_</span><span class="cursor"></span>
+                    </h1>
+                   
+                    <div class="text-lg md:text-xl space-y-2 text-orange-400/90">
+                        <p class="typing-text" id="typing-text"></p>
+                    </div>
+ 
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <button onclick="document.getElementById('projects').scrollIntoView({behavior: 'smooth'})"
+                                class="px-6 py-3 border-2 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-black transition-all duration-300 text-glow hover:shadow-[0_0_20px_rgba(255,102,0,0.6)] font-bold uppercase tracking-wider">
+                            <span class="flex items-center gap-2">
+                                <i data-lucide="folder-open" class="w-4 h-4"></i>
+                                ACCESS_FILES
+                            </span>
+                        </button>
+                        <button onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})"
+                                class="px-6 py-3 border-2 border-orange-600/50 text-orange-600/70 hover:border-orange-600 hover:text-orange-600 transition-all duration-300 uppercase tracking-wider">
+                            <span class="flex items-center gap-2">
+                                <i data-lucide="mail" class="w-4 h-4"></i>
+                                INIT_CONTACT
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- About Section -->
+    <section id="about" class="py-20 px-4 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="terminal-window p-8">
+                <div class="terminal-header mb-6 -mx-8 -mt-8">
+                    <div class="terminal-btn bg-orange-600"></div>
+                    <div class="terminal-btn border-orange-600"></div>
+                    <div class="terminal-btn border-orange-600"></div>
+                    <span class="ml-4 text-sm opacity-70">about.exe</span>
+                </div>
+ 
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <h2 class="text-3xl font-bold text-glow font-['VT323'] mb-6">> IDENTITY_MATRIX</h2>
+                        <div class="space-y-4 text-orange-400/90 leading-relaxed">
+                            <p class="border-l-2 border-orange-600 pl-4">
+                                <span class="text-orange-600">[CLASSIFIED]</span> Full-stack developer operating in the digital wasteland.
+                                Specializing in retro-futuristic interfaces and neon-soaked web experiences.
+                            </p>
+                            <p class="border-l-2 border-orange-600 pl-4">
+                                <span class="text-orange-600">[ORIGIN]</span> Born in the analog era, raised in the digital frontier.
+                                I bridge the gap between cassette futurism and modern web technologies.
+                            </p>
+                            <p class="border-l-2 border-orange-600 pl-4">
+                                <span class="text-orange-600">[MISSION]</span> Creating immersive digital experiences that pay homage
+                                to the 80s vision of the future while leveraging cutting-edge tech.
+                            </p>
+                        </div>
+                       
+                        <div class="mt-6 p-4 bg-orange-900/10 border border-orange-600/30 font-['VT323'] text-lg">
+                            <div class="flex justify-between mb-2">
+                                <span>STATUS:</span>
+                                <span class="text-green-500 animate-pulse">● ONLINE</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span>LOCATION:</span>
+                                <span>CYBERSPACE_NODE_734</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>UPTIME:</span>
+                                <span id="uptime">00:00:00</span>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="relative">
+                        <div class="aspect-square border-2 border-orange-600/50 p-4 relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-gradient-to-br from-orange-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <img src="http://static.photos/technology/640x360/42" alt="Profile" class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 transition-all duration-500 border border-orange-600/30">
+                            <div class="absolute bottom-4 left-4 right-4 bg-black/80 border border-orange-600 p-2 text-center text-sm font-['VT323'] text-glow">
+                                USER_AVATAR_RENDERED
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 px-4 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="terminal-window p-8">
+                <div class="terminal-header mb-6 -mx-8 -mt-8">
+                    <div class="terminal-btn bg-orange-600"></div>
+                    <div class="terminal-btn border-orange-600"></div>
+                    <div class="terminal-btn border-orange-600"></div>
+                    <span class="ml-4 text-sm opacity-70">directory: ~/projects</span>
+                </div>
+ 
+                <h2 class="text-3xl font-bold text-glow font-['VT323'] mb-8">> PROJECT_DATABASE</h2>
+ 
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Project 1 -->
+                    <div class="group border border-orange-600/30 bg-orange-900/5 hover:border-orange-600 hover:bg-orange-900/10 transition-all duration-300 cursor-pointer overflow-hidden">
+                        <div class="h-48 overflow-hidden border-b border-orange-600/30 relative">
+                            <img src="http://static.photos/technology/640x360/101" alt="Project 1" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-orange-600/10 group-hover:bg-transparent transition-colors"></div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-xl font-bold text-glow">NEON_PROTOCOL</h3>
+                                <i data-lucide="external-link" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </div>
+                            <p class="text-sm text-orange-400/70 mb-4 font-['VT323']">Cyberpunk interface framework for web applications</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">REACT</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">THREE.JS</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">WEBGL</span>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <!-- Project 2 -->
+                    <div class="group border border-orange-600/30 bg-orange-900/5 hover:border-orange-600 hover:bg-orange-900/10 transition-all duration-300 cursor-pointer overflow-hidden">
+                        <div class="h-48 overflow-hidden border-b border-orange-600/30 relative">
+                            <img src="http://static.photos/abstract/640x360/88" alt="Project 2" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-orange-600/10 group-hover:bg-transparent transition-colors"></div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-xl font-bold text-glow">GRID_SYSTEM_V2</h3>
+                                <i data-lucide="external-link" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </div>
+                            <p class="text-sm text-orange-400/70 mb-4 font-['VT323']">Retrofuturistic CSS framework with laser aesthetics</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">CSS3</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">SASS</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">POSTCSS</span>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <!-- Project 3 -->
+                    <div class="group border border-orange-600/30 bg-orange-900/5 hover:border-orange-600 hover:bg-orange-900/10 transition-all duration-300 cursor-pointer overflow-hidden">
+                        <div class="h-48 overflow-hidden border-b border-orange-600/30 relative">
+                            <img src="http://static.photos/technology/640x360/256" alt="Project 3" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-orange-600/10 group-hover:bg-transparent transition-colors"></div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-xl font-bold text-glow">CASSETTE_OS</h3>
+                                <i data-lucide="external-link" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </div>
+                            <p class="text-sm text-orange-400/70 mb-4 font-['VT323']">Web-based operating system interface</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">VUE</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">ELECTRON</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">NODE</span>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <!-- Project 4 -->
+                    <div class="group border border-orange-600/30 bg-orange-900/5 hover:border-orange-600 hover:bg-orange-900/10 transition-all duration-300 cursor-pointer overflow-hidden">
+                        <div class="h-48 overflow-hidden border-b border-orange-600/30 relative">
+                            <img src="http://static.photos/minimal/640x360/77" alt="Project 4" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-orange-600/10 group-hover:bg-transparent transition-colors"></div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-xl font-bold text-glow">TERMINAL_X</h3>
+                                <i data-lucide="external-link" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </div>
+                            <p class="text-sm text-orange-400/70 mb-4 font-['VT323']">Browser-based terminal emulator</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">JS</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">WEBSOCKET</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">XTERM</span>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <!-- Project 5 -->
+                    <div class="group border border-orange-600/30 bg-orange-900/5 hover:border-orange-600 hover:bg-orange-900/10 transition-all duration-300 cursor-pointer overflow-hidden">
+                        <div class="h-48 overflow-hidden border-b border-orange-600/30 relative">
+                            <img src="http://static.photos/cityscape/640x360/199" alt="Project 5" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-orange-600/10 group-hover:bg-transparent transition-colors"></div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-xl font-bold text-glow">SYNTH_WAVE_DB</h3>
+                                <i data-lucide="external-link" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </div>
+                            <p class="text-sm text-orange-400/70 mb-4 font-['VT323']">Music visualization platform</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">WEB AUDIO</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">CANVAS</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">GLSL</span>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <!-- Project 6 -->
+                    <div class="group border border-orange-600/30 bg-orange-900/5 hover:border-orange-600 hover:bg-orange-900/10 transition-all duration-300 cursor-pointer overflow-hidden">
+                        <div class="h-48 overflow-hidden border-b border-orange-600/30 relative">
+                            <img src="http://static.photos/technology/640x360/333" alt="Project 6" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-orange-600/10 group-hover:bg-transparent transition-colors"></div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-xl font-bold text-glow">CYBER_DECK</h3>
+                                <i data-lucide="external-link" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </div>
+                            <p class="text-sm text-orange-400/70 mb-4 font-['VT323']">Mobile-first cyberpunk UI kit</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">TAILWIND</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">FIGMA</span>
+                                <span class="px-2 py-1 text-xs border border-orange-600/50 text-orange-600/80">STORYBOOK</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 px-4 relative">
+        <div class="max-w-4xl mx-auto">
+            <div class="terminal-window p-8">
+                <div class="terminal-header mb-6 -mx-8 -mt-8">
+                    <div class="terminal-btn bg-orange-600"></div>
+                    <div class="terminal-btn border-orange-600"></div>
+                    <div class="terminal-btn border-orange-600"></div>
+                    <span class="ml-4 text-sm opacity-70">system_stats.dat</span>
+                </div>
+ 
+                <h2 class="text-3xl font-bold text-glow font-['VT323'] mb-8">> SKILL_MATRIX</h2>
+ 
+                <div class="space-y-6">
+                    <div class="skill-item">
+                        <div class="flex justify-between mb-2 font-['VT323'] text-lg">
+                            <span>JAVASCRIPT/TYPECRIPT</span>
+                            <span class="text-orange-600">95%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%" data-width="95%"></div>
+                        </div>
+                    </div>
+ 
+                    <div class="skill-item">
+                        <div class="flex justify-between mb-2 font-['VT323'] text-lg">
+                            <span>REACT/VUE/ANGULAR</span>
+                            <span class="text-orange-600">90%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%" data-width="90%"></div>
+                        </div>
+                    </div>
+ 
+                    <div class="skill-item">
+                        <div class="flex justify-between mb-2 font-['VT323'] text-lg">
+                            <span>CSS3/SCSS/TAILWIND</span>
+                            <span class="text-orange-600">98%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%" data-width="98%"></div>
+                        </div>
+                    </div>
+ 
+                    <div class="skill-item">
+                        <div class="flex justify-between mb-2 font-['VT323'] text-lg">
+                            <span>NODE.JS/EXPRESS</span>
+                            <span class="text-orange-600">85%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%" data-width="85%"></div>
+                        </div>
+                    </div>
+ 
+                    <div class="skill-item">
+                        <div class="flex justify-between mb-2 font-['VT323'] text-lg">
+                            <span>WEBGL/THREE.JS</span>
+                            <span class="text-orange-600">75%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%" data-width="75%"></div>
+                        </div>
+                    </div>
+ 
+                    <div class="skill-item">
+                        <div class="flex justify-between mb-2 font-['VT323'] text-lg">
+                            <span>RETRO_AESTHETICS</span>
+                            <span class="text-orange-600">100%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%" data-width="100%"></div>
+                        </div>
+                    </div>
+                </div>
+ 
+                <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="border border-orange-600/30 p-4 text-center hover:border-orange-600 hover:bg-orange-900/10 transition-all cursor-pointer group">
+                        <i data-lucide="code-2" class="w-8 h-8 mx-auto mb-2 text-orange-600 group-hover:scale-110 transition-transform"></i>
+                        <div class="text-xs font-['VT323']">CLEAN_CODE</div>
+                    </div>
+                    <div class="border border-orange-600/30 p-4 text-center hover:border-orange-600 hover:bg-orange-900/10 transition-all cursor-pointer group">
+                        <i data-lucide="zap" class="w-8 h-8 mx-auto mb-2 text-orange-600 group-hover:scale-110 transition-transform"></i>
+                        <div class="text-xs font-['VT323']">PERFORMANCE</div>
+                    </div>
+                    <div class="border border-orange-600/30 p-4 text-center hover:border-orange-600 hover:bg-orange-900/10 transition-all cursor-pointer group">
+                        <i data-lucide="shield" class="w-8 h-8 mx-auto mb-2 text-orange-600 group-hover:scale-110 transition-transform"></i>
+                        <div class="text-xs font-['VT323']">SECURITY</div>
+                    </div>
+                    <div class="border border-orange-600/30 p-4 text-center hover:border-orange-600 hover:bg-orange-900/10 transition-all cursor-pointer group">
+                        <i data-lucide="cpu" class="w-8 h-8 mx-auto mb-2 text-orange-600 group-hover:scale-110 transition-transform"></i>
+                        <div class="text-xs font-['VT323']">OPTIMIZATION</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-4 relative mb-20">
+        <div class="max-w-4xl mx-auto">
+            <div class="terminal-window p-8">
+                <div class="terminal-header mb-6 -mx-8 -mt-8">
+                    <div class="terminal-btn bg-orange-600"></div>
+                    <div class="terminal-btn border-orange-600"></div>
+                    <div class="terminal-btn border-orange-600"></div>
+                    <span class="ml-4 text-sm opacity-70">transmit.exe</span>
+                </div>
+ 
+                <h2 class="text-3xl font-bold text-glow font-['VT323'] mb-8">> ESTABLISH_CONNECTION</h2>
+ 
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4 p-4 border border-orange-600/30 hover:border-orange-600 hover:bg-orange-900/10 transition-all cursor-pointer group">
+                            <div class="w-12 h-12 border border-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <i data-lucide="mail" class="w-6 h-6 text-orange-600"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs opacity-70 font-['VT323']">EMAIL_CHANNEL</div>
+                                <div class="text-orange-400">neon@cyberspace.net</div>
+                            </div>
+                        </div>
+ 
+                        <div class="flex items-center gap-4 p-4 border border-orange-600/30 hover:border-orange-600 hover:bg-orange-900/10 transition-all cursor-pointer group">
+                            <div class="w-12 h-12 border border-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <i data-lucide="github" class="w-6 h-6 text-orange-600"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs opacity-70 font-['VT323']">GITHUB_REPO</div>
+                                <div class="text-orange-400">@neon_developer</div>
+                            </div>
+                        </div>
+ 
+                        <div class="flex items-center gap-4 p-4 border border-orange-600/30 hover:border-orange-600 hover:bg-orange-900/10 transition-all cursor-pointer group">
+                            <div class="w-12 h-12 border border-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <i data-lucide="linkedin" class="w-6 h-6 text-orange-600"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs opacity-70 font-['VT323']">LINKEDIN_NODE</div>
+                                <div class="text-orange-400">/in/neondev</div>
+                            </div>
+                        </div>
+ 
+                        <div class="flex items-center gap-4 p-4 border border-orange-600/30 hover:border-orange-600 hover:bg-orange-900/10 transition-all cursor-pointer group">
+                            <div class="w-12 h-12 border border-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <i data-lucide="twitter" class="w-6 h-6 text-orange-600"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs opacity-70 font-['VT323']">TWITTER_FEED</div>
+                                <div class="text-orange-400">@neon_grid</div>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <form class="space-y-4" onsubmit="event.preventDefault(); alert('TRANSMISSION SENT TO CYBERSPACE');">
+                        <div>
+                            <label class="block text-sm font-['VT323'] mb-2 text-orange-600">IDENTITY_STRING:</label>
+                            <input type="text" class="w-full bg-black/50 border border-orange-600/50 p-3 text-orange-400 focus:border-orange-600 focus:outline-none focus:shadow-[0_0_10px_rgba(255,102,0,0.3)] transition-all placeholder-orange-600/30" placeholder="Enter designation...">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-['VT323'] mb-2 text-orange-600">COMMUNICATION_CHANNEL:</label>
+                            <input type="email" class="w-full bg-black/50 border border-orange-600/50 p-3 text-orange-400 focus:border-orange-600 focus:outline-none focus:shadow-[0_0_10px_rgba(255,102,0,0.3)] transition-all placeholder-orange-600/30" placeholder="Enter email address...">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-['VT323'] mb-2 text-orange-600">MESSAGE_DATA:</label>
+                            <textarea rows="4" class="w-full bg-black/50 border border-orange-600/50 p-3 text-orange-400 focus:border-orange-600 focus:outline-none focus:shadow-[0_0_10px_rgba(255,102,0,0.3)] transition-all placeholder-orange-600/30 resize-none" placeholder="Enter transmission data..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3 border-2 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-black transition-all duration-300 font-bold uppercase tracking-wider text-glow hover:shadow-[0_0_20px_rgba(255,102,0,0.6)]">
+                            INITIATE_TRANSMISSION
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- Footer -->
+    <footer class="border-t border-orange-600/30 bg-black/50 py-8 px-4">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 text-orange-600/60 text-sm font-['VT323']">
+                <i data-lucide="terminal" class="w-4 h-4"></i>
+                <span>SYSTEM_STATUS: OPERATIONAL</span>
+            </div>
+            <div class="text-orange-600/60 text-sm font-['VT323']">
+                [COPYRIGHT_2024_NEON_SYSTEMS] // ALL_RIGHTS_RESERVED
+            </div>
+            <div class="flex gap-4">
+                <a href="#" class="text-orange-600/60 hover:text-orange-600 transition-colors">
+                    <i data-lucide="github" class="w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-orange-600/60 hover:text-orange-600 transition-colors">
+                    <i data-lucide="twitter" class="w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-orange-600/60 hover:text-orange-600 transition-colors">
+                    <i data-lucide="linkedin" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+ 
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+ 
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+       
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+ 
+        // Typing Effect
+        const text = "Initializing creative protocols... Building digital experiences for the retro-future.";
+        const typingElement = document.getElementById('typing-text');
+        let index = 0;
+ 
+        function typeText() {
+            if (index < text.length) {
+                typingElement.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeText, 50);
+            }
+        }
+ 
+        // Start typing after a delay
+        setTimeout(typeText, 1000);
+ 
+        // Timestamp Update
+        function updateTimestamp() {
+            const now = new Date();
+            const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
+            document.getElementById('timestamp').textContent = timestamp;
+        }
+        updateTimestamp();
+        setInterval(updateTimestamp, 1000);
+ 
+        // Uptime Counter
+        let seconds = 0;
+        function updateUptime() {
+            seconds++;
+            const hrs = Math.floor(seconds / 3600).toString().padStart(2, '0');
+            const mins = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            document.getElementById('uptime').textContent = `${hrs}:${mins}:${secs}`;
+        }
+        setInterval(updateUptime, 1000);
+ 
+        // Intersection Observer for Progress Bars
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+ 
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const progressFills = entry.target.querySelectorAll('.progress-fill');
+                    progressFills.forEach(fill => {
+                        const width = fill.getAttribute('data-width');
+                        setTimeout(() => {
+                            fill.style.width = width;
+                        }, 200);
+                    });
+                }
+            });
+        }, observerOptions);
+ 
+        const skillsSection = document.getElementById('skills');
+        if (skillsSection) {
+            observer.observe(skillsSection);
+        }
+ 
+        // Smooth Scroll for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+ 
+        // Random Glitch Effect on Title
+        setInterval(() => {
+            const glitch = document.querySelector('.glitch');
+            if (glitch && Math.random() > 0.95) {
+                glitch.style.animation = 'none';
+                setTimeout(() => {
+                    glitch.style.animation = '';
+                }, 100);
+            }
+        }, 2000);
+ 
+        // Add scanline sound effect simulation (visual only)
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                const btn = e.target.closest('button');
+                btn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    btn.style.transform = '';
+                }, 100);
+            }
+        });
+    </script>
+</body>
 </html>
