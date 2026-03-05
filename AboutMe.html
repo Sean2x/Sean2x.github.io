@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="" />
 
     <style>
-      p {
+      p, a {
         font-family: "Courier New", Courier, monospace;
         color: #b5179e;
         font-weight: 1000;
@@ -33,6 +33,12 @@
         font-family: monospace;
         color: #b5179e;
         font-weight: 1000;
+      }
+      .nav a {
+        color: #b5179e; /* custom font color */
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.2s;
       }
 
       .image-box {
@@ -93,6 +99,11 @@
         justify-content: space-between;
         align-items: center;
         padding: 1rem 2rem;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 1),
+          rgba(0, 0, 0, 0)
+        );
       "
     >
       <div style="display: flex; gap: 1.5rem">
@@ -102,6 +113,7 @@
           <a href="#about">About</a>
           <a href="#projects">Projects</a>
           <a href="#contact">Contact</a>
+          <a href="#contact">Resume</a>
         </nav>
       </div>
 
@@ -327,14 +339,9 @@
               "
             >
               <h1>Portfolio Website</h1>
-              <h2>
-                
-              </h2>
-              <p>
-                This was my first deep dive into HTML/CSS/JS and GitHub,
-              </p>
+              <h2></h2>
+              <p>This was my first deep dive into HTML/CSS/JS and GitHub,</p>
             </div>
-
           </div>
         </div>
       </section>
