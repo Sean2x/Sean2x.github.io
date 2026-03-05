@@ -21,25 +21,63 @@
     <link rel="stylesheet" href="" />
 
     <style>
-      section,
-      header,
-      footer {
-        border: 2px solid #8b8b8b;
+      p {
+        font-family: "Courier New", Courier, monospace;
+        color: #b5179e;
+        font-weight: 1000;
       }
 
-      /* div {
-        border: 2px solid #c183ff2d;
-      } */
+      h1,
+      h2,
+      h3 {
+        font-family: monospace;
+        color: #b5179e;
+        font-weight: 1000;
+      }
+
+      .image-box {
+        width: 100%;
+        aspect-ratio: 1 / 1; /* square image area */
+        overflow: hidden;
+        border-radius: 8px;
+        background: #11111100; /* optional background */
+      }
+
+      .image-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* shows whole image */
+      }
+
+      .square {
+        width: 300px; /* or 100%, or whatever */
+        aspect-ratio: 1 / 1; /* height = width */
+        overflow: hidden; /* prevents image spill */
+      }
 
       #matrixCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  opacity: 0.5;
-}
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.5;
+      }
+
+      .slide {
+        flex: 0 0 300px; /* fixed width, prevents flex from shrinking */
+        aspect-ratio: 1 / 1; /* forces height = width */
+        overflow: hidden; /* hides image overflow */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+        background: #11111131; /* optional, so you see the square */
+        border-radius: 8px; /* optional styling */
+        scroll-snap-align: center; /* snap each slide */
+        /* background-color: #f5f5f5; */
+      }
     </style>
   </head>
 
@@ -75,12 +113,16 @@
     </header>
 
     <!-- Main Content -->
-    <main class="mx-auto px-4 py-8">
+    <main class="mx-auto px-0 py-8">
       <!-- About Me Section -->
       <section id="about me" style="height: 40vh; display: flex; gap: 1rem">
         <!-- Cover photo -->
         <div style="display: flex; align-items: center">
-          <img src="Images/Headshot.jpeg" alt="" style="height: 300px" />
+          <img
+            src="Images/Headshot.jpeg"
+            alt=""
+            style="height: 300px; margin: 50px"
+          />
         </div>
         <!-- Text About Me -->
         <div
@@ -96,21 +138,17 @@
             Mechanical Engineer | Robotics Systems | Building the Magic of
             Creation
           </h2>
-          <p>
-            hi, this is straight yap and useless, lorem ipsum type shit, i just
-            want to see how the text will look like in the website, so yeah,
-            this is just a placeholder text, and it will be replaced with actual
-            content later on, but for now, let's just enjoy the beauty of this
-            meaningless text, and how it fills up the space in the website,
-            making it look more complete and professional, even though it
-            doesn't actually say anything meaningful, but hey, at least it looks
-            good, right?
+          <p style="max-width: 50vw; overflow: hidden">
+            I'm an engineer who mixes Mechanical, Electrical and Software to
+            build fantastical projects that will one day inspire others. I
+            believe science is genuinely magical, and just scraping the surface
+            can expose you to a world of fantasy
           </p>
         </div>
       </section>
 
       <!-- Internship Carousel Section - TOP -->
-      <section id="carosel" style="height: 40vh">
+      <section id="carosel" style="height: 50vh">
         <h2 style="display: flex; justify-content: center">Internships</h2>
 
         <div
@@ -125,114 +163,79 @@
           "
         >
           <!-- slide 1 -->
-          <div
-            class="slide"
-            style="
-              flex: 0 0 300px; /* fixed width */
-              border: 2px solid #c183ff2d;
-              border-radius: 12px;
-              padding: 20px;
-              scroll-snap-align: center;
-              /* background-color: #f5f5f5; */
-            "
-          >
-            <img
-              src="Images/internship1.jpg"
-              alt="Internship 1"
-              style="width: 100%; border-radius: 8px"
-            />
-            <h3>Internship 1</h3>
-            <p>Mechanical Systems | Summer 2022</p>
+          <div class="slide">
+            <div class="image-box">
+              <img
+                src="Images/Siaton_Farms.png"
+                alt="Internship 1"
+                style="width: 100%"
+              />
+            </div>
+            <h3>Siaton Farms</h3>
+            <p>Controls Engineer | Winter 2023</p>
           </div>
 
           <!-- slide 2 -->
-          <div
-            class="slide"
-            style="
-              flex: 0 0 300px;
-              border: 2px solid #c183ff2d;
-              border-radius: 12px;
-              padding: 20px;
-              scroll-snap-align: center;
-              /* background-color: #f5f5f5; */
-            "
-          >
-            <img
-              src="Images/internship2.jpg"
-              alt="Internship 2"
-              style="width: 100%; border-radius: 8px"
-            />
-            <h3>Internship 2</h3>
-            <p>Robotics Research | Fall 2022</p>
+          <div class="slide">
+            <div class="image-box">
+              <img
+                src="Images/MrDeere.png"
+                alt="Internship 2"
+                style="padding: 20px"
+              />
+            </div>
+            <h3>John Deere</h3>
+            <p>Robotics Engineer | Summer 2025</p>
           </div>
 
           <!-- slide 3 -->
-          <div
-            class="slide"
-            style="
-              flex: 0 0 300px;
-              border: 2px solid #c183ff2d;
-              border-radius: 12px;
-              padding: 20px;
-              scroll-snap-align: center;
-              /* background-color: #f5f5f5; */
-            "
-          >
-            <img
-              src="Images/internship3.jpg"
-              alt="Internship 3"
-              style="width: 100%; border-radius: 8px"
-            />
-            <h3>Internship 3</h3>
-            <p>Robotics Systems | Spring 2023</p>
+          <div class="slide">
+            <div class="image-box">
+              <img
+                src="Images/Lspace.png"
+                alt="Internship 3"
+                style="
+                  padding: 20px;
+                  filter: brightness(0) saturate(100%) invert(14%) sepia(100%)
+                    saturate(1000%) hue-rotate(250deg);
+                "
+              />
+            </div>
+            <h3>NASA L'Space</h3>
+            <p>Lead Researcher | Fall 2025</p>
           </div>
 
           <!-- slide 4 -->
-          <div
-            class="slide"
-            style="
-              flex: 0 0 300px;
-              border: 2px solid #c183ff2d;
-              border-radius: 12px;
-              padding: 20px;
-              scroll-snap-align: center;
-              /* background-color: #f5f5f5; */
-            "
-          >
-            <img
-              src="Images/internship4.jpg"
-              alt="Internship 4"
-              style="width: 100%; border-radius: 8px"
-            />
-            <h3>Internship 4</h3>
-            <p>Robotics Systems | Spring 2023</p>
-          </div>
-
-          <!-- slide 5 -->
-          <div
-            class="slide"
-            style="
-              flex: 0 0 300px;
-              border: 2px solid #c183ff2d;
-              border-radius: 12px;
-              padding: 20px;
-              scroll-snap-align: center;
-              /* background-color: #f5f5f5; */
-            "
-          >
-            <img
-              src="Images/internship5.jpg"
-              alt="Internship 5"
-              style="width: 100%; border-radius: 8px"
-            />
-            <h3>Internship 5</h3>
-            <p>Robotics Systems | Spring 2023</p>
+          <div class="slide">
+            <div class="image-box">
+              <img
+                src="Images/RTX.png"
+                alt="Internship 4"
+                style="
+                  padding: 20px;
+                  filter: brightness(0) saturate(100%) invert(14%) sepia(100%)
+                    saturate(1000%) hue-rotate(250deg);
+                "
+              />
+            </div>
+            <h3>Collins Aerospace</h3>
+            <p>Systems Engineer | Spring 2026</p>
           </div>
         </div>
       </section>
 
       <!-- Youtube -->
-      <section id="youtube" style="height: 70vh">
+      <section
+        id="youtube"
+        style="
+          height: 70vh;
+          background-color: rgb(1, 1, 1);
+          border-top: #b5179e 2px solid;
+          border-bottom: #b5179e 2px solid;
+          border-radius: 8px;
+          padding: 20px;
+        "
+      >
         <!--BG-->
         <div
           style="
@@ -243,11 +246,11 @@
           "
         >
           <!--left-->
-          <div style="flex: 1; min-width: 0;">
+          <div style="flex: 1; min-width: 0">
             <h2>@SeanAppliesEngineering</h2>
           </div>
           <!--YT center-->
-          <div style="flex: 3; min-width: 0;">
+          <div style="flex: 3; min-width: 0">
             <div
               class="video-container"
               style="
@@ -272,7 +275,12 @@
               >
                 <iframe
                   src="https://www.youtube.com/embed/9oTIuknrMB4"
-                  style="width: 100%; aspect-ratio: 16/9; max-width: 800px;"
+                  style="
+                    width: 100%;
+                    aspect-ratio: 16/9;
+                    max-width: 800px;
+                    border-radius: 16px;
+                  "
                   frameborder="0"
                   allowfullscreen
                 >
@@ -281,7 +289,7 @@
             </div>
           </div>
           <!--right-->
-          <div style="flex: 1; min-width: 0;">
+          <div style="flex: 1; min-width: 0">
             <p>Check out this super cool video!</p>
           </div>
         </div>
@@ -318,213 +326,15 @@
                 align-items: left;
               "
             >
-              <h1>Sean Lirazan</h1>
+              <h1>Portfolio Website</h1>
               <h2>
-                Mechanical Engineer | Robotics Systems | Building the Magic of
-                Creation
+                
               </h2>
               <p>
-                hi, this is straight yap and useless, lorem ipsum type shit, i
-                just want to see how the text will look like in the website, so
-                yeah, this is just a placeholder text, and it will be replaced
-                with actual content later on, but for now, let's just enjoy the
-                beauty of this meaningless text, and how it fills up the space
-                in the website, making it look more complete and professional,
-                even though it doesn't actually say anything meaningful, but
-                hey, at least it looks good, right?
+                This was my first deep dive into HTML/CSS/JS and GitHub,
               </p>
             </div>
-          </div>
-          <div
-            class="grid-item"
-            style="height: 300px; display: flex; flex-direction: row"
-          >
-            <div style="display: flex; align-items: center">
-              <img
-                src=""
-                alt="Project 2"
-                style="height: 200px; width: 200px; margin: 20px"
-              />
-            </div>
-            <!-- Text About Me -->
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: left;
-              "
-            >
-              <h1>Sean Lirazan</h1>
-              <h2>
-                Mechanical Engineer | Robotics Systems | Building the Magic of
-                Creation
-              </h2>
-              <p>
-                hi, this is straight yap and useless, lorem ipsum type shit, i
-                just want to see how the text will look like in the website, so
-                yeah, this is just a placeholder text, and it will be replaced
-                with actual content later on, but for now, let's just enjoy the
-                beauty of this meaningless text, and how it fills up the space
-                in the website, making it look more complete and professional,
-                even though it doesn't actually say anything meaningful, but
-                hey, at least it looks good, right?
-              </p>
-            </div>
-          </div>
-          <div
-            class="grid-item"
-            style="height: 300px; display: flex; flex-direction: row"
-          >
-            <div style="display: flex; align-items: center">
-              <img
-                src=""
-                alt="Project 3"
-                style="height: 200px; width: 200px; margin: 20px"
-              />
-            </div>
-            <!-- Text About Me -->
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: left;
-              "
-            >
-              <h1>Sean Lirazan</h1>
-              <h2>
-                Mechanical Engineer | Robotics Systems | Building the Magic of
-                Creation
-              </h2>
-              <p>
-                hi, this is straight yap and useless, lorem ipsum type shit, i
-                just want to see how the text will look like in the website, so
-                yeah, this is just a placeholder text, and it will be replaced
-                with actual content later on, but for now, let's just enjoy the
-                beauty of this meaningless text, and how it fills up the space
-                in the website, making it look more complete and professional,
-                even though it doesn't actually say anything meaningful, but
-                hey, at least it looks good, right?
-              </p>
-            </div>
-          </div>
-          <div class="grid-item">
-            <div
-              class="grid-item"
-              style="height: 300px; display: flex; flex-direction: row"
-            >
-              <div style="display: flex; align-items: center">
-                <img
-                  src=""
-                  alt="Project 4"
-                  style="height: 200px; width: 200px; margin: 20px"
-                />
-              </div>
-              <!-- Text About Me -->
-              <div
-                style="
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: center;
-                  align-items: left;
-                "
-              >
-                <h1>Sean Lirazan</h1>
-                <h2>
-                  Mechanical Engineer | Robotics Systems | Building the Magic of
-                  Creation
-                </h2>
-                <p>
-                  hi, this is straight yap and useless, lorem ipsum type shit, i
-                  just want to see how the text will look like in the website,
-                  so yeah, this is just a placeholder text, and it will be
-                  replaced with actual content later on, but for now, let's just
-                  enjoy the beauty of this meaningless text, and how it fills up
-                  the space in the website, making it look more complete and
-                  professional, even though it doesn't actually say anything
-                  meaningful, but hey, at least it looks good, right?
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="grid-item">
-            <div
-              class="grid-item"
-              style="height: 300px; display: flex; flex-direction: row"
-            >
-              <div style="display: flex; align-items: center">
-                <img
-                  src=""
-                  alt="Project 5"
-                  style="height: 200px; width: 200px; margin: 20px"
-                />
-              </div>
-              <!-- Text About Me -->
-              <div
-                style="
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: center;
-                  align-items: left;
-                "
-              >
-                <h1>Sean Lirazan</h1>
-                <h2>
-                  Mechanical Engineer | Robotics Systems | Building the Magic of
-                  Creation
-                </h2>
-                <p>
-                  hi, this is straight yap and useless, lorem ipsum type shit, i
-                  just want to see how the text will look like in the website,
-                  so yeah, this is just a placeholder text, and it will be
-                  replaced with actual content later on, but for now, let's just
-                  enjoy the beauty of this meaningless text, and how it fills up
-                  the space in the website, making it look more complete and
-                  professional, even though it doesn't actually say anything
-                  meaningful, but hey, at least it looks good, right?
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="grid-item">
-            <div
-              class="grid-item"
-              style="height: 300px; display: flex; flex-direction: row"
-            >
-              <div style="display: flex; align-items: center">
-                <img
-                  src=""
-                  alt="Project 6"
-                  style="height: 200px; width: 200px; margin: 20px"
-                />
-              </div>
-              <!-- Text About Me -->
-              <div
-                style="
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: center;
-                  align-items: left;
-                "
-              >
-                <h1>Sean Lirazan</h1>
-                <h2>
-                  Mechanical Engineer | Robotics Systems | Building the Magic of
-                  Creation
-                </h2>
-                <p>
-                  hi, this is straight yap and useless, lorem ipsum type shit, i
-                  just want to see how the text will look like in the website,
-                  so yeah, this is just a placeholder text, and it will be
-                  replaced with actual content later on, but for now, let's just
-                  enjoy the beauty of this meaningless text, and how it fills up
-                  the space in the website, making it look more complete and
-                  professional, even though it doesn't actually say anything
-                  meaningful, but hey, at least it looks good, right?
-                </p>
-              </div>
-            </div>
+
           </div>
         </div>
       </section>
@@ -564,44 +374,44 @@
   </body>
 
   <script>
-const canvas = document.getElementById('matrixCanvas');
-const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById("matrixCanvas");
+    const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const fontSize = 19;
-const columns = Math.floor(canvas.width / fontSize);
-const drops = Array(columns).fill(1);
+    const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const fontSize = 19;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
 
-function draw() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-gradient.addColorStop(0, '#b5179e');
-gradient.addColorStop(1, '#7209b7');
-  ctx.fillStyle = gradient;
-  ctx.font = fontSize + "px monospace";
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, "#b5179e44");
+      gradient.addColorStop(1, "#7209b744");
+      ctx.fillStyle = gradient;
+      ctx.font = fontSize + "px monospace";
 
-  for (let i = 0; i < drops.length; i++) {
-    const text = chars[Math.floor(Math.random() * chars.length)];
-    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-      drops[i] = 0;
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
     }
 
-    drops[i]++;
-  }
-}
+    setInterval(draw, 33);
 
-setInterval(draw, 33);
-
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-</script>
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
 </html>
