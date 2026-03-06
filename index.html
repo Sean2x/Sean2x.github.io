@@ -22,14 +22,14 @@
       href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" href="Images\favicon.ico" type="image/x-icon">
+    <link rel="icon" href="Images\favicon.ico" type="image/x-icon" />
 
     <style>
       :root {
         --pink: #b5179e;
         --purple: #7209b7;
         --bg: #00000000;
-        --glow: 0 0 10px #b5179ecc, 0 0 20px #b5179e66, 0 0 30px #b5179e33;
+        --glow: 0 0 10px #b5179d7d, 0 0 20px #b5179d12, 0 0 30px #b5179e33;
       }
 
       p,
@@ -37,6 +37,7 @@
         font-family: "Share Tech Mono", "Courier New", monospace;
         color: #b5179e;
         font-weight: 1000;
+        text-shadow: var(--glow);
       }
 
       h1,
@@ -45,6 +46,7 @@
         font-family: "Share Tech Mono", "Courier New", monospace;
         color: #b5179e;
         font-weight: 1000;
+        text-shadow: var(--glow);
       }
       .nav a {
         color: #b5179e; /* custom font color */
@@ -131,6 +133,31 @@
       ::-webkit-scrollbar-thumb:hover {
         background: var(--pink);
       }
+
+      .text-glow {
+        text-shadow: var(--glow);
+      }
+
+      .box-glow {
+        box-shadow:
+          0 0 10px #b5179e80,
+          inset 0 0 10px #b5179e1a;
+      }
+
+      .border-glow {
+        border: 1px solid var(--pink);
+        box-shadow:
+          0 0 10px #b5179e80,
+          inset 0 0 20px #b5179e1a;
+      }
+
+      .logo {
+        transition: all 0.3s ease;
+      }
+
+      .logo:hover {
+        scale: 1.1;
+      }
     </style>
   </head>
 
@@ -154,7 +181,7 @@
       "
     >
       <div style="display: flex; gap: 1.5rem">
-        <i class="logo bi bi-instagram" style="font-size: 2rem"></i>
+        <i class="logo bi bi-rocket-takeoff-fill" style="font-size: 2rem"></i>
 
         <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
           <a href="#about">About</a>
@@ -169,7 +196,7 @@
       <div class="socials" style="gap: 2rem; display: flex">
         <a
           href="https://www.instagram.com/sean.applies.engineering/"
-          class="logo bi bi-instagram"
+          class="logo bi bi-instagram hover"
           style="font-size: 2rem"
         ></a>
         <a
@@ -315,8 +342,8 @@
           "
         >
           <!--left-->
-          <div style="flex: 1; min-width: 0">
-            <h2>@SeanAppliesEngineering</h2>
+          <div style="flex: 2; min-width: 0">
+            <h2 style="overflow: hidden">@SeanAppliesEngineering</h2>
           </div>
           <!--YT center-->
           <div style="flex: 3; min-width: 0">
@@ -358,8 +385,10 @@
             </div>
           </div>
           <!--right-->
-          <div style="flex: 1; min-width: 0">
-            <p>Check out this super cool video!</p>
+          <div
+            style="flex: 2; min-width: 0; display: flex; justify-content: right"
+          >
+            <h3>Check out this super cool video!</h3>
           </div>
         </div>
       </section>
@@ -416,7 +445,7 @@
         <div>
           <h1 style="font-size: 8rem">Colaborate?</h1>
           <h1 style="font-size: 8rem">Sponsor?</h1>
-          <h1 style="font-size: 8rem">Or just ask questions</h1>
+          <h1 style="font-size: 6rem">Or just ask questions</h1>
           <p style="font-size: 3rem">My DMs are always open!</p>
         </div>
         <div
