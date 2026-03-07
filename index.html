@@ -42,7 +42,8 @@
 
       h1,
       h2,
-      h3 {
+      h3,
+      span {
         font-family: "Share Tech Mono", "Courier New", monospace;
         color: #b5179e;
         font-weight: 1000;
@@ -53,6 +54,15 @@
         text-decoration: none;
         font-weight: bold;
         transition: color 0.2s;
+      }
+
+      .grid-item {
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px;
+        height: 300px;
+        display: flex;
+        flex-direction: row;
       }
 
       .image-box {
@@ -159,10 +169,51 @@
         scale: 1.1;
       }
 
-      section, a, div, p, h1, h2, h3 {
-        border: 1px solid #ffffff00; /* for debugging layout, remove or set to transparent */
-      } /* this is for debugging layout, remove or set to transparent */
+      .terminal-window {
+        background: #00000086;
+        border: 2px solid var(--pink);
+        box-shadow: var(--glow);
+        position: relative;
+        overflow: hidden;
+      }
+      .terminal-window-top {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        background: linear-gradient(90deg, transparent, #b5179e1a, transparent);
+        border-bottom: 1px solid var(--pink);
+        gap: 8px;
+        padding: 8px 16px;
+      }
 
+      .terminal-header {
+        background: rgba(74, 29, 29, 0.91);
+        border-bottom: 1px solid var(--pink);
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .terminal-btn {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 1px solid var(--pink);
+      }
+
+      section,
+      a,
+      div,
+      p,
+      h1,
+      h2,
+      h3 {
+        border: 1px solid #b05d5d00;
+      }
     </style>
   </head>
 
@@ -185,19 +236,19 @@
         );
       "
     >
-      <div style="display: flex; gap: 1.5rem ">
+      <div style="display: flex; gap: 1.5rem">
         <i class="logo bi bi-rocket-takeoff-fill" style="font-size: 2rem"></i>
-
         <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
-          <a href="#about" >About</a>
+          <a href="#about">About</a>
           <a href="#projects">Projects</a>
-          <a href="https://sean2x.github.io/ConnectCard.html" target="_blank">Contact</a>
+          <a href="https://sean2x.github.io/ConnectCard.html" target="_blank"
+            >Contact</a
+          >
           <a href="Images/Sean Lirazan Resume 2.2.pdf" download
             >Resume <i class="bi bi-download"></i
           ></a>
         </nav>
       </div>
-
       <div class="socials" style="gap: 2rem; display: flex">
         <a
           href="https://www.instagram.com/sean.applies.engineering/"
@@ -214,11 +265,10 @@
         <a href="#" class="logo bi bi-youtube" style="font-size: 2rem"></a>
       </div>
     </header>
-
     <!-- Main Content -->
     <main class="mx-auto px-0 py-8">
       <!-- About Me Section -->
-      <section id="about me" style="height: 40vh; display: flex; gap: 1rem;">
+      <section id="about me" style="height: 40vh; display: flex; gap: 1rem">
         <!-- Cover photo -->
         <div style="display: flex; align-items: center">
           <img
@@ -249,11 +299,9 @@
           </p>
         </div>
       </section>
-
       <!-- Internship Carousel Section - TOP -->
       <section id="carosel" style="height: 50vh">
         <h2 style="display: flex; justify-content: center">Internships</h2>
-
         <div
           class="carousel-viewport"
           style="
@@ -277,7 +325,6 @@
             <h3>Siaton Farms</h3>
             <p>Controls Engineer | Winter 2023</p>
           </div>
-
           <!-- slide 2 -->
           <div class="slide">
             <div class="image-box">
@@ -290,7 +337,6 @@
             <h3>John Deere</h3>
             <p>Robotics Engineer | Summer 2025</p>
           </div>
-
           <!-- slide 3 -->
           <div class="slide">
             <div class="image-box">
@@ -307,7 +353,6 @@
             <h3>NASA L'Space</h3>
             <p>Lead Researcher | Fall 2025</p>
           </div>
-
           <!-- slide 4 -->
           <div class="slide">
             <div class="image-box">
@@ -326,7 +371,6 @@
           </div>
         </div>
       </section>
-
       <!-- Youtube -->
       <section
         id="youtube"
@@ -365,7 +409,6 @@
               "
             >
               <h1>My Latest Video</h1>
-
               <div
                 style="
                   margin-bottom: 70px;
@@ -399,9 +442,8 @@
           </div>
         </div>
       </section>
-
       <!-- Projects Section -->
-      <section id="projects" style="overflow: hidden;">
+      <section id="projects" style="overflow: hidden">
         <h2 style="display: flex; justify-content: center">Projects</h2>
         <div
           class="grid-container"
@@ -411,16 +453,35 @@
             gap: 20px;
           "
         >
-          <div
-            class="grid-item"
-            style="height: 300px; display: flex; flex-direction: row"
-          >
+          <div class="grid-item terminal-window" style="">
+            <div
+              class="terminal-window-top"
+              style="display: flex; align-items: center; height"
+            >
+              <div
+                class="terminal-btn"
+                style="border: 7px solid var(--pink)"
+              ></div>
+              <div
+                class="terminal-btn"
+                style="border: 1px solid var(--pink)"
+              ></div>
+              <div
+                class="terminal-btn"
+                style="border: 1px solid var(--pink)"
+              ></div>
+              <span style="opacity: 0.9">Portfolio Websites</span>
+            </div>
             <div style="display: flex; align-items: center">
-              <img
+              <i
+                style="font-size: 200px; margin: 20px"
+                class="bi bi-code-slash"
+              ></i>
+              <!-- <img
                 src=""
                 alt="Project 1"
                 style="height: 200px; width: 200px; margin: 20px"
-              />
+              /> -->
             </div>
             <!-- Text About Me -->
             <div
@@ -431,14 +492,15 @@
                 align-items: left;
               "
             >
-              <h1>Portfolio Website</h1>
-              <h2></h2>
-              <p>This was my first deep dive into HTML/CSS/JS and GitHub,</p>
+              <div style="border: 1px solid #e52929a2; height: 100%; padding-top: 10px;">
+                <h1>Portfolio Website</h1>
+                <h2></h2>
+                <p>This was my first deep dive into HTML/CSS/JS and GitHub,</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
-
       <!-- Connect Information -->
       <section
         id="contact"
@@ -449,21 +511,29 @@
           justify-content: space-between;
         "
       >
-        <div class="contact-text" style="flex-direction: column; gap: 1rem; margin-left: 50px; min-width: 0;">
+        <div
+          class="contact-text"
+          style="
+            flex-direction: column;
+            gap: 1rem;
+            margin-left: 50px;
+            min-width: 0;
+          "
+        >
           <h1 style="font-size: 8rem">Colaborate?</h1>
           <h1 style="font-size: 8rem">Sponsor?</h1>
           <h1 style="font-size: 6rem">Or just ask questions</h1>
           <p style="font-size: 3rem">My DMs are always open!</p>
         </div>
         <div
-        class="contact-icons"
+          class="contact-icons"
           style="
             display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-right: 50px;
-    flex: 1 1 auto;
-    align-items: center;
+            flex-direction: column;
+            gap: 1rem;
+            margin-right: 50px;
+            flex: 1 1 auto;
+            align-items: center;
           "
         >
           <a
@@ -486,19 +556,19 @@
     <!-- Footer -->
   </body>
 
-<style>
-  /* Hide text column on small screens */
-  @media (max-width: 1000px) {
-    .contact-text {
-      display: none;
-    }
+  <style>
+    /* Hide text column on small screens */
+    @media (max-width: 1000px) {
+      .contact-text {
+        display: none;
+      }
 
-    /* Center icons horizontally */
-    .contact-icons {
-      margin: 0 auto;
-      align-items: center;
+      /* Center icons horizontally */
+      .contact-icons {
+        margin: 0 auto;
+        align-items: center;
+      }
     }
-  }
   </style>
 
   <script>
