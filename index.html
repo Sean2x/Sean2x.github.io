@@ -57,7 +57,7 @@
       }
 
       .grid-item {
-        border-radius: 8px;
+        border-radius: 15px;
         padding: 20px;
         margin: 20px;
         height: 300px;
@@ -197,14 +197,12 @@
         align-items: center;
         gap: 8px;
       }
-
       .terminal-btn {
         width: 12px;
         height: 12px;
         border-radius: 50%;
         border: 1px solid var(--pink);
       }
-
       section,
       a,
       div,
@@ -268,36 +266,68 @@
     <!-- Main Content -->
     <main class="mx-auto px-0 py-8">
       <!-- About Me Section -->
-      <section id="about me" style="height: 40vh; display: flex; gap: 1rem">
-        <!-- Cover photo -->
-        <div style="display: flex; align-items: center">
-          <img
+      <section id="about me" style="height: 40vh; display: flex; gap: 1rem; justify-content: center;">
+
+        
+        <div class="grid-item terminal-window" style="height: 400px">
+          <div
+            class="terminal-window-top"
+            style="display: flex; align-items: center"
+          >
+            <div
+              class="terminal-btn"
+              style="border: 7px solid var(--pink)"
+            ></div>
+            <div
+              class="terminal-btn"
+              style="border: 1px solid var(--pink)"
+            ></div>
+            <div
+              class="terminal-btn"
+              style="border: 1px solid var(--pink)"
+            ></div>
+            <span style="opacity: 0.9">About Me</span>
+          </div>
+          <div style="display: flex; align-items: center">
+            <img
             src="Images/Headshot.jpeg"
             alt=""
-            style="height: 300px; margin: 50px"
+            style="height: 300px; margin: 30px; border-radius: 12px;"
           />
-        </div>
-        <!-- Text About Me -->
-        <div
-          style="
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: left;
-          "
-        >
-          <h1>Sean Lirazan</h1>
+          </div>
+          <!-- Text About Me -->
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: left;
+            "
+          >
+            <div
+              style="
+                border: 1px solid #e5292900;
+                height: 100%;
+                padding-top: 40px;
+              "
+            >
+              <h1 style="font-size: 5rem;">Sean Lirazan</h1>
           <h2>
             Mechanical Engineer | Robotics Systems | Building the Magic of
             Creation
           </h2>
-          <p style="max-width: 50vw; overflow: hidden">
+          <p style="max-width: 50vw; overflow: hidden; font-size: 1.2rem;">
             I'm an engineer who mixes Mechanical, Electrical and Software to
             build fantastical projects that will one day inspire others. I
             believe science is genuinely magical, and just scraping the surface
             can expose you to a world of fantasy
           </p>
+            </div>
+          </div>
         </div>
+
+    
+        
       </section>
       <!-- Internship Carousel Section - TOP -->
       <section id="carosel" style="height: 50vh">
@@ -453,10 +483,10 @@
             gap: 20px;
           "
         >
-          <div class="grid-item terminal-window" style="">
+          <div class="grid-item terminal-window">
             <div
               class="terminal-window-top"
-              style="display: flex; align-items: center; height"
+              style="display: flex; align-items: center"
             >
               <div
                 class="terminal-btn"
@@ -470,7 +500,7 @@
                 class="terminal-btn"
                 style="border: 1px solid var(--pink)"
               ></div>
-              <span style="opacity: 0.9">Portfolio Websites</span>
+              <span style="opacity: 0.9">Portfolio Website</span>
             </div>
             <div style="display: flex; align-items: center">
               <i
@@ -492,10 +522,21 @@
                 align-items: left;
               "
             >
-              <div style="border: 1px solid #e5292900; height: 100%; padding-top: 10px;">
+              <div
+                style="
+                  border: 1px solid #e5292900;
+                  height: 100%;
+                  padding-top: 10px;
+                "
+              >
                 <h1>Portfolio Website</h1>
                 <h2></h2>
-                <p>This was my first deep dive into HTML/CSS/JS and GitHub. This portfolio was my first serious dive into the raw mechanics of the web—learning how HTML structures ideas, CSS shapes them visually, and JavaScript gives them motion and behavior.</p>
+                <p>
+                  This was my first deep dive into HTML/CSS/JS and GitHub. This
+                  portfolio was my first serious dive into the raw mechanics of
+                  the web—learning how HTML structures ideas, CSS shapes them
+                  visually, and JavaScript gives them motion and behavior.
+                </p>
               </div>
             </div>
           </div>
