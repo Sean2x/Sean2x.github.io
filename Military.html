@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYS.OPERATOR // PORTFOLIO_V1.0</title>
+    <meta name="description" content="Retro military-grade terminal portfolio interface">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --phosphor-primary: #33ff00;
+            --phosphor-dim: #1a8000;
+            --phosphor-bright: #66ff33;
+            --bg-crt: #0a0a0a;
+            --scanline-color: rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        body {
+            background-color: #000;
+            color: var(--phosphor-primary);
+            font-family: 'VT323', monospace;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        /* CRT Screen Container */
+        .crt-container {
+            position: relative;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, #000000 100%);
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+        }
+
+        /* Scanlines */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.2) 50%,
+                rgba(0,0,0,0.2)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 50;
+            animation: scanlineMove 10s linear infinite;
+        }
+
+        /* Screen Flicker */
+        .flicker {
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.97; }
+            50% { opacity: 1; }
+            100% { opacity: 0.98; }
+        }
+
+        @keyframes scanlineMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+
+        /* Text Glow */
+        .glow-text {
+            text-shadow: 0 0 5px var(--phosphor-primary),
+                         0 0 10px var(--phosphor-primary),
+                         0 0 20px var(--phosphor-dim);
+        }
+
+        .glow-amber {
+            color: #ffb000;
+            text-shadow: 0 0 5px #ffb000,
+                         0 0 10px #ff8000;
+        }
+
+        .glow-white {
+            color: #e0e0e0;
+            text-shadow: 0 0 5px #ffffff,
+                         0 0 10px #a0a0a0;
+        }
+
+        /* Terminal Window */
+        .terminal-window {
+            border: 2px solid var(--phosphor-dim);
+            background: rgba(0, 20, 0, 0.9);
+            box-shadow: 0 0 20px rgba(51, 255, 0, 0.2),
+                        inset 0 0 20px rgba(51, 255, 0, 0.05);
+            position: relative;
+        }
+
+        .terminal-window::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+        }
+
+        /* Blinking Cursor */
+        .cursor {
+            display: inline-block;
+            width: 12px;
+            height: 20px;
+            background-color: var(--phosphor-primary);
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Canvas Ads Container */
+        #ad-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .ad-canvas {
+            position: absolute;
+            pointer-events: auto;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+            cursor: move;
+        }
+
+        /* Button Styles */
+        .retro-btn {
+            background: transparent;
+            border: 1px solid var(--phosphor-primary);
+            color: var(--phosphor-primary);
+            padding: 8px 16px;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .retro-btn:hover {
+            background: var(--phosphor-primary);
+            color: #000;
+            box-shadow: 0 0 15px var(--phosphor-primary);
+        }
+
+        /* Grid Background */
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(0, 255, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 0, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--phosphor-dim);
+            border: 1px solid var(--phosphor-primary);
+        }
+
+        /* Radar Animation */
+        @keyframes radar-sweep {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .radar-sweep {
+            animation: radar-sweep 4s linear infinite;
+            transform-origin: center;
+        }
+
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--phosphor-primary);
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--phosphor-primary); }
+        }
+    </style>
+</head>
+<body class="bg-black">
+    <div class="scanlines"></div>
+    
+    <div class="crt-container grid-bg flicker">
+        <!-- Header -->
+        <header class="border-b border-green-800 p-4 relative z-10">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <div class="w-4 h-4 bg-green-500 animate-pulse"></div>
+                    <h1 class="text-3xl glow-text tracking-widest">SYS.OPERATOR</h1>
+                </div>
+                <nav>
+                    <ul id="nav-list" class="flex gap-6 text-xl"></ul>
+                </nav>
+                <div class="text-sm opacity-70" id="system-time"></div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto p-4 relative z-10 space-y-8 pb-32">
+            
+            <!-- Hero Terminal -->
+            <section class="terminal-window p-6 min-h-[300px]">
+                <div class="border-b border-green-800 mb-4 pb-2 flex justify-between">
+                    <span>TERMINAL_SESSION_001</span>
+                    <span>STATUS: ONLINE</span>
+                </div>
+                <div id="terminal-output" class="text-xl leading-relaxed space-y-2 font-mono"></div>
+                <div class="mt-4 flex items-center gap-2">
+                    <span class="text-green-400">root@portfolio:~$</span>
+                    <span class="typewriter">./initialize_system.sh</span>
+                    <span class="cursor"></span>
+                </div>
+            </section>
+
+            <!-- Radar Display -->
+            <section class="grid md:grid-cols-2 gap-6">
+                <div class="terminal-window p-4">
+                    <h3 class="text-xl mb-4 border-b border-green-800 pb-2">RADAR_SCOPE // PROJECT_DETECTION</h3>
+                    <div class="relative w-full h-64 bg-black border border-green-900 rounded-full overflow-hidden">
+                        <svg viewBox="0 0 200 200" class="w-full h-full">
+                            <circle cx="100" cy="100" r="95" fill="none" stroke="#33ff00" stroke-width="0.5" opacity="0.3"/>
+                            <circle cx="100" cy="100" r="70" fill="none" stroke="#33ff00" stroke-width="0.5" opacity="0.3"/>
+                            <circle cx="100" cy="100" r="45" fill="none" stroke="#33ff00" stroke-width="0.5" opacity="0.3"/>
+                            <line x1="100" y1="5" x2="100" y2="195" stroke="#33ff00" stroke-width="0.5" opacity="0.3"/>
+                            <line x1="5" y1="100" x2="195" y2="100" stroke="#33ff00" stroke-width="0.5" opacity="0.3"/>
+                            <g class="radar-sweep" style="transform-origin: 100px 100px;">
+                                <path d="M 100 100 L 100 5 A 95 95 0 0 1 195 100 Z" fill="url(#radarGradient)" opacity="0.6"/>
+                            </g>
+                            <defs>
+                                <radialGradient id="radarGradient" cx="0" cy="0" r="1">
+                                    <stop offset="0%" stop-color="#33ff00" stop-opacity="0.8"/>
+                                    <stop offset="100%" stop-color="#33ff00" stop-opacity="0"/>
+                                </radialGradient>
+                            </defs>
+                            <!-- Blips -->
+                            <circle cx="130" cy="80" r="3" fill="#33ff00" class="animate-pulse"/>
+                            <circle cx="70" cy="120" r="2" fill="#33ff00" class="animate-pulse"/>
+                            <circle cx="150" cy="140" r="2" fill="#ff0000" class="animate-pulse"/>
+                        </svg>
+                        <div class="absolute bottom-2 left-2 text-xs">SCANNING...</div>
+                    </div>
+                </div>
+
+                <!-- System Stats -->
+                <div class="terminal-window p-4">
+                    <h3 class="text-xl mb-4 border-b border-green-800 pb-2">SYSTEM_METRICS</h3>
+                    <div id="stats-container" class="space-y-3 font-mono text-lg"></div>
+                </div>
+            </section>
+
+            <!-- Projects Grid -->
+            <section>
+                <h2 class="text-2xl mb-6 glow-text border-b border-green-800 pb-2">DATA_BANK // PROJECTS</h2>
+                <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </section>
+
+            <!-- Skills Oscilloscope -->
+            <section class="terminal-window p-4">
+                <h3 class="text-xl mb-4 border-b border-green-800 pb-2">OSCILLOSCOPE // SKILL_ANALYSIS</h3>
+                <canvas id="oscilloscope" width="800" height="200" class="w-full bg-black border border-green-900"></canvas>
+            </section>
+
+            <!-- Contact Terminal -->
+            <section class="terminal-window p-6">
+                <h3 class="text-xl mb-4 border-b border-green-800 pb-2">COMMUNICATION_ARRAY // CONTACT</h3>
+                <form id="contact-form" class="space-y-4 max-w-2xl">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block mb-1 text-green-400">OPERATOR_ID (Name):</label>
+                            <input type="text" class="w-full bg-black border border-green-700 p-2 text-green-400 focus:outline-none focus:border-green-400 font-mono" required>
+                        </div>
+                        <div>
+                            <label class="block mb-1 text-green-400">FREQUENCY (Email):</label>
+                            <input type="email" class="w-full bg-black border border-green-700 p-2 text-green-400 focus:outline-none focus:border-green-400 font-mono" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-green-400">TRANSMISSION (Message):</label>
+                        <textarea rows="4" class="w-full bg-black border border-green-700 p-2 text-green-400 focus:outline-none focus:border-green-400 font-mono" required></textarea>
+                    </div>
+                    <button type="submit" class="retro-btn">INITIATE_TRANSMISSION</button>
+                </form>
+            </section>
+        </main>
+
+        <footer class="border-t border-green-800 p-4 text-center text-sm opacity-70 relative z-10">
+            <p>SYSTEM_VERSION: 1.0.4 | MEMORY: 640K OK | COPYRIGHT 1985-2024</p>
+        </footer>
+    </div>
+
+    <!-- Canvas Ad Container -->
+    <div id="ad-container"></div>
+
+    <script>
+        // Data Layer
+        const navigationData = [
+            { "label": "[HOME]", "href": "#home" },
+            { "label": "[PROJECTS]", "href": "#projects" },
+            { "label": "[SYSTEM]", "href": "#system" },
+            { "label": "[CONTACT]", "href": "#contact" }
+        ];
+
+        const terminalLines = [
+            { "text": "BIOS DATE: 01/15/85 14:22:01 VER 1.02", "delay": 100 },
+            { "text": "CPU: INTEL 8088, SPEED: 4.77 MHz", "delay": 300 },
+            { "text": "640K RAM SYSTEM... OK", "delay": 600 },
+            { "text": "LOADING MILITARY_GRADE_INTERFACE...", "delay": 900 },
+            { "text": "MOUNTING DATA_BANKS...", "delay": 1200 },
+            { "text": "ESTABLISHING SECURE CONNECTION...", "delay": 1500 },
+            { "text": "ACCESS GRANTED. WELCOME, OPERATOR.", "delay": 2000, "highlight": true }
+        ];
+
+        const projectsData = [
+            { 
+                "id": "PRJ-001", 
+                "title": "DEFENSE_MAINFRAME", 
+                "type": "MILITARY", 
+                "status": "CLASSIFIED",
+                "desc": "Early warning system interface for NORAD simulation",
+                "tech": ["FORTRAN", "COBOL", "ASSEMBLY"]
+            },
+            { 
+                "id": "PRJ-002", 
+                "title": "RADAR_ANALYZER", 
+                "type": "SCIENTIFIC", 
+                "status": "ACTIVE",
+                "desc": "Real-time signal processing for atmospheric research",
+                "tech": ["C", "PASCAL", "8086 ASM"]
+            },
+            { 
+                "id": "PRJ-003", 
+                "title": "DOS_NAVIGATOR", 
+                "type": "SYSTEM", 
+                "status": "PUBLIC",
+                "desc": "File management system with TUI interface",
+                "tech": ["TURBO C", "DOS", "VGA"]
+            },
+            { 
+                "id": "PRJ-004", 
+                "title": "SCOPE_INTERFACE", 
+                "type": "HARDWARE", 
+                "status": "PROTOTYPE",
+                "desc": "Digital oscilloscope data acquisition module",
+                "tech": ["BASIC", "Z80", "RS-232"]
+            },
+            { 
+                "id": "PRJ-005", 
+                "title": "SATELLITE_UPLINK", 
+                "type": "COMMS", 
+                "status": "ONLINE",
+                "desc": "Telemetry decoding for weather satellites",
+                "tech": ["FORTRAN 77", "VAX", "DECNET"]
+            },
+            { 
+                "id": "PRJ-006", 
+                "title": "TERMINAL_EMULATOR", 
+                "type": "SOFTWARE", 
+                "status": "BETA",
+                "desc": "VT100 terminal emulation for modern systems",
+                "tech": ["C++", "POSIX", "NCURSES"]
+            }
+        ];
+
+        const statsData = [
+            { "label": "CPU_LOAD", "value": 12, "unit": "%" },
+            { "label": "MEM_USAGE", "value": 640, "unit": "KB" },
+            { "label": "UPTIME", "value": 4532, "unit": "HRS" },
+            { "label": "PACKETS", "value": 8943, "unit": "RX" }
+        ];
+
+        // Ad Variations Database (15+ variations as required)
+        const adVariations = [
+            {
+                "type": "PRIZE",
+                "title": "CONGRATULATIONS!",
+                "message": "YOU ARE THE 1,000,000th VISITOR!\nCLICK TO CLAIM YOUR FREE iPOD!",
+                "buttonText": "CLAIM NOW!!!",
+                "color": "#33ff00",
+                "bgColor": "#001100",
+                "blink": true,
+                "icon": "GIFT"
+            },
+            {
+                "type": "WARNING",
+                "title": "SYSTEM ALERT",
+                "message": "WARNING: VIRUS DETECTED\nIN SECTOR 7G\nIMMEDIATE ACTION REQUIRED",
+                "buttonText": "FIX NOW",
+                "color": "#ff0000",
+                "bgColor": "#110000",
+                "blink": true,
+                "icon": "SKULL"
+            },
+            {
+                "type": "UPGRADE",
+                "title": "DOS 5.0 UPGRADE",
+                "message": "UPGRADE TO MS-DOS 5.0\nINCLUDES QBasic!\nONLY $99.95",
+                "buttonText": "ORDER TODAY",
+                "color": "#ffff00",
+                "bgColor": "#111100",
+                "blink": false,
+                "icon": "DISK"
+            },
+            {
+                "type": "MAIL",
+                "title": "YOU'VE GOT MAIL!",
+                "message": "3 NEW MESSAGES\nFROM: AFRICAN_PRINCE\nSUBJECT: URGENT BUSINESS",
+                "buttonText": "READ MAIL",
+                "color": "#00ffff",
+                "bgColor": "#001111",
+                "blink": true,
+                "icon": "ENVELOPE"
+            },
+            {
+                "type": "HARDWARE",
+                "title": "DOWNLOAD RAM",
+                "message": "COMPUTER SLOW?\nDOWNLOAD MORE RAM\nFREE! 100% LEGIT!",
+                "buttonText": "DOWNLOAD",
+                "color": "#ff00ff",
+                "bgColor": "#110011",
+                "blink": false,
+                "icon": "CHIP"
+            },
+            {
+                "type": "DATING",
+                "title": "HOT SINGLES",
+                "message": "HOT SINGLES IN YOUR AREA\nWANT TO MEET NOW!\nAGE: 18-25",
+                "buttonText": "VIEW PICS",
+                "color": "#ff6600",
+                "bgColor": "#110500",
+                "blink": true,
+                "icon": "HEART"
+            },
+            {
+                "type": "CASINO",
+                "title": "INTERNET CASINO",
+                "message": "WIN BIG!\n$5000 FREE CREDITS\nNO DEPOSIT REQUIRED",
+                "buttonText": "PLAY NOW",
+                "color": "#00ff00",
+                "bgColor": "#001100",
+                "blink": true,
+                "icon": "DOLLAR"
+            },
+            {
+                "type": "ERROR",
+                "title": "FATAL ERROR",
+                "message": "SYSTEM32 WILL BE DELETED\nIN 30 SECONDS\nCLICK TO ABORT",
+                "buttonText": "CANCEL",
+                "color": "#ff0000",
+                "bgColor": "#110000",
+                "blink": true,
+                "icon": "BOMB"
+            },
+            {
+                "type": "TOOLBAR",
+                "title": "COOLTOOLBAR",
+                "message": "ENHANCE YOUR BROWSING!\nFREE SMILEYS!\nFREE CURSORS!",
+                "buttonText": "INSTALL",
+                "color": "#0088ff",
+                "bgColor": "#000511",
+                "blink": false,
+                "icon": "WRENCH"
+            },
+            {
+                "type": "PHARMACY",
+                "title": "CHEAP MEDS",
+                "message": "VIAGRA 90% OFF!\nNO PRESCRIPTION!\nDISCREET SHIPPING!",
+                "buttonText": "BUY NOW",
+                "color": "#ff0088",
+                "bgColor": "#110005",
+                "blink": false,
+                "icon": "PILL"
+            },
+            {
+                "type": "MORTGAGE",
+                "title": "REFINANCE NOW",
+                "message": "LOW RATES!\nBAD CREDIT OK!\nSAVE $500/MONTH!",
+                "buttonText": "APPLY",
+                "color": "#88ff00",
+                "bgColor": "#051100",
+                "blink": true,
+                "icon": "HOUSE"
+            },
+            {
+                "type": "WEIGHT",
+                "title": "LOSE WEIGHT",
+                "message": "MIRACLE DIET PILL!\nLOSE 30 LBS IN 1 WEEK!\nDOCTORS HATE THIS!",
+                "buttonText": "LEARN MORE",
+                "color": "#00ff88",
+                "bgColor": "#001105",
+                "blink": false,
+                "icon": "SCALE"
+            },
+            {
+                "type": "LOTTERY",
+                "title": "LOTTO WINNER",
+                "message": "YOU HAVE WON\n$5,000,000 USD\nCONTACT MR. SMITH",
+                "buttonText": "CLAIM PRIZE",
+                "color": "#ffd700",
+                "bgColor": "#111000",
+                "blink": true,
+                "icon": "TROPHY"
+            },
+            {
+                "type": "SECURITY",
+                "title": "NORTON 1995",
+                "message": "YOUR PC IS INFECTED!\n34 VIRUSES FOUND!\nBUY ANTIVIRUS NOW!",
+                "buttonText": "SCAN NOW",
+                "color": "#ff4444",
+                "bgColor": "#110000",
+                "blink": true,
+                "icon": "SHIELD"
+            },
+            {
+                "type": "PORN",
+                "title": "XXX PASSWORD",
+                "message": "FREE PASSWORDS!\nACCESS 1000 SITES!\nNO CREDIT CARD!",
+                "buttonText": "ENTER",
+                "color": "#ff69b4",
+                "bgColor": "#110208",
+                "blink": false,
+                "icon": "LOCK"
+            },
+            {
+                "type": "WORK",
+                "title": "WORK FROM HOME",
+                "message": "EARN $5000/WEEK!\nSTUFFING ENVELOPES!\nNO EXPERIENCE!",
+                "buttonText": "START NOW",
+                "color": "#00ffff",
+                "bgColor": "#001111",
+                "blink": true,
+                "icon": "BRIEFCASE"
+            }
+        ];
+
+        // Render Functions
+        function renderNavigation(items) {
+            return items.map(item => 
+                "<li><a href=\"" + item.href + "\" class=\"hover:glow-text transition-all duration-200\">" + item.label + "</a></li>"
+            ).join("");
+        }
+
+        function renderTerminalLines(lines) {
+            const container = document.getElementById("terminal-output");
+            lines.forEach((line, index) => {
+                setTimeout(() => {
+                    const div = document.createElement("div");
+                    div.className = line.highlight ? "glow-text text-2xl" : "";
+                    div.textContent = "> " + line.text;
+                    container.appendChild(div);
+                }, line.delay);
+            });
+        }
+
+        function renderProjects(projects) {
+            return projects.map(project => {
+                const techTags = project.tech.map(t => 
+                    "<span class=\"text-xs border border-green-800 px-2 py-1\">" + t + "</span>"
+                ).join("");
+                
+                return "<div class=\"terminal-window p-4 hover:border-green-400 transition-colors cursor-pointer group\">" +
+                    "<div class=\"flex justify-between items-start mb-2\">" +
+                        "<span class=\"text-xs opacity-70\">" + project.id + "</span>" +
+                        "<span class=\"text-xs " + (project.status === "CLASSIFIED" ? "text-red-500" : "text-green-400") + "\">[" + project.status + "]</span>" +
+                    "</div>" +
+                    "<h3 class=\"text-xl mb-2 group-hover:glow-text\">" + project.title + "</h3>" +
+                    "<p class=\"text-sm mb-3 opacity-80\">" + project.desc + "</p>" +
+                    "<div class=\"flex flex-wrap gap-2\">" + techTags + "</div>" +
+                    "<div class=\"mt-3 text-xs border-t border-green-900 pt-2\">TYPE: " + project.type + "</div>" +
+                "</div>";
+            }).join("");
+        }
+
+        function renderStats(stats) {
+            return stats.map(stat => {
+                const barWidth = Math.min(100, stat.value / 10);
+                return "<div class=\"flex items-center gap-4\">" +
+                    "<span class=\"w-24 text-green-400\">" + stat.label + ":</span>" +
+                    "<div class=\"flex-1 bg-green-900 h-4 relative\">" +
+                        "<div class=\"bg-green-400 h-full\" style=\"width: " + barWidth + "%\"></div>" +
+                    "</div>" +
+                    "<span class=\"w-16 text-right\">" + stat.value + stat.unit + "</span>" +
+                "</div>";
+            }).join("");
+        }
+
+        // Canvas Ad System
+        class RetroAd {
+            constructor(data, x, y) {
+                this.data = data;
+                this.x = x;
+                this.y = y;
+                this.width = 320;
+                this.height = 200;
+                this.dragging = false;
+                this.dragOffsetX = 0;
+                this.dragOffsetY = 0;
+                this.blinkState = true;
+                this.canvas = document.createElement("canvas");
+                this.canvas.width = this.width;
+                this.canvas.height = this.height;
+                this.canvas.className = "ad-canvas";
+                this.canvas.style.left = x + "px";
+                this.canvas.style.top = y + "px";
+                this.ctx = this.canvas.getContext("2d");
+                this.ctx.imageSmoothingEnabled = false;
+                
+                this.init();
+            }
+
+            init() {
+                document.getElementById("ad-container").appendChild(this.canvas);
+                
+                // Blink interval
+                if (this.data.blink) {
+                    this.blinkInterval = setInterval(() => {
+                        this.blinkState = !this.blinkState;
+                        this.draw();
+                    }, 500);
+                }
+                
+                // Event listeners
+                this.canvas.addEventListener("mousedown", (e) => this.handleMouseDown(e));
+                document.addEventListener("mousemove", (e) => this.handleMouseMove(e));
+                document.addEventListener("mouseup", () => this.handleMouseUp());
+                this.canvas.addEventListener("click", (e) => this.handleClick(e));
+                
+                this.draw();
+            }
+
+            draw() {
+                const ctx = this.ctx;
+                const w = this.width;
+                const h = this.height;
+                
+                // Clear
+                ctx.fillStyle = this.data.bgColor;
+                ctx.fillRect(0, 0, w, h);
+                
+                // Border (beveled effect)
+                ctx.strokeStyle = this.data.color;
+                ctx.lineWidth = 2;
+                ctx.strokeRect(0, 0, w, h);
+                
+                // Inner border
+                ctx.strokeStyle = this.data.color;
+                ctx.globalAlpha = 0.3;
+                ctx.strokeRect(4, 4, w-8, h-8);
+                ctx.globalAlpha = 1;
+                
+                // Title bar
+                ctx.fillStyle = this.data.color;
+                ctx.fillRect(2, 2, w-4, 24);
+                ctx.fillStyle = "#000";
+                ctx.font = "bold 14px monospace";
+                ctx.fillText(this.data.title, 8, 18);
+                
+                // Close button
+                ctx.fillStyle = "#ff0000";
+                ctx.fillRect(w-22, 4, 18, 18);
+                ctx.fillStyle = "#fff";
+                ctx.fillText("X", w-16, 18);
+                
+                // Icon (simple geometric representation)
+                ctx.strokeStyle = this.data.color;
+                ctx.lineWidth = 2;
+                this.drawIcon(ctx, 40, 60, this.data.icon);
+                
+                // Message
+                ctx.fillStyle = this.blinkState || !this.data.blink ? this.data.color : "#333";
+                ctx.font = "16px monospace";
+                const lines = this.data.message.split("\n");
+                lines.forEach((line, i) => {
+                    ctx.fillText(line, 20, 100 + (i * 20));
+                });
+                
+                // Button
+                const btnY = h - 50;
+                ctx.fillStyle = this.data.color;
+                ctx.fillRect(w/2 - 60, btnY, 120, 30);
+                ctx.fillStyle = "#000";
+                ctx.font = "bold 14px monospace";
+                ctx.fillText(this.data.buttonText, w/2 - 50, btnY + 20);
+                
+                // Scanline effect on canvas
+                ctx.fillStyle = "rgba(0,0,0,0.1)";
+                for (let i = 0; i < h; i += 4) {
+                    ctx.fillRect(0, i, w, 2);
+                }
+            }
+
+            drawIcon(ctx, x, y, type) {
+                ctx.beginPath();
+                switch(type) {
+                    case "GIFT":
+                        ctx.rect(x, y, 20, 20);
+                        ctx.moveTo(x+10, y);
+                        ctx.lineTo(x+10, y+20);
+                        ctx.moveTo(x, y+10);
+                        ctx.lineTo(x+20, y+10);
+                        break;
+                    case "SKULL":
+                        ctx.arc(x+10, y+10, 10, 0, Math.PI*2);
+                        ctx.moveTo(x+5, y+15);
+                        ctx.lineTo(x+15, y+15);
+                        break;
+                    case "DISK":
+                        ctx.rect(x, y, 20, 20);
+                        ctx.rect(x+5, y+5, 10, 5);
+                        break;
+                    case "ENVELOPE":
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x+20, y);
+                        ctx.lineTo(x+20, y+15);
+                        ctx.lineTo(x, y+15);
+                        ctx.closePath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x+10, y+10);
+                        ctx.lineTo(x+20, y);
+                        break;
+                    case "CHIP":
+                        ctx.rect(x+5, y+5, 10, 10);
+                        ctx.moveTo(x+10, y);
+                        ctx.lineTo(x+10, y+5);
+                        ctx.moveTo(x+10, y+15);
+                        ctx.lineTo(x+10, y+20);
+                        break;
+                    case "HEART":
+                        ctx.arc(x+7, y+7, 5, 0, Math.PI*2);
+                        ctx.arc(x+13, y+7, 5, 0, Math.PI*2);
+                        ctx.moveTo(x+2, y+10);
+                        ctx.lineTo(x+10, y+20);
+                        ctx.lineTo(x+18, y+10);
+                        break;
+                    case "DOLLAR":
+                        ctx.fillText("$", x+8, y+15);
+                        break;
+                    case "BOMB":
+                        ctx.arc(x+10, y+12, 8, 0, Math.PI*2);
+                        ctx.moveTo(x+10, y+4);
+                        ctx.lineTo(x+10, y-2);
+                        break;
+                    case "WRENCH":
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x+20, y+20);
+                        break;
+                    case "PILL":
+                        ctx.rect(x, y+5, 20, 10);
+                        ctx.moveTo(x+10, y+5);
+                        ctx.lineTo(x+10, y+15);
+                        break;
+                    case "HOUSE":
+                        ctx.moveTo(x+10, y);
+                        ctx.lineTo(x, y+10);
+                        ctx.lineTo(x+20, y+10);
+                        ctx.closePath();
+                        ctx.rect(x+3, y+10, 14, 10);
+                        break;
+                    case "SCALE":
+                        ctx.moveTo(x, y+20);
+                        ctx.lineTo(x+20, y+20);
+                        ctx.moveTo(x+10, y);
+                        ctx.lineTo(x+10, y+20);
+                        break;
+                    case "TROPHY":
+                        ctx.moveTo(x+5, y);
+                        ctx.lineTo(x+15, y);
+                        ctx.lineTo(x+15, y+10);
+                        ctx.lineTo(x+10, y+15);
+                        ctx.lineTo(x+5, y+10);
+                        ctx.closePath();
+                        break;
+                    case "SHIELD":
+                        ctx.moveTo(x+10, y);
+                        ctx.lineTo(x+20, y+5);
+                        ctx.lineTo(x+20, y+15);
+                        ctx.lineTo(x+10, y+20);
+                        ctx.lineTo(x, y+15);
+                        ctx.lineTo(x, y+5);
+                        ctx.closePath();
+                        break;
+                    case "LOCK":
+                        ctx.rect(x+5, y+8, 10, 12);
+                        ctx.arc(x+10, y+8, 5, Math.PI, 0);
+                        break;
+                    case "BRIEFCASE":
+                        ctx.rect(x, y+5, 20, 15);
+                        ctx.moveTo(x+8, y+5);
+                        ctx.lineTo(x+8, y+2);
+                        ctx.moveTo(x+12, y+5);
+                        ctx.lineTo(x+12, y+2);
+                        break;
+                }
+                ctx.stroke();
+            }
+
+            handleMouseDown(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Check close button
+                if (x > this.width - 22 && x < this.width - 4 && y > 4 && y < 22) {
+                    this.destroy();
+                    return;
+                }
+                
+                // Check drag (title bar area)
+                if (y < 24) {
+                    this.dragging = true;
+                    this.dragOffsetX = e.clientX - this.x;
+                    this.dragOffsetY = e.clientY - this.y;
+                }
+            }
+
+            handleMouseMove(e) {
+                if (this.dragging) {
+                    this.x = e.clientX - this.dragOffsetX;
+                    this.y = e.clientY - this.dragOffsetY;
+                    this.canvas.style.left = this.x + "px";
+                    this.canvas.style.top = this.y + "px";
+                }
+            }
+
+            handleMouseUp() {
+                this.dragging = false;
+            }
+
+            handleClick(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Check button click
+                if (y > this.height - 50 && y < this.height - 20 && x > this.width/2 - 60 && x < this.width/2 + 60) {
+                    alert("AD_CLICKED: " + this.data.type + "\nIn a real scenario, this would install malware!");
+                }
+            }
+
+            destroy() {
+                if (this.blinkInterval) clearInterval(this.blinkInterval);
+                this.canvas.remove();
+            }
+        }
+
+        // Oscilloscope Animation
+        function initOscilloscope() {
+            const canvas = document.getElementById("oscilloscope");
+            const ctx = canvas.getContext("2d");
+            let phase = 0;
+            
+            function draw() {
+                ctx.fillStyle = "rgba(0, 10, 0, 0.1)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.strokeStyle = "#33ff00";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                
+                for (let x = 0; x < canvas.width; x++) {
+                    const y = canvas.height/2 + 
+                             Math.sin((x + phase) * 0.02) * 50 * Math.sin(phase * 0.01) +
+                             Math.sin((x + phase) * 0.05) * 20;
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+                
+                // Grid
+                ctx.strokeStyle = "rgba(51, 255, 0, 0.1)";
+                ctx.lineWidth = 1;
+                for (let i = 0; i < canvas.width; i += 50) {
+                    ctx.beginPath();
+                    ctx.moveTo(i, 0);
+                    ctx.lineTo(i, canvas.height);
+                    ctx.stroke();
+                }
+                for (let i = 0; i < canvas.height; i += 50) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, i);
+                    ctx.lineTo(canvas.width, i);
+                    ctx.stroke();
+                }
+                
+                phase += 2;
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        // Ad Spawner
+        function spawnRandomAd() {
+            const adData = adVariations[Math.floor(Math.random() * adVariations.length)];
+            const x = Math.random() * (window.innerWidth - 340) + 10;
+            const y = Math.random() * (window.innerHeight - 220) + 10;
+            new RetroAd(adData, x, y);
+        }
+
+        // System Time Update
+        function updateSystemTime() {
+            const now = new Date();
+            const timeStr = now.toISOString().replace("T", " ").substring(0, 19);
+            document.getElementById("system-time").textContent = timeStr + " UTC";
+        }
+
+        // Initialize
+        document.addEventListener("DOMContentLoaded", function() {
+            // Render static content
+            document.getElementById("nav-list").innerHTML = renderNavigation(navigationData);
+            document.getElementById("projects-grid").innerHTML = renderProjects(projectsData);
+            document.getElementById("stats-container").innerHTML = renderStats(statsData);
+            
+            // Start terminal animation
+            renderTerminalLines(terminalLines);
+            
+            // Start oscilloscope
+            initOscilloscope();
+            
+            // Update time
+            setInterval(updateSystemTime, 1000);
+            updateSystemTime();
+            
+            // Spawn ads periodically
+            setTimeout(() => spawnRandomAd(), 3000);
+            setInterval(spawnRandomAd, 8000);
+            
+            // Form handler
+            document.getElementById("contact-form").addEventListener("submit", function(e) {
+                e.preventDefault();
+                alert("TRANSMISSION SENT\nENCRYPTING DATA PACKET...\nSENT VIA ARPANET");
+                this.reset();
+            });
+            
+            // Smooth scroll for nav
+            document.addEventListener("click", function(e) {
+                if (e.target.closest("a[href^='#']")) {
+                    e.preventDefault();
+                    const target = document.querySelector(e.target.getAttribute("href"));
+                    if (target) target.scrollIntoView({ behavior: "smooth" });
+                }
+            });
+        });
+
+        // Random glitch effect
+        setInterval(() => {
+            if (Math.random() > 0.95) {
+                document.body.style.transform = "translateX(2px)";
+                setTimeout(() => {
+                    document.body.style.transform = "translateX(0)";
+                }, 50);
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
