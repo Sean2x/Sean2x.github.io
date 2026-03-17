@@ -256,7 +256,8 @@
 
         .squarel {
             aspect-ratio: 1/1;
-            height: 100px;
+            width: 100%;
+            height: 100%;
 
             padding: 0px;
             margin: 0px;
@@ -409,35 +410,43 @@
         <!-- About Me Section -->
         <section id="Spelling" style="display: flex; padding: 1rem; justify-content: center">
 
-            <div class="grid-item terminal-window" style="height: 120vh; width: 100%">
+            <div class="grid-item terminal-window" style="display: flex;           /* activate Flexbox */
+  flex-direction: column;  /* stack items vertically */
+  justify-content: flex-start; /* align items from top */
+  align-items: center;     /* center horizontally */
+  height: 120vh;           /* container height */
+  width: 100%;             /* full width */
+  gap: 30px">
+                <div id="textbox" style="border: 2px solid var(--pink);
+box-shadow: var(--glow); height: 80px; width: 700px"></div>
                 <div id="grid" style="
     display: grid;
+    aspect-ratio: 1/1;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    gap: 0px; /* space between squares */
-    width: 60vw; /* adjust container width */
-    height: 60vw; /* keep container square so squares are perfect */
+    gap: 10px; /* space between squares */
+    height: 60%; /* keep container square so squares are perfect */
     margin: 0px;
     border: 2px solid rgb(255, 0, 0);
     box-shadow: var(--glow);
   ">
 
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
-                    <div class="squarel"> a </div>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
+                    <button class="squarel"> a </button>
 
                 </div>
 
