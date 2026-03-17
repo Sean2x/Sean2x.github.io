@@ -1,271 +1,227 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <base target="_self" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sean Lirazan | Portfolio</title>
-    <meta
-      name="description"
-      content="Professional portfolio with internship carousel and project showcase"
-    />
+    <meta name="description" content="Professional portfolio with internship carousel and project showcase" />
     <script src=""></script>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
     <link rel="icon" href="Images\favicon.ico" type="image/x-icon" />
 
     <style>
-      :root {
-        --pink: #b5179e;
-        --purple: #7209b7;
-        --bg: #00000000;
-        --glow: 0 0 10px #b5179d7d, 0 0 20px #b5179d12, 0 0 30px #b5179e33;
-      }
+        :root {
+            --pink: #b5179e;
+            --purple: #7209b7;
+            --bg: #00000000;
+            --glow: 0 0 10px #b5179d7d, 0 0 20px #b5179d12, 0 0 30px #b5179e33;
+        }
 
-      p,
-      a {
-        font-family: "Share Tech Mono", "Courier New", monospace;
-        color: #b5179e;
-        font-weight: 1000;
-        text-shadow: var(--glow);
-      }
+        p,
+        a {
+            font-family: "Share Tech Mono", "Courier New", monospace;
+            color: #b5179e;
+            font-weight: 1000;
+            text-shadow: var(--glow);
+        }
 
-      h1,
-      h2,
-      h3,
-      span {
-        font-family: "Share Tech Mono", "Courier New", monospace;
-        color: #b5179e;
-        font-weight: 1000;
-        text-shadow: var(--glow);
-      }
+        h1,
+        h2,
+        h3,
+        span {
+            font-family: "Share Tech Mono", "Courier New", monospace;
+            color: #b5179e;
+            font-weight: 1000;
+            text-shadow: var(--glow);
+        }
 
-      .nav a {
-        color: #b5179e;
-        /* custom font color */
-        text-decoration: none;
-        font-weight: bold;
-        transition: color 0.2s;
-      }
+        .nav a {
+            color: #b5179e;
+            /* custom font color */
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
 
-      .grid-item {
-        border-radius: 15px;
-        padding: 20px;
-        margin: 20px;
-        height: 300px;
-        display: flex;
-        flex-direction: row;
-      }
+        .grid-item {
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px;
+            height: 300px;
+            display: flex;
+            flex-direction: row;
+        }
 
-      .image-box {
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        /* square image area */
-        overflow: hidden;
-        border-radius: 8px;
-        background: #11111100;
-        /* optional background */
-      }
+        .image-box {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            /* square image area */
+            overflow: hidden;
+            border-radius: 8px;
+            background: #11111100;
+            /* optional background */
+        }
 
-      .image-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        /* shows whole image */
-      }
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* shows whole image */
+        }
 
-      .square {
-        width: 300px;
-        /* or 100%, or whatever */
-        aspect-ratio: 1 / 1;
-        /* height = width */
-        overflow: hidden;
-        /* prevents image spill */
-      }
+        .square {
+            width: 300px;
+            /* or 100%, or whatever */
+            aspect-ratio: 1 / 1;
+            /* height = width */
+            overflow: hidden;
+            /* prevents image spill */
+        }
 
-      #matrixCanvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        opacity: 0.7;
-      }
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.7;
+        }
 
-      .slide {
-        flex: 0 0 300px;
-        scroll-snap-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
+        .slide {
+            flex: 0 0 300px;
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
-      .carousel-viewport {
-        display: flex;
-        gap: 20px;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        align-items: center; /* vertically center slides */
-        padding-block: 20px; /* top & bottom padding */
-        padding-inline: calc(
-          (100vw - 300px) / 2
-        ); /* dynamic left/right padding */
-        scroll-padding-inline: calc(
-          (100vw - 300px) / 2
-        ); /* ensures snap considers padding */
-        justify-content: center;
+        .carousel-viewport {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            align-items: center;
+            /* vertically center slides */
+            padding-block: 20px;
+            /* top & bottom padding */
+            padding-inline: calc((100vw - 300px) / 2);
+            /* dynamic left/right padding */
+            scroll-padding-inline: calc((100vw - 300px) / 2);
+            /* ensures snap considers padding */
+            justify-content: center;
 
-        /* critical fix: use padding, not extra spacer divs */
-        padding-left: calc(
-          (100vw - 300px) / 2
-        ); /* half viewport - half slide */
-        padding-right: calc((100vw - 300px) / 2);
-        box-sizing: content-box; /* ensure padding doesn’t shrink content */
-        scroll-padding-inline: calc(
-          (100vw - 300px) / 2
-        ); /* helps snap to center first/last */
-      }
+            /* critical fix: use padding, not extra spacer divs */
+            padding-left: calc((100vw - 300px) / 2);
+            /* half viewport - half slide */
+            padding-right: calc((100vw - 300px) / 2);
+            box-sizing: content-box;
+            /* ensure padding doesn’t shrink content */
+            scroll-padding-inline: calc((100vw - 300px) / 2);
+            /* helps snap to center first/last */
+        }
 
-      .crt::before {
-        content: " ";
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background: linear-gradient(
-          rgba(18, 16, 16, 0) 50%,
-          rgba(0, 0, 0, 0.25) 50%
-        );
-        background-size: 100% 4px;
-        z-index: 50;
-        pointer-events: none;
-        animation: scanline 8s linear infinite;
-      }
+        .crt::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%,
+                    rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 50;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
 
-      ::-webkit-scrollbar {
-        width: 14px;
-      }
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
 
-      ::-webkit-scrollbar-track {
-        background: var(--bg);
-        border-left: 1px solid var(--purple);
-      }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+            border-left: 1px solid var(--purple);
+        }
 
-      ::-webkit-scrollbar-thumb {
-        background: var(--purple);
-        box-shadow: var(--glow);
-      }
+        ::-webkit-scrollbar-thumb {
+            background: var(--purple);
+            box-shadow: var(--glow);
+        }
 
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--pink);
-      }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--pink);
+        }
 
-      .text-glow {
-        text-shadow: var(--glow);
-      }
+        .text-glow {
+            text-shadow: var(--glow);
+        }
 
-      .box-glow {
-        box-shadow:
-          0 0 10px #b5179e80,
-          inset 0 0 10px #b5179e1a;
-      }
+        .box-glow {
+            box-shadow:
+                0 0 10px #b5179e80,
+                inset 0 0 10px #b5179e1a;
+        }
 
-      .border-glow {
-        border: 1px solid var(--pink);
-        box-shadow:
-          0 0 10px #b5179e80,
-          inset 0 0 20px #b5179e1a;
-      }
+        .border-glow {
+            border: 1px solid var(--pink);
+            box-shadow:
+                0 0 10px #b5179e80,
+                inset 0 0 20px #b5179e1a;
+        }
 
-      .logo {
-        transition: all 0.3s ease;
-      }
+        .logo {
+            transition: all 0.3s ease;
+        }
 
-      .logo:hover {
-        scale: 1.1;
-      }
+        .logo:hover {
+            scale: 1.1;
+        }
 
-      .terminal-window {
-        background: #00000086;
-        border: 2px solid var(--pink);
-        box-shadow: var(--glow);
-        position: relative;
-        overflow: hidden;
-      }
+        .terminal-window {
+            background: #00000086;
+            border: 2px solid var(--pink);
+            box-shadow: var(--glow);
+            position: relative;
+            overflow: hidden;
+        }
 
-      .terminal-window-top {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 30px;
-        background: linear-gradient(90deg, transparent, #b5179e1a, transparent);
-        border-bottom: 1px solid var(--pink);
-        gap: 8px;
-        padding: 8px 16px;
-      }
+        .terminal-window-top {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(90deg, transparent, #b5179e1a, transparent);
+            border-bottom: 1px solid var(--pink);
+            gap: 8px;
+            padding: 8px 16px;
+        }
 
-      .terminal-header {
-        background: rgba(74, 29, 29, 0.91);
-        border-bottom: 1px solid var(--pink);
-        padding: 8px 16px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
+        .terminal-header {
+            background: rgba(74, 29, 29, 0.91);
+            border-bottom: 1px solid var(--pink);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-      .terminal-btn {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        border: 1px solid var(--pink);
-      }
+        .terminal-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid var(--pink);
+        }
 
-      section,
-      a,
-      div,
-      p,
-      h1,
-      h2,
-      h3 {
-        border: 1px solid #25abe000;
-      }
-      .expand2 {
-        height: 40vh;
-      }
-      .desc {
-        width: 50vw;
-      }
-
-      .spacer {
-        flex: 0 0 calc((100vw - 300px) / 2); /* 300px = slide width */
-      }
-
-      /* hamburger hidden on desktop */
-      .hamburger {
-  display: none;
-}
-
-.rocket {
-  display: inline;
-}
-
-      @media (max-width: 768px) {
         section,
         a,
         div,
@@ -273,93 +229,147 @@
         h1,
         h2,
         h3 {
-          border: 1px solid rgba(255, 0, 0, 0);
-        }
-        .hamburger {
-    display: inline;
-  }
-  section{
-    overflow: hidden;
-  }
-
-  .rocket {
-    display: none;
-  }
-        #header {
-          flex-direction: row;
-          gap: 1rem;
-          padding: 1rem;
-          border: 1px solid rgba(255, 0, 0, 0);
-          align-items: flex-start; /* pushes icons to top of their container */
-        }
-        #header1 {
-    display: flex !important;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .nav.active {
-    display:  flex !important;
-  }
-
-        .nav {
-        
-    display:  none !important;
-  
-          flex-direction: column;
-          gap: 1rem;
-          border: 1px solid rgba(255, 0, 0, 0);
+            border: 1px solid #25abe000;
         }
 
-        .socials {
-          display: flex;
-          gap: 2rem;
-          align-self: flex-start;
-        }
-        .expand {
-          flex-direction: column;
-          height: auto;
-        }
         .expand2 {
-          height: auto;
-        }
-        .terminal-window {
-          background: #00000086;
-          border: 2px solid var(--pink);
-          box-shadow: var(--glow);
-          position: relative;
-          overflow: auto;
+            height: 40vh;
         }
 
         .desc {
-          width: 78vw;
-        }
-        .desktop-only {
-          display: none !important;
+            width: 50vw;
         }
 
-        #youtube {
-          height: auto !important;
+        .spacer {
+            flex: 0 0 calc((100vw - 300px) / 2);
+            /* 300px = slide width */
         }
 
-        .grid-container {
-          grid-template-columns: repeat(
-            1,
-            1fr
-          ) !important; /* single column on mobile */
+        /* hamburger hidden on desktop */
+        .hamburger {
+            display: none;
         }
-      }
+
+        .rocket {
+            display: inline;
+        }
+        .squarel {
+                aspect-ratio: 1/1;
+                height: 100px;
+
+                padding: 20px;
+                margin: 20px;
+                display: flex;
+                border-radius: 15px;
+                background: #00000086;
+                border: 2px solid var(--pink);
+                box-shadow: var(--glow);
+
+            }
+
+        @media (max-width: 768px) {
+
+            section,
+            a,
+            div,
+            p,
+            h1,
+            h2,
+            h3 {
+                border: 1px solid rgba(255, 0, 0, 0);
+            }
+
+            .hamburger {
+                display: inline;
+            }
+
+            section {
+                overflow: hidden;
+            }
+
+            .rocket {
+                display: none;
+            }
+
+            #header {
+                flex-direction: row;
+                gap: 1rem;
+                padding: 1rem;
+                border: 1px solid rgba(255, 0, 0, 0);
+                align-items: flex-start;
+                /* pushes icons to top of their container */
+            }
+
+            #header1 {
+                display: flex !important;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav.active {
+                display: flex !important;
+            }
+
+            .nav {
+
+                display: none !important;
+
+                flex-direction: column;
+                gap: 1rem;
+                border: 1px solid rgba(255, 0, 0, 0);
+            }
+
+            .socials {
+                display: flex;
+                gap: 2rem;
+                align-self: flex-start;
+            }
+
+            .expand {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .expand2 {
+                height: auto;
+            }
+
+            .terminal-window {
+                background: #00000086;
+                border: 2px solid var(--pink);
+                box-shadow: var(--glow);
+                position: relative;
+                overflow: auto;
+            }
+
+            .desc {
+                width: 78vw;
+            }
+
+            .desktop-only {
+                display: none !important;
+            }
+
+            #youtube {
+                height: auto !important;
+            }
+
+            .grid-container {
+                grid-template-columns: repeat(1,
+                        1fr) !important;
+                /* single column on mobile */
+            }
+
+            
+        }
     </style>
-  </head>
+</head>
 
-  <canvas id="matrixCanvas"></canvas>
+<canvas id="matrixCanvas"></canvas>
 
-  <body class="crt" style="background-color: #000000">
+<body class="crt" style="background-color: #000000">
     <!-- Header with Gradient Background -->
-    <header
-      id="header"
-      class="header"
-      style="
+    <header id="header" class="header" style="
         margin: 0;
         display: flex;
         justify-content: space-between;
@@ -370,137 +380,75 @@
           rgba(0, 0, 0, 1),
           rgba(0, 0, 0, 0)
         );
-      "
-    >
+      ">
 
-      <div id="header1" style="display: flex; gap: 1.5rem">
-<div class="menu-toggle" onclick="toggleMenu()">
-  <i class="bi bi-list hamburger" style="font-size: 2rem"></i> </i>
-  <i class="logo bi bi-rocket-takeoff-fill rocket" style="font-size: 2rem"></i>
-</div>
-        
+        <div id="header1" style="display: flex; gap: 1.5rem">
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i class="bi bi-list hamburger" style="font-size: 2rem"></i> </i>
+                <i class="logo bi bi-rocket-takeoff-fill rocket" style="font-size: 2rem"></i>
+            </div>
 
-        <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
-          <a href="#about">About</a>
-          <a href="#projects">Projects</a>
-          <a href="https://sean2x.github.io/ConnectCard.html" target="_blank"
-            >Contact</a
-          >
-          <a href="Images/Sean Lirazan Resume 2.2.pdf" download
-            >Resume <i class="bi bi-download"></i
-          ></a>
-        </nav>
-      </div>
-      <div class="socials" style="gap: 2rem; display: flex">
-        <a
-          href="https://www.instagram.com/sean.applies.engineering/"
-          class="logo bi bi-instagram hover"
-          style="font-size: 2rem"
-          target="_blank"
-        ></a>
-        <a
-          href="https://github.com/Sean2x"
-          class="logo bi bi-github"
-          style="font-size: 2rem"
-          target="_blank"
-        ></a>
-        <a href="#" class="logo bi bi-youtube" style="font-size: 2rem"></a>
-      </div>
+
+            <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
+                <a href="#about">About</a>
+                <a href="#projects">Projects</a>
+                <a href="https://sean2x.github.io/ConnectCard.html" target="_blank">Contact</a>
+                <a href="Images/Sean Lirazan Resume 2.2.pdf" download>Resume <i class="bi bi-download"></i></a>
+            </nav>
+        </div>
+        <div class="socials" style="gap: 2rem; display: flex">
+            <a href="https://www.instagram.com/sean.applies.engineering/" class="logo bi bi-instagram hover"
+                style="font-size: 2rem" target="_blank"></a>
+            <a href="https://github.com/Sean2x" class="logo bi bi-github" style="font-size: 2rem" target="_blank"></a>
+            <a href="#" class="logo bi bi-youtube" style="font-size: 2rem"></a>
+        </div>
     </header>
     <!-- Main Content -->
     <main class="mx-auto px-0 py-8">
-      <!-- About Me Section -->
-      <section
-        id="about me"
-        style="display: flex; gap: 1rem; justify-content: center"
-        class="expand2"
-      >
-        <div class="grid-item terminal-window expand" style="height: auto">
-          <div
-            class="terminal-window-top"
-            style="display: flex; align-items: center"
-          >
-            <div
-              class="terminal-btn"
-              style="border: 7px solid var(--pink)"
-            ></div>
-            <div
-              class="terminal-btn"
-              style="border: 1px solid var(--pink)"
-            ></div>
-            <div
-              class="terminal-btn"
-              style="border: 1px solid var(--pink)"
-            ></div>
-            <span style="opacity: 0.9">About Me</span>
-          </div>
-          <div style="display: flex; align-items: center">
-            <img
-              src="Images/Headshot.jpeg"
-              alt=""
-              style="
-                max-width: 300px;
-                margin: 20px;
-                border-radius: 12px;
-                min-height: 30px;
-                height: auto;
-              "
-            />
-          </div>
-          <!-- Text About Me -->
-          <div
-            style="
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: left;
-            "
-          >
-            <div
-              style="
-                border: 1px solid #e5292900;
-                height: 100%;
-                padding-top: 40px;
-              "
-            >
-              <h1 style="font-size: 5rem">Sean Lirazan</h1>
-              <h2>
-                Mechanical Engineer | Robotics Systems | Building the Magic of
-                Creation
-              </h2>
-              <p class="desc" style="overflow: hidden; font-size: 1.2rem">
-                I'm an engineer who mixes Mechanical, Electrical and Software to
-                build fantastical projects that will one day inspire others. I
-                believe science is genuinely magical, and just scraping the
-                surface can expose you to a world of fantasy
-              </p>
+        <!-- About Me Section -->
+        <section id="Spelling" style="display: flex; padding: 1rem; justify-content: center">
+
+            <div class="grid-item terminal-window expand" style="height: 100vh; width: 100%">
+                <div id="grid" style="
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 10px; /* space between squares */
+    width: 40vw; /* adjust container width */
+    height: 40vw; /* keep container square so squares are perfect */
+    margin: 0 auto;
+  ">
+
+                    <div class="squarel"> a </div>
+
+                </div>
+
             </div>
-          </div>
-        </div>
-      </section>
-      
-      
+
+        </section>
+
+
     </main>
 
     <!-- Footer -->
-  </body>
+</body>
 
-  <style>
+<style>
     /* Hide text column on small screens */
     @media (max-width: 1000px) {
-      .contact-text {
-        display: none;
-      }
+        .contact-text {
+            display: none;
+        }
 
-      /* Center icons horizontally */
-      .contact-icons {
-        margin: 0 auto;
-        align-items: center;
-      }
+        /* Center icons horizontally */
+        .contact-icons {
+            margin: 0 auto;
+            align-items: center;
+        }
     }
-  </style>
+</style>
 
-  <script>
+<script>
     const canvas = document.getElementById("matrixCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -513,39 +461,40 @@
     const drops = Array(columns).fill(1);
 
     function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, "#b5179eff");
-      gradient.addColorStop(1, "#7209b7ff");
-      ctx.fillStyle = gradient;
-      ctx.font = fontSize + "px monospace";
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, "#b5179eff");
+        gradient.addColorStop(1, "#7209b7ff");
+        ctx.fillStyle = gradient;
+        ctx.font = fontSize + "px monospace";
 
-      for (let i = 0; i < drops.length; i++) {
-        const text = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        for (let i = 0; i < drops.length; i++) {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+
+            drops[i]++;
         }
-
-        drops[i]++;
-      }
     }
 
     setInterval(draw, 33);
 
     window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     });
-  </script>
+</script>
 
-  <script>
+<script>
     function toggleMenu() {
-      const menu = document.getElementsByClassName("nav")[0];
-      menu.classList.toggle("active");
+        const menu = document.getElementsByClassName("nav")[0];
+        menu.classList.toggle("active");
     }
-  </script>
+</script>
+
 </html>
