@@ -2,6 +2,7 @@
     --pink: #b5179e;
     --purple: #7209b7;
     --bg: #00000000;
+    --lightbg: #00000086;
     --glow: 0 0 10px #b5179d7d, 0 0 20px #b5179d12, 0 0 30px #b5179e33;
 }
 
@@ -95,7 +96,7 @@ span {
 }
 
 .terminal-window {
-    background: #00000086;
+    background: var(--lightbg);
     border: 2px solid var(--pink);
     box-shadow: var(--glow);
     position: relative;
