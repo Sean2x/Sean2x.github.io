@@ -33,6 +33,19 @@
             justify-content: center;
 
         }
+
+        #grid {
+            
+    display: grid;
+    aspect-ratio: 1/1;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 10px; 
+    height: 60%; 
+    margin: 0px;
+    border: 2px solid rgb(255, 0, 0);
+    box-shadow: var(--glow);
+        }
     </style>
 </head>
 
@@ -88,8 +101,7 @@
   gap: 30px">
                 <div id="textbox" style="border: 2px solid var(--pink);
 box-shadow: var(--glow); height: 80px; width: 700px"></div>
-                <div id="grid" 
-  >
+                <div id="grid">
 
                     <button id="letter" class="square"> A </button>
 
