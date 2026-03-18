@@ -25106,6 +25106,7 @@ creepering
 creepie
 creepily
 creepy
+creepier
 creepies
 creese
 creeses
@@ -42604,6 +42605,7 @@ funner
 funnest
 funnily
 funny
+funnier
 funnies
 funnyman
 funnymen
@@ -50874,6 +50876,7 @@ hungers
 hungover
 hungrily
 hungry
+hungrier
 hunk
 hunks
 hunked
@@ -63735,6 +63738,7 @@ meatpacking
 meatus
 meatuses
 meaty
+meatier
 mecca
 meccas
 mech
@@ -85115,6 +85119,10 @@ quayside
 quaysides
 qubit
 qubits
+que
+queue
+ques
+queues
 quean
 queans
 queasily
@@ -116090,6 +116098,7 @@ woodworkering
 woodworm
 woodworms
 woody
+woodier
 woodies
 wooer
 wooers

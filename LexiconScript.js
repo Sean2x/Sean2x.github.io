@@ -88,14 +88,16 @@ function getRandomLetter() {
     (sum, w) => sum + w,
     0,
   );
+
   let rand = Math.random() * totalWeight;
 
   for (const [letter, weight] of Object.entries(letterWeights)) {
-    if (rand < weight) return letter;
+    if (rand < weight) {
+      return letter === "Q" ? "QU" : letter;
+    }
     rand -= weight;
   }
 
-  // fallback (shouldn’t happen)
   return "E";
 }
 
@@ -135,8 +137,16 @@ function generateGrid() {
 backspaceButton.addEventListener("click", () => {
   if (wordBar.textContent.length === 0) return;
 
-  const removedLetter = wordBar.textContent.slice(-1);
-  wordBar.textContent = wordBar.textContent.slice(0, -1);
+  let text = wordBar.textContent;
+
+  let removedLetter;
+  if (text.endsWith("QU")) {
+    removedLetter = "QU";
+    wordBar.textContent = text.slice(0, -2);
+  } else {
+    removedLetter = text.slice(-1);
+    wordBar.textContent = text.slice(0, -1);
+  }
 
   // reactivate last used button
   for (let i = usedButtons.length - 1; i >= 0; i--) {
@@ -173,8 +183,13 @@ scoreWordButton.addEventListener("click", () => {
 
   let wordScore = 0;
 
-  for (const char of word) {
-    wordScore += letterValues[char] || 0; // add letter value
+  for (let i = 0; i < word.length; i++) {
+    if (word[i] === "Q" && word[i + 1] === "U") {
+      wordScore += letterValues["Q"];
+      i++; // skip the U
+    } else {
+      wordScore += letterValues[word[i]] || 0;
+    }
   }
 
   totalScore += wordScore;
