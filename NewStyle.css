@@ -134,11 +134,68 @@ span {
 }
 
 section,
+a,
+div,
+p,
+h1,
+h2,
+h3 {
+    border: 1px solid #25abe000;
+}
+
+@media (max-width: 768px) {
+
+    section,
     a,
     div,
     p,
     h1,
     h2,
     h3 {
-      border: 1px solid #25abe000;
+        border: 1px solid rgba(255, 0, 0, 0);
+    }
+
+    .hamburger {
+        display: inline;
+    }
+
+    section {
+        overflow: hidden;
+    }
+
+    .rocket {
+        display: none;
+    }
+
+    #header {
+        flex-direction: row;
+        gap: 1rem;
+        padding: 1rem;
+        border: 1px solid rgba(255, 0, 0, 0);
+        align-items: flex-start;
+        /* pushes icons to top of their container */
+    }
+
+    #header1 {
+        display: flex !important;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav.active {
+        display: flex !important;
+    }
+
+    .nav {
+        display: none !important;
+
+        flex-direction: column;
+        gap: 1rem;
+        border: 1px solid rgba(255, 0, 0, 0);
+    }
+
+    .socials {
+        display: flex;
+        gap: 2rem;
+        align-self: flex-start;
     }
