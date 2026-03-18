@@ -33,6 +33,19 @@
             justify-content: center;
 
         }
+
+        #grid {
+            
+    display: grid;
+    aspect-ratio: 1/1;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 10px; /* space between squares */
+    height: 60%; /* keep container square so squares are perfect */
+    margin: 0px;
+    border: 2px solid rgb(255, 0, 0);
+    box-shadow: var(--glow);
+        }
     </style>
 </head>
 
@@ -88,25 +101,14 @@
   gap: 30px">
                 <div id="textbox" style="border: 2px solid var(--pink);
 box-shadow: var(--glow); height: 80px; width: 700px"></div>
-                <div id="grid" style="
-    display: grid;
-    aspect-ratio: 1/1;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: 10px; /* space between squares */
-    height: 60%; /* keep container square so squares are perfect */
-    margin: 0px;
-    border: 2px solid rgb(255, 0, 0);
-    box-shadow: var(--glow);
-  ">
+                <div id="grid" 
+  >
 
                     <button id="letter" class="square"> A </button>
 
                 </div>
-                <button style="border: 2px solid var(--pink);
-box-shadow: var(--glow); height: 60px; width: 300px; background: #00000086; color: white">New Board</button>
-                <button style="border: 2px solid var(--pink);
-box-shadow: var(--glow); height: 60px; width: 300px; background: #00000086; color: white">Score it</button>
+                <button class="terminal-window" style=" height: 60px; width: 300px;  color: white">New Board</button>
+                <button class="terminal-window" style=" height: 60px; width: 300px;  color: white">Score it</button>
             </div>
 
         </section>
@@ -116,6 +118,17 @@ box-shadow: var(--glow); height: 60px; width: 300px; background: #00000086; colo
 
     <!-- Footer -->
 </body>
+
+
+
+<script src="Matrix.js"></script>
+
+<script>
+    function toggleMenu() {
+        const menu = document.getElementsByClassName("nav")[0];
+        menu.classList.toggle("active");
+    }
+</script>
 
 <style>
     /* Hide text column on small screens */
@@ -131,54 +144,5 @@ box-shadow: var(--glow); height: 60px; width: 300px; background: #00000086; colo
         }
     }
 </style>
-
-<script>
-    const canvas = document.getElementById("matrixCanvas");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const fontSize = 19;
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops = Array(columns).fill(1);
-
-    function draw() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, "#b5179eff");
-        gradient.addColorStop(1, "#7209b7ff");
-        ctx.fillStyle = gradient;
-        ctx.font = fontSize + "px monospace";
-
-        for (let i = 0; i < drops.length; i++) {
-            const text = chars[Math.floor(Math.random() * chars.length)];
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
-
-            drops[i]++;
-        }
-    }
-
-    setInterval(draw, 33);
-
-    window.addEventListener("resize", () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-</script>
-
-<script>
-    function toggleMenu() {
-        const menu = document.getElementsByClassName("nav")[0];
-        menu.classList.toggle("active");
-    }
-</script>
 
 </html>
