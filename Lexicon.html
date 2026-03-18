@@ -52,8 +52,14 @@
         gap: 10px;
         height: 50%;
         margin: 0px;
-        border: 2px solid rgb(255, 0, 0);
-        box-shadow: var(--glow);
+        /* border: 2px solid rgb(255, 0, 0);
+        box-shadow: var(--glow); */
+      }
+      button:disabled {
+        color: #ffffff50;
+        border: 2px solid var(--lightbg);
+        box-shadow: none;
+        cursor: not-allowed;
       }
     </style>
   </head>
@@ -174,6 +180,9 @@
           <div id="scoreTotal" style="font-size: 30px; color: white">
             Score: 0
           </div>
+          <div id="previousTotal" style="font-size: 24px; color: white">
+            Last word:
+          </div>
           <button
             id="score"
             class="terminal-window"
@@ -230,6 +239,7 @@
     const newBoardButton = document.getElementById("new-board");
     const scoreWordButton = document.getElementById("score");
     const scoreTotal = document.getElementById("scoreTotal");
+    const previousTotal = document.getElementById("previousTotal");
 
     const letterValues = {
       A: 1,
@@ -262,21 +272,72 @@
 
     let totalScore = 0;
 
+    const letterWeights = {
+      A: 4,
+      E: 4,
+      I: 3,
+      O: 3,
+      U: 2, // vowels slightly higher
+      N: 3,
+      R: 3,
+      T: 3,
+      S: 3,
+      L: 2,
+      D: 2, // consonants roughly equal
+      C: 2,
+      M: 2,
+      P: 2,
+      G: 1,
+      H: 1,
+      F: 1,
+      Y: 1,
+      W: 1,
+      K: 1,
+      B: 1,
+      V: 1,
+      X: 0.5,
+      J: 0.5,
+      Q: 0.5,
+      Z: 0.5,
+    };
+
+    function getRandomLetter() {
+      const totalWeight = Object.values(letterWeights).reduce(
+        (sum, w) => sum + w,
+        0,
+      );
+      let rand = Math.random() * totalWeight;
+
+      for (const [letter, weight] of Object.entries(letterWeights)) {
+        if (rand < weight) return letter;
+        rand -= weight;
+      }
+
+      // fallback (shouldn’t happen)
+      return "E";
+    }
+
     // generate grid function
     function generateGrid() {
       // Clear previous letters
+      const usedButtons = [];
+
       boardDiv.innerHTML = "";
       wordBar.textContent = "";
 
       for (let i = 0; i < 16; i++) {
         const button = document.createElement("button");
         button.classList.add("square", "letter");
-        button.textContent =
-          alphabet[Math.floor(Math.random() * alphabet.length)];
+
+        const letter = getRandomLetter();
+        button.textContent = letter;
+        button.disabled = false;
 
         // click listener
         button.addEventListener("click", () => {
           wordBar.textContent += button.textContent;
+          //   button.disabled = true;
+          usedButtons.push(button); // track used button
         });
 
         boardDiv.appendChild(button);
@@ -286,7 +347,16 @@
 
     // backspace listener
     backspaceButton.addEventListener("click", () => {
+      if (wordBar.textContent.length === 0) return;
+
+      // Remove last letter from wordBar
       wordBar.textContent = wordBar.textContent.slice(0, -1);
+
+      // Reactivate the exact last used button
+      const lastUsed = usedButtons.pop();
+      if (lastUsed) {
+        lastUsed.button.disabled = false;
+      }
     });
 
     // new board listener
@@ -304,7 +374,8 @@
       }
 
       totalScore += wordScore;
-      scoreTotal.innerHTML = `Score: ${totalScore} <br>Last word: ${word} (${wordScore} points)`;
+      scoreTotal.innerHTML = `Score: ${totalScore} Last word: ${word} (${wordScore} points)`;
+      previousTotal.innerHTML = `Last word: ${word} (${wordScore} points)`;
 
       generateGrid();
     });
