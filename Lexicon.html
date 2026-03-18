@@ -57,7 +57,7 @@
       }
       button:disabled {
         color: #ffffff50;
-        border: 2px solid var(--lightbg);
+        border: 2px solid #b5179d36;
         box-shadow: none;
         cursor: default;
       }
@@ -283,11 +283,11 @@
       T: 3,
       S: 3,
       L: 2,
-      D: 2, // consonants roughly equal
+      D: 3, // consonants roughly equal
       C: 2,
       M: 2,
       P: 2,
-      G: 1,
+      G: 2,
       H: 1,
       F: 1,
       Y: 1,
@@ -371,6 +371,7 @@
 
     //scoring function
     scoreWordButton.addEventListener("click", () => {
+      if (wordBar.textContent.length === 0) return; // no word to score
       const word = wordBar.textContent.toUpperCase();
       let wordScore = 0;
 
