@@ -10,32 +10,12 @@ const scoreTotal = document.getElementById("scoreTotal");
 const previousTotal = document.getElementById("previousTotal");
 
 const letterValues = {
-    A: 1,
-    B: 3,
-    C: 3,
-    D: 2,
-    E: 1,
-    F: 4,
-    G: 2,
-    H: 4,
-    I: 1,
-    J: 8,
-    K: 5,
-    L: 1,
-    M: 3,
-    N: 1,
-    O: 1,
-    P: 3,
-    Q: 10,
-    R: 1,
-    S: 1,
-    T: 1,
-    U: 1,
-    V: 4,
-    W: 4,
-    X: 8,
-    Y: 4,
-    Z: 10,
+  A: 1, D: 1, E: 1, G: 1, I: 1, L: 1, N: 1, O: 1, R: 1, S: 1, T: 1, U: 1,
+  B: 1.25, C: 1.25, F: 1.25, H: 1.25, M: 1.25, P: 1.25,
+  V: 1.5, W: 1.5, Y: 1.5,
+  J: 1.75, K: 1.75,
+  X: 2, Z: 2,
+  Q: 2.75
 };
 
 let totalScore = 0;
