@@ -1,43 +1,34 @@
 const fs = require("fs");
 
-// change this to your file name
-const inputFile = "2of12.txt";
+const inputFile = "Misc/en_US-large.dic";
 const outputFile = "cleaned_words.txt";
 
 const text = fs.readFileSync(inputFile, "utf-8");
 
-// split by lines
-const words = text.split(/\r?\n/);
+// split lines
+let words = text.split(/\r?\n/);
 
-// filter rules
-const cleaned = words.filter(word => {
-  const w = word.trim();
+// skip first line if it’s a number (common in .dic files)
+if (/^\d+$/.test(words[0].trim())) {
+  words = words.slice(1);
+}
 
+// strip flags and apply filters
+const cleaned = words.map(word => {
+  const base = word.split("/")[0].trim();
+  return base.toLowerCase(); // normalize to lowercase
+}).filter(word => {
   return (
-    w.length >= 3 &&
-    w.length <= 16 &&
-    !w.includes("'") &&
-    !w.includes("-") &&
-    !w.includes(".") &&
-    !w.includes("&") 
-    &&
-    !w.includes("1") &&
-    !w.includes("2") &&
-    !w.includes("3") &&
-    !w.includes("4") &&
-    !w.includes("5") &&
-    !w.includes("6") &&
-    !w.includes("7") &&
-    !w.includes("8") &&
-    !w.includes("9") &&
-    !w.includes("0")
+    word.length >= 3 &&
+    word.length <= 16 &&
+    /^[a-z]+$/.test(word) // only letters
   );
 });
 
-// optional: remove duplicates
+// remove duplicates
 const unique = [...new Set(cleaned)];
 
-// save result
+// save
 fs.writeFileSync(outputFile, unique.join("\n"));
 
-console.log("Done. Cleaned file saved as:", outputFile);
+console.log("Done! Cleaned dictionary saved as:", outputFile);
