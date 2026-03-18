@@ -10,155 +10,174 @@ const scoreTotal = document.getElementById("scoreTotal");
 const previousTotal = document.getElementById("previousTotal");
 
 const letterValues = {
-  A: 1, D: 1, E: 1, G: 1, I: 1, L: 1, N: 1, O: 1, R: 1, S: 1, T: 1, U: 1,
-  B: 1.25, C: 1.25, F: 1.25, H: 1.25, M: 1.25, P: 1.25,
-  V: 1.5, W: 1.5, Y: 1.5,
-  J: 1.75, K: 1.75,
-  X: 2, Z: 2,
-  Q: 2.75
+  A: 1,
+  D: 1,
+  E: 1,
+  G: 1,
+  I: 1,
+  L: 1,
+  N: 1,
+  O: 1,
+  R: 1,
+  S: 1,
+  T: 1,
+  U: 1,
+  B: 1.25,
+  C: 1.25,
+  F: 1.25,
+  H: 1.25,
+  M: 1.25,
+  P: 1.25,
+  V: 1.5,
+  W: 1.5,
+  Y: 1.5,
+  J: 1.75,
+  K: 1.75,
+  X: 2,
+  Z: 2,
+  Q: 2.75,
 };
 
 let totalScore = 0;
 
 const letterWeights = {
-    A: 4,
-    E: 4,
-    I: 3,
-    O: 3,
-    U: 2, // vowels slightly higher
-    N: 3,
-    R: 3,
-    T: 3,
-    S: 3,
-    L: 2,
-    D: 3, // consonants roughly equal
-    C: 2,
-    M: 2,
-    P: 2,
-    G: 2,
-    H: 1,
-    F: 1,
-    Y: 1,
-    W: 1,
-    K: 1,
-    B: 1,
-    V: 1,
-    X: 0.5,
-    J: 0.5,
-    Q: 0.5,
-    Z: 0.5,
+  A: 4,
+  E: 4,
+  I: 3,
+  O: 3,
+  U: 2, // vowels slightly higher
+  N: 3,
+  R: 3,
+  T: 3,
+  S: 3,
+  L: 2,
+  D: 3, // consonants roughly equal
+  C: 2,
+  M: 2,
+  P: 2,
+  G: 2,
+  H: 1,
+  F: 1,
+  Y: 1,
+  W: 1,
+  K: 1,
+  B: 1,
+  V: 1,
+  X: 0.5,
+  J: 0.5,
+  Q: 0.5,
+  Z: 0.5,
 };
 
 //dictionaty
 let dictionary = new Set();
 
 async function loadDictionary() {
-    const response = await fetch("Misc/expanded_words.txt");
-    const text = await response.text();
+  const response = await fetch("Misc/expanded_words.txt");
+  const text = await response.text();
 
-    const words = text.split(/\r?\n/);
+  const words = text.split(/\r?\n/);
 
-    dictionary = new Set(
-        words.map(w => w.trim().toUpperCase())
-    );
+  dictionary = new Set(words.map((w) => w.trim().toUpperCase()));
 
-    console.log("Dictionary loaded:", dictionary.size, "words");
+  console.log("Dictionary loaded:", dictionary.size, "words");
 }
 
 function getRandomLetter() {
-    const totalWeight = Object.values(letterWeights).reduce(
-        (sum, w) => sum + w,
-        0,
-    );
-    let rand = Math.random() * totalWeight;
+  const totalWeight = Object.values(letterWeights).reduce(
+    (sum, w) => sum + w,
+    0,
+  );
+  let rand = Math.random() * totalWeight;
 
-    for (const [letter, weight] of Object.entries(letterWeights)) {
-        if (rand < weight) return letter;
-        rand -= weight;
-    }
+  for (const [letter, weight] of Object.entries(letterWeights)) {
+    if (rand < weight) return letter;
+    rand -= weight;
+  }
 
-    // fallback (shouldn’t happen)
-    return "E";
+  // fallback (shouldn’t happen)
+  return "E";
 }
 
 const usedButtons = [];
 
 // generate grid function
 function generateGrid() {
-    // Clear previous letters
-    loadDictionary();
+  // Clear previous letters
+  loadDictionary();
 
-    boardDiv.innerHTML = "";
-    wordBar.textContent = "";
-    usedButtons.length = 0;
+  boardDiv.innerHTML = "";
+  wordBar.textContent = "";
+  usedButtons.length = 0;
 
-    for (let i = 0; i < 16; i++) {
-        const button = document.createElement("button");
-        button.classList.add("square", "letter");
+  for (let i = 0; i < 16; i++) {
+    const button = document.createElement("button");
+    button.classList.add("square", "letter");
 
-        const letter = getRandomLetter();
-        button.textContent = letter;
-        button.disabled = false;
+    const letter = getRandomLetter();
+    button.textContent = letter;
+    button.disabled = false;
 
-        // click listener
-        button.addEventListener("click", () => {
-            wordBar.textContent += button.textContent;
-            button.disabled = true;
-            usedButtons.push(button); // track used button
-        });
+    // click listener
+    button.addEventListener("click", () => {
+      wordBar.textContent += button.textContent;
+      button.disabled = true;
+      usedButtons.push(button); // track used button
+    });
 
-        boardDiv.appendChild(button);
-    }
+    boardDiv.appendChild(button);
+  }
 }
-
 
 // backspace listener
 backspaceButton.addEventListener("click", () => {
-    if (wordBar.textContent.length === 0) return;
+  if (wordBar.textContent.length === 0) return;
 
-    const removedLetter = wordBar.textContent.slice(-1);
-    wordBar.textContent = wordBar.textContent.slice(0, -1);
+  const removedLetter = wordBar.textContent.slice(-1);
+  wordBar.textContent = wordBar.textContent.slice(0, -1);
 
-    // reactivate last used button
-    for (let i = usedButtons.length - 1; i >= 0; i--) {
-        if (usedButtons[i].textContent === removedLetter) {
-            usedButtons[i].disabled = false;
-            usedButtons.splice(i, 1); // remove from used
-            break;
-        }
+  // reactivate last used button
+  for (let i = usedButtons.length - 1; i >= 0; i--) {
+    if (usedButtons[i].textContent === removedLetter) {
+      usedButtons[i].disabled = false;
+      usedButtons.splice(i, 1); // remove from used
+      break;
     }
+  }
 });
 
 // new board listener
 newBoardButton.addEventListener("click", () => {
-    generateGrid();
+  generateGrid();
 });
 
 //scoring function
 scoreWordButton.addEventListener("click", () => {
-    if (wordBar.textContent.length === 0) return; // no word to score
-    if (wordBar.textContent.length < 2)  {
+  if (wordBar.textContent.length === 0) return; // no word to score
+
+  const word = wordBar.textContent.toUpperCase();
+
+  if (wordBar.textContent.length <= 2) {
     previousTotal.innerHTML = `"${word}" is too short`;
     return;
   }
-    const word = wordBar.textContent.toUpperCase();
 
-    if (!dictionary.has(word)) {
+  if (!dictionary.has(word)) {
     previousTotal.innerHTML = `"${word}" is not a valid word`;
     return;
   }
 
-    let wordScore = 0;
+  let wordScore = 0;
 
-    for (const char of word) {
-        wordScore += letterValues[char] || 0; // add letter value
-    }
+  for (const char of word) {
+    wordScore += letterValues[char] || 0; // add letter value
+  }
 
-    totalScore += wordScore;
-    scoreTotal.innerHTML = `Score: ${totalScore}`;
-    previousTotal.innerHTML = `Last word: ${word} (${wordScore} points)`;
+  totalScore += wordScore;
+  scoreTotal.innerHTML = `Score: ${totalScore}`;
+  previousTotal.innerHTML = `Last word: ${word} (${wordScore} points)`;
 
-    generateGrid();
+  generateGrid();
 });
 
 window.addEventListener("DOMContentLoaded", () => {
