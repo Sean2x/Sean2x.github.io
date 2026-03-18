@@ -123,6 +123,8 @@ function generateGrid() {
       wordBar.textContent += button.textContent;
       button.disabled = true;
       usedButtons.push(button); // track used button
+
+      updateWordState();
     });
 
     boardDiv.appendChild(button);
@@ -144,6 +146,8 @@ backspaceButton.addEventListener("click", () => {
       break;
     }
   }
+
+  updateWordState();
 });
 
 // new board listener
@@ -178,9 +182,26 @@ scoreWordButton.addEventListener("click", () => {
   previousTotal.innerHTML = `Last word: ${word} (${wordScore} points)`;
 
   generateGrid();
+  updateWordState();
 });
 
 window.addEventListener("DOMContentLoaded", () => {
   loadDictionary();
   generateGrid(); // start game AFTER loading starts
 });
+
+function updateWordState() {
+  const word = wordBar.textContent.toUpperCase();
+
+  const isValid = word.length >= 3 && dictionary.has(word);
+
+  // Enable / disable score button
+  scoreWordButton.disabled = !isValid;
+
+  // Glow effect
+  if (isValid) {
+    wordBar.classList.add("valid-word");
+  } else {
+    wordBar.classList.remove("valid-word");
+  }
+}

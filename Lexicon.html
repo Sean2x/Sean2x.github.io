@@ -1,77 +1,104 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <base target="_self" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Sean Lirazan | Portfolio</title>
+    <meta
+      name="description"
+      content="Professional portfolio with internship carousel and project showcase"
+    />
+    <script src=""></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="NewStyle.css" />
+    <link rel="icon" href="Images\favicon.ico" type="image/x-icon" />
 
-<head>
-  <base target="_self" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Sean Lirazan | Portfolio</title>
-  <meta name="description" content="Professional portfolio with internship carousel and project showcase" />
-  <script src=""></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="NewStyle.css" />
-  <link rel="icon" href="Images\favicon.ico" type="image/x-icon" />
+    <style>
+      .square {
+        aspect-ratio: 1/1;
+        width: 100%;
+        height: 100%;
 
-  <style>
-    .square {
-      aspect-ratio: 1/1;
-      width: 100%;
-      height: 100%;
+        padding: 0px;
+        margin: 0px;
+        display: flex;
+        border-radius: 15px;
+        background: #00000086;
+        border: 2px solid var(--pink);
+        box-shadow: var(--glow);
+        color: white;
+        font-size: 40px;
+        align-items: center;
+        justify-content: center;
+      }
 
-      padding: 0px;
-      margin: 0px;
-      display: flex;
-      border-radius: 15px;
-      background: #00000086;
-      border: 2px solid var(--pink);
-      box-shadow: var(--glow);
-      color: white;
-      font-size: 40px;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #grid {
-      display: grid;
-      aspect-ratio: 1/1;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(4, 1fr);
-      gap: 10px;
-      height: 50%;
-      margin: 0px;
-      /* border: 2px solid rgb(255, 0, 0);
-        box-shadow: var(--glow); */
-    }
-
-    button:disabled {
-      color: #ffffff50;
-      border: 2px solid #b5179d36;
-      box-shadow: none;
-      cursor: default;
-    }
-
-    @media (max-width: 768px) {
       #grid {
+        display: grid;
+        aspect-ratio: 1/1;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 10px;
+        height: 50%;
+        margin: 0px;
+        /* border: 2px solid rgb(255, 0, 0);
+        box-shadow: var(--glow); */
+      }
 
-        height: 30%;
+      button:disabled {
+        color: #ffffff50;
+        border: 2px solid #b5179d36;
+        box-shadow: none;
+        cursor: default;
       }
 
       #textbox {
-        font-size: 30px;
+        transition: all 0.2s ease;
       }
 
+      .textbox-invalid {
+        border: 2px solid #35303086;
+      }
 
-    }
-  </style>
-</head>
+      .valid-word {
+        box-shadow: 0 0 10px limegreen;
+        border: 2px solid limegreen;
+      }
 
-<canvas id="matrixCanvas"></canvas>
+      @media (max-width: 768px) {
+        #grid {
+          height: 30%;
+        }
 
-<body class="crt" style="background-color: #000000">
-  <!-- Header with Gradient Background -->
-  <header id="header" class="header" style="
+        #textbox {
+          font-size: 30px;
+        }
+      }
+    </style>
+  </head>
+
+  <canvas id="matrixCanvas"></canvas>
+
+  <body class="crt" style="background-color: #000000">
+    <!-- Header with Gradient Background -->
+    <header
+      id="header"
+      class="header"
+      style="
         margin: 0;
         display: flex;
         justify-content: space-between;
@@ -82,32 +109,54 @@
           rgba(0, 0, 0, 1),
           rgba(0, 0, 0, 0)
         );
-      ">
-    <div id="header1" style="display: flex; gap: 1.5rem">
-      <div class="menu-toggle" onclick="toggleMenu()">
-        <i class="bi bi-list hamburger" style="font-size: 2rem"></i>
-        <i class="logo bi bi-rocket-takeoff-fill rocket" style="font-size: 2rem"></i>
-      </div>
+      "
+    >
+      <div id="header1" style="display: flex; gap: 1.5rem">
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <i class="bi bi-list hamburger" style="font-size: 2rem"></i>
+          <i
+            class="logo bi bi-rocket-takeoff-fill rocket"
+            style="font-size: 2rem"
+          ></i>
+        </div>
 
-      <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
-        <a href="index.html">About</a>
-        <a href="index.html">Projects</a>
-        <a href="https://sean2x.github.io/ConnectCard.html" target="_blank">Contact</a>
-        <a href="Images/Sean Lirazan Resume 2.2.pdf" download>Resume <i class="bi bi-download"></i></a>
-      </nav>
-    </div>
-    <div class="socials" style="gap: 2rem; display: flex">
-      <a href="https://www.instagram.com/sean.applies.engineering/" class="logo bi bi-instagram hover"
-        style="font-size: 2rem" target="_blank"></a>
-      <a href="https://github.com/Sean2x" class="logo bi bi-github" style="font-size: 2rem" target="_blank"></a>
-      <a href="#" class="logo bi bi-youtube" style="font-size: 2rem"></a>
-    </div>
-  </header>
-  <!-- Main Content -->
-  <main class="mx-auto px-0 py-8">
-    <!-- spelling Section -->
-    <section id="Spelling" style="display: flex; padding: 1rem; justify-content: center">
-      <div class="grid-item terminal-window" style="
+        <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
+          <a href="index.html">About</a>
+          <a href="index.html">Projects</a>
+          <a href="https://sean2x.github.io/ConnectCard.html" target="_blank"
+            >Contact</a
+          >
+          <a href="Images/Sean Lirazan Resume 2.2.pdf" download
+            >Resume <i class="bi bi-download"></i
+          ></a>
+        </nav>
+      </div>
+      <div class="socials" style="gap: 2rem; display: flex">
+        <a
+          href="https://www.instagram.com/sean.applies.engineering/"
+          class="logo bi bi-instagram hover"
+          style="font-size: 2rem"
+          target="_blank"
+        ></a>
+        <a
+          href="https://github.com/Sean2x"
+          class="logo bi bi-github"
+          style="font-size: 2rem"
+          target="_blank"
+        ></a>
+        <a href="#" class="logo bi bi-youtube" style="font-size: 2rem"></a>
+      </div>
+    </header>
+    <!-- Main Content -->
+    <main class="mx-auto px-0 py-8">
+      <!-- spelling Section -->
+      <section
+        id="Spelling"
+        style="display: flex; padding: 1rem; justify-content: center"
+      >
+        <div
+          class="grid-item terminal-window"
+          style="
             display: flex;
             flex-direction: column; /* stack items vertically */
             justify-content: flex-start; /* align items from top */
@@ -115,25 +164,34 @@
             height: 120vh; /* container height */
             width: 100%; /* full width */
             gap: 30px;
-          ">
-        <div id="texbox holder" style="
+          "
+        >
+          <div
+            id="texbox holder"
+            style="
               width: 90%;
               border: 2px solid rgba(255, 0, 0, 0);
               display: flex;
               flex-direction: row;
               justify-content: center;
-            ">
-          <div id="textbox" style="
-                border: 2px solid var(--pink);
-                box-shadow: var(--glow);
+            "
+          >
+            <div
+              id="textbox"
+              class="textbox-invalid"
+              style="
                 height: 80px;
                 width: 700px;
                 color: white;
                 font-size: 40px;
                 text-align: center;
                 align-self: center;
-              "></div>
-          <button id="backspace" class="bi bi-backspace" style="
+              "
+            ></div>
+            <button
+              id="backspace"
+              class="bi bi-backspace"
+              style="
                 font-size: 48px;
                 position: relative;
                 right: 0px;
@@ -145,54 +203,61 @@
                 border: none;
                 outline: none;
                 box-shadow: none;
-              "></button>
+              "
+            ></button>
+          </div>
+          <div id="scoreTotal" style="font-size: 30px; color: white">
+            Score: 0
+          </div>
+          <div id="previousTotal" style="font-size: 24px; color: white">
+            Last word:
+          </div>
+          <button
+            id="score"
+            class="terminal-window"
+            style="height: 60px; width: 300px; color: white"
+            disabled
+          >
+            Score it
+          </button>
+          <div id="grid"></div>
+          <button
+            id="new-board"
+            class="terminal-window"
+            style="height: 60px; width: 300px; color: white"
+          >
+            New Board
+          </button>
         </div>
-        <div id="scoreTotal" style="font-size: 30px; color: white">
-          Score: 0
-        </div>
-        <div id="previousTotal" style="font-size: 24px; color: white">
-          Last word:
-        </div>
-        <button id="score" class="terminal-window" style="height: 60px; width: 300px; color: white">
-          Score it
-        </button>
-        <div id="grid"></div>
-        <button id="new-board" class="terminal-window" style="height: 60px; width: 300px; color: white">
-          New Board
-        </button>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
 
-  <!-- Footer -->
-</body>
+    <!-- Footer -->
+  </body>
 
-<script src="Matrix.js"></script>
+  <script src="Matrix.js"></script>
 
-<script>
-  function toggleMenu() {
-    const menu = document.getElementsByClassName("nav")[0];
-    menu.classList.toggle("active");
-  }
-</script>
-
-<style>
-  /* Hide text column on small screens */
-  @media (max-width: 1000px) {
-    .contact-text {
-      display: none;
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementsByClassName("nav")[0];
+      menu.classList.toggle("active");
     }
+  </script>
 
-    /* Center icons horizontally */
-    .contact-icons {
-      margin: 0 auto;
-      align-items: center;
+  <style>
+    /* Hide text column on small screens */
+    @media (max-width: 1000px) {
+      .contact-text {
+        display: none;
+      }
+
+      /* Center icons horizontally */
+      .contact-icons {
+        margin: 0 auto;
+        align-items: center;
+      }
     }
-  }
-</style>
+  </style>
 
-<script src="LexiconScript.js"></script>
-
-</script>
-
+  <script src="LexiconScript.js"></script>
 </html>
