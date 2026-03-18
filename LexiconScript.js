@@ -157,6 +157,10 @@ newBoardButton.addEventListener("click", () => {
 //scoring function
 scoreWordButton.addEventListener("click", () => {
     if (wordBar.textContent.length === 0) return; // no word to score
+    if (wordBar.textContent.length < 2)  {
+    previousTotal.innerHTML = `"${word}" is too short`;
+    return;
+  }
     const word = wordBar.textContent.toUpperCase();
 
     if (!dictionary.has(word)) {
