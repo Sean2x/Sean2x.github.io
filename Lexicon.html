@@ -1,59 +1,71 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <base target="_self" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sean Lirazan | Portfolio</title>
-    <meta name="description" content="Professional portfolio with internship carousel and project showcase" />
+    <meta
+      name="description"
+      content="Professional portfolio with internship carousel and project showcase"
+    />
     <script src=""></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="NewStyle.css" />
     <link rel="icon" href="Images\favicon.ico" type="image/x-icon" />
 
     <style>
-        .square {
-            aspect-ratio: 1/1;
-            width: 100%;
-            height: 100%;
+      .square {
+        aspect-ratio: 1/1;
+        width: 100%;
+        height: 100%;
 
-            padding: 0px;
-            margin: 0px;
-            display: flex;
-            border-radius: 15px;
-            background: #00000086;
-            border: 2px solid var(--pink);
-            box-shadow: var(--glow);
-            color: white;
-            font-size: 40px;
-            align-items: center;
-            justify-content: center;
+        padding: 0px;
+        margin: 0px;
+        display: flex;
+        border-radius: 15px;
+        background: #00000086;
+        border: 2px solid var(--pink);
+        box-shadow: var(--glow);
+        color: white;
+        font-size: 40px;
+        align-items: center;
+        justify-content: center;
+      }
 
-        }
-
-        #grid {
-            
-    display: grid;
-    aspect-ratio: 1/1;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: 10px; 
-    height: 60%; 
-    margin: 0px;
-    border: 2px solid rgb(255, 0, 0);
-    box-shadow: var(--glow);
-        }
+      #grid {
+        display: grid;
+        aspect-ratio: 1/1;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 10px;
+        height: 50%;
+        margin: 0px;
+        border: 2px solid rgb(255, 0, 0);
+        box-shadow: var(--glow);
+      }
     </style>
-</head>
+  </head>
 
-<canvas id="matrixCanvas"></canvas>
+  <canvas id="matrixCanvas"></canvas>
 
-<body class="crt" style="background-color: #000000">
+  <body class="crt" style="background-color: #000000">
     <!-- Header with Gradient Background -->
-    <header id="header" class="header" style="
+    <header
+      id="header"
+      class="header"
+      style="
         margin: 0;
         display: flex;
         justify-content: space-between;
@@ -64,84 +76,234 @@
           rgba(0, 0, 0, 1),
           rgba(0, 0, 0, 0)
         );
-      ">
-
-        <div id="header1" style="display: flex; gap: 1.5rem">
-            <div class="menu-toggle" onclick="toggleMenu()">
-                <i class="bi bi-list hamburger" style="font-size: 2rem"></i> </i>
-                <i class="logo bi bi-rocket-takeoff-fill rocket" style="font-size: 2rem"></i>
-            </div>
-
-
-            <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
-                <a href="#about">About</a>
-                <a href="#projects">Projects</a>
-                <a href="https://sean2x.github.io/ConnectCard.html" target="_blank">Contact</a>
-                <a href="Images/Sean Lirazan Resume 2.2.pdf" download>Resume <i class="bi bi-download"></i></a>
-            </nav>
+      "
+    >
+      <div id="header1" style="display: flex; gap: 1.5rem">
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <i class="bi bi-list hamburger" style="font-size: 2rem"></i>
+          <i
+            class="logo bi bi-rocket-takeoff-fill rocket"
+            style="font-size: 2rem"
+          ></i>
         </div>
-        <div class="socials" style="gap: 2rem; display: flex">
-            <a href="https://www.instagram.com/sean.applies.engineering/" class="logo bi bi-instagram hover"
-                style="font-size: 2rem" target="_blank"></a>
-            <a href="https://github.com/Sean2x" class="logo bi bi-github" style="font-size: 2rem" target="_blank"></a>
-            <a href="#" class="logo bi bi-youtube" style="font-size: 2rem"></a>
-        </div>
+
+        <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
+          <a href="#about">About</a>
+          <a href="#projects">Projects</a>
+          <a href="https://sean2x.github.io/ConnectCard.html" target="_blank"
+            >Contact</a
+          >
+          <a href="Images/Sean Lirazan Resume 2.2.pdf" download
+            >Resume <i class="bi bi-download"></i
+          ></a>
+        </nav>
+      </div>
+      <div class="socials" style="gap: 2rem; display: flex">
+        <a
+          href="https://www.instagram.com/sean.applies.engineering/"
+          class="logo bi bi-instagram hover"
+          style="font-size: 2rem"
+          target="_blank"
+        ></a>
+        <a
+          href="https://github.com/Sean2x"
+          class="logo bi bi-github"
+          style="font-size: 2rem"
+          target="_blank"
+        ></a>
+        <a href="#" class="logo bi bi-youtube" style="font-size: 2rem"></a>
+      </div>
     </header>
     <!-- Main Content -->
     <main class="mx-auto px-0 py-8">
-        <!-- About Me Section -->
-        <section id="Spelling" style="display: flex; padding: 1rem; justify-content: center">
+      <!-- spelling Section -->
+      <section
+        id="Spelling"
+        style="display: flex; padding: 1rem; justify-content: center"
+      >
+        <div
+          class="grid-item terminal-window"
+          style="
+            display: flex;
+            flex-direction: column; /* stack items vertically */
+            justify-content: flex-start; /* align items from top */
+            align-items: center; /* center horizontally */
+            height: 120vh; /* container height */
+            width: 100%; /* full width */
+            gap: 30px;
+          "
+        >
+          <div
+            id="texbox holder"
+            style="
+              border: 2px solid rgba(255, 0, 0, 0);
+              display: flex;
+              flex-direction: row;
+            "
+          >
+            <div
+              id="textbox"
+              style="
+                border: 2px solid var(--pink);
+                box-shadow: var(--glow);
+                height: 80px;
+                width: 700px;
+                color: white;
+                font-size: 40px;
+                text-align: center;
+              "
+            ></div>
+            <button
+              id="backspace"
+              class="bi bi-backspace"
+              style="
+                font-size: 48px;
+                position: relative;
+                right: 0px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: var(--lightbg);
+                color: var(--pink);
 
-        <div class="grid-item terminal-window" style="display: flex;         
-  flex-direction: column;  /* stack items vertically */
-  justify-content: flex-start; /* align items from top */
-  align-items: center;     /* center horizontally */
-  height: 120vh;           /* container height */
-  width: 100%;             /* full width */
-  gap: 30px">
-                <div id="textbox" style="border: 2px solid var(--pink);
-box-shadow: var(--glow); height: 80px; width: 700px"></div>
-                <div id="grid">
+                border: none;
+                outline: none;
+                box-shadow: none;
+              "
+            ></button>
+            <div id="score" style="font-size: 30px; color: white">Score: 0</div>
+          </div>
 
-                    <button id="letter" class="square"> A </button>
-
-                </div>
-                <button class="terminal-window" style=" height: 60px; width: 300px;  color: white">New Board</button>
-                <button class="terminal-window" style=" height: 60px; width: 300px;  color: white">Score it</button>
-            </div>
-
-        </section>
-
-
+          <button
+            class="terminal-window"
+            style="height: 60px; width: 300px; color: white"
+          >
+            Score it
+          </button>
+          <div id="grid"></div>
+          <button
+            id="new-board"
+            class="terminal-window"
+            style="height: 60px; width: 300px; color: white"
+          >
+            New Board
+          </button>
+        </div>
+      </section>
     </main>
 
     <!-- Footer -->
-</body>
+  </body>
 
+  <script src="Matrix.js"></script>
 
-
-<script src="Matrix.js"></script>
-
-<script>
+  <script>
     function toggleMenu() {
-        const menu = document.getElementsByClassName("nav")[0];
-        menu.classList.toggle("active");
+      const menu = document.getElementsByClassName("nav")[0];
+      menu.classList.toggle("active");
     }
-</script>
+  </script>
 
-<style>
+  <style>
     /* Hide text column on small screens */
     @media (max-width: 1000px) {
-        .contact-text {
-            display: none;
-        }
+      .contact-text {
+        display: none;
+      }
 
-        /* Center icons horizontally */
-        .contact-icons {
-            margin: 0 auto;
-            align-items: center;
-        }
+      /* Center icons horizontally */
+      .contact-icons {
+        margin: 0 auto;
+        align-items: center;
+      }
     }
-</style>
+  </style>
 
+  <script>
+    //instaniate elements
+    const boardDiv = document.getElementById("grid");
+    const wordBar = document.getElementById("textbox");
+    const backspaceButton = document.getElementById("backspace");
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    const newBoardButton = document.getElementById("new-board");
+    const displayScore = document.getElementById("score");
+
+    const letterValues = {
+      A: 1,
+      B: 3,
+      C: 3,
+      D: 2,
+      E: 1,
+      F: 4,
+      G: 2,
+      H: 4,
+      I: 1,
+      J: 8,
+      K: 5,
+      L: 1,
+      M: 3,
+      N: 1,
+      O: 1,
+      P: 3,
+      Q: 10,
+      R: 1,
+      S: 1,
+      T: 1,
+      U: 1,
+      V: 4,
+      W: 4,
+      X: 8,
+      Y: 4,
+      Z: 10,
+    };
+
+    let totalScore = 0;
+
+    // generate grid function
+    function generateGrid() {
+      // Clear previous letters
+      boardDiv.innerHTML = "";
+      wordBar.innerHTML = "";
+
+      for (let i = 0; i < 16; i++) {
+        const button = document.createElement("button");
+        button.classList.add("square", "letter");
+        button.textContent =
+          alphabet[Math.floor(Math.random() * alphabet.length)];
+
+        // click listener
+        button.addEventListener("click", () => {
+          wordBar.textContent += button.textContent;
+        });
+
+        boardDiv.appendChild(button);
+      }
+    }
+    generateGrid();
+
+    // backspace listener
+    backspaceButton.addEventListener("click", () => {
+      wordBar.textContent = wordBar.textContent.slice(0, -1);
+    });
+
+    // new board listener
+    newBoardButton.addEventListener("click", () => {
+      generateGrid();
+    });
+
+    //scoring function
+    scoreWordButton.addEventListener("click", () => {
+      const word = wordBar.textContent.toUpperCase();
+      let wordScore = 0;
+
+      for (const char of word) {
+        wordScore += letterValues[char] || 0; // add letter value
+      }
+
+      totalScore += wordScore;
+      scoreDisplay.textContent = `Score: ${totalScore}`;
+
+      wordBar.textContent = ""; // reset for next word
+    });
+  </script>
 </html>
