@@ -59,7 +59,7 @@
         color: #ffffff50;
         border: 2px solid var(--lightbg);
         box-shadow: none;
-        cursor: not-allowed;
+        cursor: default;
       }
     </style>
   </head>
@@ -317,13 +317,15 @@
       return "E";
     }
 
+    const usedButtons = [];
+
     // generate grid function
     function generateGrid() {
       // Clear previous letters
-      const usedButtons = [];
 
       boardDiv.innerHTML = "";
       wordBar.textContent = "";
+      usedButtons.length = 0;
 
       for (let i = 0; i < 16; i++) {
         const button = document.createElement("button");
@@ -336,7 +338,7 @@
         // click listener
         button.addEventListener("click", () => {
           wordBar.textContent += button.textContent;
-          //   button.disabled = true;
+          button.disabled = true;
           usedButtons.push(button); // track used button
         });
 
@@ -349,13 +351,16 @@
     backspaceButton.addEventListener("click", () => {
       if (wordBar.textContent.length === 0) return;
 
-      // Remove last letter from wordBar
+      const removedLetter = wordBar.textContent.slice(-1);
       wordBar.textContent = wordBar.textContent.slice(0, -1);
 
-      // Reactivate the exact last used button
-      const lastUsed = usedButtons.pop();
-      if (lastUsed) {
-        lastUsed.button.disabled = false;
+      // reactivate last used button
+      for (let i = usedButtons.length - 1; i >= 0; i--) {
+        if (usedButtons[i].textContent === removedLetter) {
+          usedButtons[i].disabled = false;
+          usedButtons.splice(i, 1); // remove from used
+          break;
+        }
       }
     });
 
