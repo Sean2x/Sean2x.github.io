@@ -116,7 +116,13 @@ function generateGrid() {
     const button = document.createElement("button");
     button.classList.add("square", "letter");
 
-    const letter = getRandomLetter();
+    const letter = getRandomLetter(); // "QU" if it's Q
+    button.textContent = letter;
+
+    // Add a class if it's QU
+    if (letter === "QU") {
+      button.classList.add("qu");
+    }
     button.textContent = letter;
     button.disabled = false;
 
