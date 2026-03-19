@@ -77,7 +77,10 @@ let topWords = []; // stores objects {word: "WORD", score: 12}
 //dictionaty
 let dictionary = new Set();
 
-let baseSeed = 12345; // default seed
+const today = new Date();
+baseSeed = Number(
+  `${today.getMonth() + 1}${today.getDate()}${today.getFullYear()}`
+);
 let currentRound = 1;
 
 async function loadDictionary() {
@@ -184,6 +187,10 @@ backspaceButton.addEventListener("click", () => {
 
 // new board listener
 newSeedButton.addEventListener("click", () => {
+  baseSeed = Math.floor(Math.random() * 1000000); // new random seed
+  currentRound = 1; // reset rounds
+  totalScore = 0;
+  scoreTotal.textContent = `Score: ${totalScore}`;
   generateGrid();
 });
 
