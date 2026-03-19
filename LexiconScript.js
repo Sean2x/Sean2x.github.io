@@ -117,7 +117,7 @@ function generateGrid() {
   wordBar.textContent = "";
   usedButtons.length = 0;
 
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < 16; i++) {
     const button = document.createElement("button");
     button.classList.add("square", "letter");
 
