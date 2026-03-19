@@ -84,17 +84,30 @@
         border: 2px solid limegreen;
       }
 
-      .dim-hover {
+      .dim-hover-newBoard {
         /* Dim by default */
         filter: brightness(0.3);
         transition: filter 0.3s ease;
         box-shadow: black 0px 0px 10px; /* smooth fade on hover */
       }
 
-      .dim-hover:hover {
+      .dim-hover-newBoard:hover {
         border: 2px solid red;
         filter: brightness(1); /* brightens when hovered */
         box-shadow: red 0px 0px 20px; /* stronger glow on hover */
+      }
+
+      .dim-hover-shuffle {
+        /* Dim by default */
+        filter: brightness(0.3);
+        transition: filter 0.3s ease;
+        box-shadow: black 0px 0px 10px; /* smooth fade on hover */
+      }
+
+      .dim-hover-shuffle:hover {
+        border: 2px solid rgb(215, 238, 87);
+        filter: brightness(1); /* brightens when hovered */
+        box-shadow: rgb(215, 238, 87) 0px 0px 20px; /* stronger glow on hover */
       }
 
       .container {
@@ -334,14 +347,14 @@
               <div>
                 <button
                   id="new-board"
-                  class="terminal-window dim-hover"
+                  class="terminal-window dim-hover-newBoard"
                   style="height: 60px; width: 300px; color: white"
                 >
                   New Board
                 </button>
                 <button
                   id="shuffle-board"
-                  class="terminal-window dim-hover"
+                  class="terminal-window dim-hover-shuffle"
                   style="height: 60px; width: 300px; color: white"
                 >
                   Shuffle Board
