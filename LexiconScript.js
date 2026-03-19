@@ -77,6 +77,9 @@ let topWords = []; // stores objects {word: "WORD", score: 12}
 //dictionaty
 let dictionary = new Set();
 
+let baseSeed = 12345; // default seed
+let currentRound = 1;
+
 async function loadDictionary() {
   const response = await fetch("Misc/expanded_wordsV2.txt");
   const text = await response.text();
@@ -88,13 +91,13 @@ async function loadDictionary() {
   console.log("Dictionary loaded:", dictionary.size, "words");
 }
 
-function getRandomLetter() {
+function getRandomLetter(rng) {
   const totalWeight = Object.values(letterWeights).reduce(
     (sum, w) => sum + w,
     0,
   );
 
-  let rand = Math.random() * totalWeight;
+  let rand = rng() * totalWeight;
 
   for (const [letter, weight] of Object.entries(letterWeights)) {
     if (rand < weight) {
@@ -117,11 +120,15 @@ function generateGrid() {
   wordBar.textContent = "";
   usedButtons.length = 0;
 
+  // 🔥 KEY LINE: unique seed per round
+  const roundSeed = baseSeed * 1000 + currentRound;
+  const rng = createSeededRNG(roundSeed);
+
   for (let i = 0; i < 16; i++) {
     const button = document.createElement("button");
     button.classList.add("square", "letter");
 
-    const letter = getRandomLetter(); // "QU" if it's Q
+    const letter = getRandomLetter(rng); // "QU" if it's Q
     button.textContent = letter;
 
     // Add a class if it's QU
@@ -142,6 +149,10 @@ function generateGrid() {
 
     boardDiv.appendChild(button);
   }
+
+  // update UI
+  document.getElementById("seed").textContent = `Seed: ${baseSeed}`;
+  document.getElementById("round").textContent = `Round: ${currentRound}`;
 }
 
 // backspace listener
@@ -220,6 +231,7 @@ scoreWordButton.addEventListener("click", () => {
     .map((w) => `${w.word} (${w.score})`)
     .join("<br>");
 
+  currentRound++;
   generateGrid();
   updateWordState();
 });
@@ -270,3 +282,12 @@ shuffleButton.addEventListener("click", () => {
   usedButtons.length = 0;
   updateWordState();
 });
+
+function createSeededRNG(seed) {
+  let value = seed;
+
+  return function () {
+    value = (value * 9301 + 49297) % 233280;
+    return value / 233280;
+  };
+}
