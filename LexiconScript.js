@@ -93,7 +93,7 @@ const scoreColors = [
 ];
 
 async function loadDictionary() {
-  const response = await fetch("Misc/expanded_wordsV2.txt");
+  const response = await fetch("Misc/expanded_wordsV3.txt");
   const text = await response.text();
 
   const words = text.split(/\r?\n/);

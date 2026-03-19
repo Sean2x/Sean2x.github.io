@@ -1,16 +1,16 @@
 const fs = require("fs");
 
 // === CONFIG ===
-const inputFile = "Misc/en_US-large.dic"; // your input dictionary
-const outputFile = "expanded_wordsV2.txt"; // output file
+const inputFile = "Misc/en_US-large.dic";
+const outputFile = "Misc/expanded_wordsV3.txt";
 
 // === HELPER FUNCTIONS ===
 
-// Pluralize regular and irregular nouns
+// Pluralize nouns
 function pluralize(word) {
   const lw = word.toLowerCase();
 
-  // hard-coded irregulars
+  // irregulars
   if (lw === "mass") return "masses";
   if (lw === "child") return "children";
   if (lw === "person") return "people";
@@ -19,19 +19,19 @@ function pluralize(word) {
   if (lw === "mouse") return "mice";
   if (lw === "goose") return "geese";
 
-  // common Latin/Greek endings
-  if (lw.endsWith("us")) return word.slice(0, -2) + "i"; // cactus → cacti
-  if (lw.endsWith("a")) return word.slice(0, -1) + "ae"; // cochlea → cochleae
-  if (lw.endsWith("is")) return word.slice(0, -2) + "es"; // axis → axes
-  if (lw.endsWith("um")) return word.slice(0, -2) + "a"; // bacterium → bacteria
-  if (/(ex|ix)$/i.test(lw)) return word.slice(0, -2) + "ices"; // index → indices
+  // latin/greek
+  if (lw.endsWith("us")) return word.slice(0, -2) + "i";
+  if (lw.endsWith("a")) return word.slice(0, -1) + "ae";
+  if (lw.endsWith("is")) return word.slice(0, -2) + "es";
+  if (lw.endsWith("um")) return word.slice(0, -2) + "a";
+  if (/(ex|ix)$/i.test(lw)) return word.slice(0, -2) + "ices";
 
-  // words ending in y after consonant → ies
+  // y → ies
   if (word.endsWith("y") && !/[aeiou]y$/i.test(word)) {
     return word.slice(0, -1) + "ies";
   }
 
-  // words ending in s, x, z, ch, sh → es
+  // es endings
   if (/(s|x|z|ch|sh)$/i.test(word)) {
     return word + "es";
   }
@@ -39,46 +39,62 @@ function pluralize(word) {
   return word + "s";
 }
 
-// Conjugate regular verbs
+// check for consonant-vowel-consonant pattern
+function isCVC(word) {
+  return /^[^aeiou]*[aeiou][^aeiou]$/i.test(word) && !/(w|x|y)$/i.test(word);
+}
+
+// Conjugate verbs (FIXED)
 function conjugate(word) {
   const lw = word.toLowerCase();
   let forms = [];
 
-  // handle irregular verbs
-  if (lw === "make") {
-    forms.push("makes", "made", "making");
-  } else if (lw === "be") {
-    forms.push("is", "was", "being");
-  } else if (lw === "have") {
-    forms.push("has", "had", "having");
+  // irregulars
+  if (lw === "make") return ["makes", "made", "making"];
+  if (lw === "be") return ["is", "was", "being"];
+  if (lw === "have") return ["has", "had", "having"];
+
+  // --- THIRD PERSON ---
+  if (word.endsWith("y") && !/[aeiou]y$/i.test(word)) {
+    forms.push(word.slice(0, -1) + "ies");
+  } else if (/(s|x|z|ch|sh)$/i.test(word)) {
+    forms.push(word + "es");
   } else {
-    // normal verb endings
-    // third person singular
-    if (word.endsWith("y") && !/[aeiou]y$/i.test(word)) {
-      forms.push(word.slice(0, -1) + "ies"); // carry → carries
-    } else if (/(s|x|z|ch|sh)$/i.test(word)) {
-      forms.push(word + "es"); // fix → fixes
-    } else {
-      forms.push(word + "s");
-    }
+    forms.push(word + "s");
+  }
+
+  // --- PAST ---
+  if (word.endsWith("e")) {
+    forms.push(word + "d"); // vote → voted
+  } else if (isCVC(word)) {
+    forms.push(word + word.slice(-1) + "ed"); // stop → stopped
+  } else {
     forms.push(word + "ed");
+  }
+
+  // --- ING ---
+  if (word.endsWith("e") && lw !== "be") {
+    forms.push(word.slice(0, -1) + "ing"); // vote → voting
+  } else if (isCVC(word)) {
+    forms.push(word + word.slice(-1) + "ing"); // run → running
+  } else {
     forms.push(word + "ing");
   }
 
   return forms;
 }
 
-// Expand a word based on flags
+// Expand based on flags
 function expandWord(word, flags) {
   const result = [word];
   const flagSet = new Set(flags.toUpperCase().split(""));
 
-  // Noun plural
+  // plural
   if (flagSet.has("S")) {
     result.push(pluralize(word));
   }
 
-  // Verb expansions
+  // verbs
   if (
     flagSet.has("M") ||
     flagSet.has("D") ||
@@ -88,14 +104,14 @@ function expandWord(word, flags) {
     result.push(...conjugate(word));
   }
 
-  // Adjective comparative / superlative
+  // adjectives
   if (flagSet.has("R")) result.push(word + "er");
   if (flagSet.has("T")) result.push(word + "est");
 
-  // Adverb
+  // adverbs
   if (flagSet.has("Y")) result.push(word + "ly");
 
-  // Irregular plurals from Z flag
+  // irregular plural flag
   if (flagSet.has("Z")) {
     const lw = word.toLowerCase();
     if (lw.endsWith("a")) result.push(word.slice(0, -1) + "ae");
@@ -108,7 +124,7 @@ function expandWord(word, flags) {
   return result;
 }
 
-// === PROCESS DICTIONARY ===
+// === PROCESS ===
 const text = fs.readFileSync(inputFile, "utf-8");
 const lines = text.split(/\r?\n/);
 
@@ -117,21 +133,21 @@ let expanded = [];
 lines.forEach((line) => {
   if (!line.trim()) return;
 
-  // Split word and flags
   const parts = line.split("/");
   const word = parts[0].trim().toLowerCase();
   const flags = parts[1] ? parts[1].trim() : "";
 
-  // Filter nonsense
+  // filter junk
   if (word.length < 2 || word.length > 16) return;
   if (!/^[a-z]+$/.test(word)) return;
 
   expanded.push(...expandWord(word, flags));
 });
 
-// Remove duplicates
+// dedupe
 const unique = [...new Set(expanded)];
 
-// Save to file
+// save
 fs.writeFileSync(outputFile, unique.join("\n"));
+
 console.log(`Done! Expanded list saved as: ${outputFile}`);
