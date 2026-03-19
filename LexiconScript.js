@@ -11,6 +11,8 @@ const scoreTotal = document.getElementById("scoreTotal");
 
 const shuffleButton = document.getElementById("shuffle-board");
 const topListDiv = document.getElementById("top-words");
+const seedInput = document.getElementById("seed-input");
+const setSeedButton = document.getElementById("set-seed");
 
 const letterValues = {
   A: 1,
@@ -298,3 +300,29 @@ function createSeededRNG(seed) {
     return value / 233280;
   };
 }
+
+setSeedButton.addEventListener("click", () => {
+  let input = seedInput.value.trim();
+
+  if (input === "") return;
+
+  // Convert to number safely
+  let newSeed;
+
+  // If it's a number → use it directly
+  if (!isNaN(input)) {
+    newSeed = Number(input);
+  } else {
+    // If it's text → convert to number (hash it)
+    newSeed = 0;
+    for (let i = 0; i < input.length; i++) {
+      newSeed += input.charCodeAt(i) * (i + 1);
+    }
+  }
+
+  baseSeed = newSeed;
+  currentRound = 1;
+  totalScore = 0;
+
+  generateGrid();
+});

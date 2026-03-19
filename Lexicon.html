@@ -287,12 +287,12 @@
                 width: 100%; /* full width */
                 gap: 30px;
               ">
-              <div id="seed-round-holder" >
-                  <div id="seed" style="font-size: 24px; color: white">Seed: 019393</div>
-                  <div id="round" style="font-size: 24px; color: white">Round: 1</div>
+            <div id="seed-round-holder">
+              <div id="seed" style="font-size: 24px; color: white">Seed: 019393</div>
+              <div id="round" style="font-size: 24px; color: white">Round: 1</div>
 
 
-              </div>
+            </div>
             <div id="texbox holder" style="
                   width: 90%;
                   border: 2px solid rgba(255, 0, 0, 0);
@@ -343,7 +343,13 @@
               font-size: 18px;
               color: white;
               text-align: start;
-            "><button id="new-seed" class="terminal-window dim-hover-newBoard"
+            ">
+          <input id="seed-input" class="terminal-window" type="text" placeholder="Enter seed..."
+            style="width: 90%; height: 40px; text-align: center; background-color: var(--lightbg); color: white" />
+          <button id="set-seed" class="terminal-window" style="height: 100px; width:90%; color: white; text-align: center;">
+            Set Seed
+          </button>
+          <button id="new-seed" class="terminal-window dim-hover-newBoard"
             style="height: 60px; width:90%; color: white">
             New Seed
           </button>
@@ -352,10 +358,7 @@
             Shuffle Board
           </button>
 
-          <div class="terminal-window"
-            style="height: 100px; width:90%; color: white; text-align: center;">
-            Seeded
-          </div>
+          
 
         </div>
       </div>
