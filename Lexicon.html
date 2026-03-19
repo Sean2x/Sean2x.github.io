@@ -237,6 +237,21 @@
     </main>
 
     <!-- Footer -->
+    <script>
+      document.querySelectorAll("*").forEach((el) => {
+        el.style["touch-action"] = "manipulation";
+      });
+
+      new MutationObserver((elms) => {
+        elms.forEach(function (elm) {
+          for (var i = 0; i < elm.addedNodes.length; i++) {
+            if (elm.addedNodes[i].style) {
+              elm.addedNodes[i].style["touch-action"] = "manipulation";
+            }
+          }
+        });
+      }).observe(document.body, { childList: true, subtree: true });
+    </script>
   </body>
 
   <script src="Matrix.js"></script>
