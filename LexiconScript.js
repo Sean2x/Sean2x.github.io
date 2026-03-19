@@ -9,6 +9,8 @@ const scoreWordButton = document.getElementById("score");
 const scoreTotal = document.getElementById("scoreTotal");
 const previousTotal = document.getElementById("previousTotal");
 
+const shuffleButton = document.getElementById("shuffle-board");
+
 const letterValues = {
   A: 1,
   D: 1,
@@ -226,3 +228,29 @@ function updateWordState() {
     wordBar.classList.remove("valid-word");
   }
 }
+
+shuffleButton.addEventListener("click", () => {
+  // Get current letters from buttons
+  const letters = Array.from(boardDiv.querySelectorAll(".letter")).map(
+    (btn) => btn.textContent,
+  );
+
+  // Shuffle the array
+  for (let i = letters.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [letters[i], letters[j]] = [letters[j], letters[i]];
+  }
+
+  // Reassign letters to buttons and reset state
+  const buttons = boardDiv.querySelectorAll(".letter");
+  buttons.forEach((btn, idx) => {
+    btn.textContent = letters[idx];
+    btn.disabled = false; // reactivate all letters
+    btn.classList.toggle("qu", letters[idx] === "QU");
+  });
+
+  // Clear word bar and usedButtons
+  wordBar.textContent = "";
+  usedButtons.length = 0;
+  updateWordState();
+});
