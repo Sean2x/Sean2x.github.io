@@ -4,7 +4,7 @@ const wordBar = document.getElementById("textbox");
 const backspaceButton = document.getElementById("backspace");
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-const newBoardButton = document.getElementById("new-board");
+const newSeedButton = document.getElementById("new-seed");
 const scoreWordButton = document.getElementById("score");
 const scoreTotal = document.getElementById("scoreTotal");
 // const previousTotal = document.getElementById("previousTotal");
@@ -172,7 +172,7 @@ backspaceButton.addEventListener("click", () => {
 });
 
 // new board listener
-newBoardButton.addEventListener("click", () => {
+newSeedButton.addEventListener("click", () => {
   generateGrid();
 });
 
