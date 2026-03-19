@@ -85,6 +85,13 @@ baseSeed = Number(
 );
 let currentRound = 1;
 
+const scoreColors = [
+  { threshold: 1, color: "#7c3d05" },     // low score
+  { threshold: 1.25, color: "#c0c0c0" }, // medium
+  { threshold: 1.75, color: "#FFD700" },  // high
+
+];
+
 async function loadDictionary() {
   const response = await fetch("Misc/expanded_wordsV2.txt");
   const text = await response.text();
