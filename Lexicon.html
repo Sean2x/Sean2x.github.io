@@ -96,6 +96,55 @@
         box-shadow: red 0px 0px 20px; /* stronger glow on hover */
       }
 
+      .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem; /* spacing between items */
+        width: 100%;
+      }
+
+      /* Left and right: fixed width */
+      .left,
+      .right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        width: 150px; /* predefined size */
+        text-align: center;
+        justify-content: center;
+      }
+
+      /* Middle always centered with a box */
+      .middle {
+        flex: 0 0 auto; /* keep natural size */
+        text-align: center;
+        padding: 1rem 2rem;
+        border: 2px solid var(--pink);
+        border-radius: 8px;
+        box-shadow: var(--glow);
+        background: var(--lightbg);
+      }
+
+      /* Responsive: vertical layout on small screens */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column; /* stack vertically */
+        }
+
+        /* Reorder items */
+        .middle {
+          order: 1; /* comes first */
+        }
+        .left {
+          order: 2; /* comes second */
+        }
+        .right {
+          order: 3; /* stays last */
+        }
+      }
+
       @media (max-width: 768px) {
         #grid {
           height: 30%;
@@ -104,6 +153,10 @@
         #textbox {
           font-size: 30px;
         }
+      }
+      div {
+        border: 1px solid rgba(0, 0, 255, 0); /* visible for all divs */
+        background: rgba(0, 0, 0, 0.05); /* subtle background to see spacing */
       }
     </style>
   </head>
@@ -171,92 +224,118 @@
         id="Spelling"
         style="display: flex; padding: 1rem; justify-content: center"
       >
-        <div
-          class="grid-item terminal-window"
-          style="
-            display: flex;
-            flex-direction: column; /* stack items vertically */
-            justify-content: flex-start; /* align items from top */
-            align-items: center; /* center horizontally */
-            height: 120vh; /* container height */
-            width: 100%; /* full width */
-            gap: 30px;
-          "
-        >
-          <div id="scoreTotal" style="font-size: 30px; color: white">
-            Score: 0
-          </div>
-          <div id="previousTotal" style="font-size: 24px; color: white">
-            Last word:
-          </div>
+        <div class="container" class="terminal-window">
           <div
-            id="texbox holder"
+            class="left terminal-window"
             style="
-              width: 90%;
-              border: 2px solid rgba(255, 0, 0, 0);
               display: flex;
-              flex-direction: row;
-              justify-content: center;
+              flex-direction: column; /* stack items vertically */
+              justify-content: flex-start; /* push everything to the top */
+              align-items: center; /* align left if needed */
+              gap: 0.5rem; /* optional spacing between items */
+              height: 50vh;
+              width: 200px;
+              padding: 10px;
+              font-size: 18px;
+              color: white;
+              text-align: start;
             "
           >
+            <div id="scoreTotal" style="font-size: 30px; color: white">
+              Score: 0
+            </div>
+            <!-- <div
+              id="previousTotal"
+              style="font-size: 24px; color: white; text-align: center"
+            >
+              Last word:
+            </div> -->
+            <div id="top-words" style="color: rgb(121, 121, 121)">
+              <!-- Top 5 words will appear here -->
+            </div>
+          </div>
+          <div class="middle">
             <div
-              id="textbox"
-              class="textbox-invalid"
+              class="grid-item"
               style="
-                height: 80px;
-                width: 700px;
-                color: white;
-                font-size: 40px;
-                text-align: center;
-                align-self: center;
+                display: flex;
+                flex-direction: column; /* stack items vertically */
+                justify-content: flex-start; /* align items from top */
+                align-items: center; /* center horizontally */
+                height: 100vh; /* container height */
+                width: 100%; /* full width */
+                gap: 30px;
               "
-            ></div>
-            <button
-              id="backspace"
-              class="bi bi-backspace"
-              style="
-                font-size: 48px;
-                position: relative;
-                right: 0px;
-                top: 50%;
-                transform: translateY(-50%);
-                background: var(--lightbg);
-                color: var(--pink);
+            >
+              <div
+                id="texbox holder"
+                style="
+                  width: 90%;
+                  border: 2px solid rgba(255, 0, 0, 0);
+                  display: flex;
+                  flex-direction: row;
+                  justify-content: center;
+                "
+              >
+                <div
+                  id="textbox"
+                  class="textbox-invalid"
+                  style="
+                    height: 80px;
+                    width: 700px;
+                    color: white;
+                    font-size: 40px;
+                    text-align: center;
+                    align-self: center;
+                  "
+                ></div>
+                <button
+                  id="backspace"
+                  class="bi bi-backspace"
+                  style="
+                    font-size: 48px;
+                    position: relative;
+                    right: 0px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: var(--lightbg);
+                    color: var(--pink);
 
-                border: none;
-                outline: none;
-                box-shadow: none;
-              "
-            ></button>
+                    border: none;
+                    outline: none;
+                    box-shadow: none;
+                  "
+                ></button>
+              </div>
+              <div>
+                <button
+                  id="new-board"
+                  class="terminal-window dim-hover"
+                  style="height: 60px; width: 300px; color: white"
+                >
+                  New Board
+                </button>
+                <button
+                  id="shuffle-board"
+                  class="terminal-window dim-hover"
+                  style="height: 60px; width: 300px; color: white"
+                >
+                  Shuffle Board
+                </button>
+              </div>
+
+              <div id="grid"></div>
+              <button
+                id="score"
+                class="terminal-window"
+                style="height: 60px; width: 300px; color: white"
+                disabled
+              >
+                Score it
+              </button>
+            </div>
           </div>
-          <div>
-            <button
-              id="new-board"
-              class="terminal-window dim-hover"
-              style="height: 60px; width: 300px; color: white"
-            >
-              New Board
-            </button>
-            <button
-              id="shuffle-board"
-              class="terminal-window dim-hover"
-              style="height: 60px; width: 300px; color: white"
-            >
-              Shuffle Board
-            </button>
-          </div>
-          <div id="grid"></div>
-          <button
-            id="score"
-            class="terminal-window"
-            style="height: 60px; width: 300px; color: white"
-            disabled
-          >
-            Score it
-          </button>
-        </div>
-        <div id="top-words">
-          <!-- Top 5 words will appear here -->
+          <div class="right">Right</div>
         </div>
       </section>
     </main>

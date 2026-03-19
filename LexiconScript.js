@@ -7,7 +7,7 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const newBoardButton = document.getElementById("new-board");
 const scoreWordButton = document.getElementById("score");
 const scoreTotal = document.getElementById("scoreTotal");
-const previousTotal = document.getElementById("previousTotal");
+// const previousTotal = document.getElementById("previousTotal");
 
 const shuffleButton = document.getElementById("shuffle-board");
 const topListDiv = document.getElementById("top-words");
@@ -205,7 +205,7 @@ scoreWordButton.addEventListener("click", () => {
 
   totalScore += wordScore;
   scoreTotal.innerHTML = `Score: ${totalScore}`;
-  previousTotal.innerHTML = `Last word: ${word} (${wordScore} points)`;
+  // previousTotal.innerHTML = `Last word: ${word} (${wordScore} points)`;
 
   // --- TOP WORDS LOGIC ---
   topWords.push({ word, score: wordScore });
