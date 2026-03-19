@@ -72,6 +72,7 @@
 
       #textbox {
         transition: all 0.2s ease;
+        width: 700px;
       }
 
       .textbox-invalid {
@@ -118,7 +119,6 @@
 
       /* Middle always centered with a box */
       .middle {
-        flex: 0 0 auto; /* keep natural size */
         text-align: center;
         padding: 1rem 2rem;
         border: 2px solid var(--pink);
@@ -143,15 +143,38 @@
         .right {
           order: 3; /* stays last */
         }
-      }
-
-      @media (max-width: 768px) {
+        section {
+          width: 100vw;
+        }
         #grid {
           height: 30%;
         }
 
         #textbox {
           font-size: 30px;
+          width: 60vw;
+        }
+
+        .square {
+          aspect-ratio: 1/1;
+          width: 100%;
+          height: 100%;
+
+          padding: 0px;
+          margin: 0px;
+          display: flex;
+          border-radius: 15px;
+          background: #00000086;
+          border: 2px solid var(--pink);
+          box-shadow: var(--glow);
+          color: white;
+          font-size: 30px;
+          align-items: center;
+          justify-content: center;
+        }
+        .square.qu {
+          font-size: 20px; /* smaller than 40px for other letters */
+          padding: 2px; /* optional: reduce padding to fit visually */
         }
       }
       div {
@@ -282,7 +305,7 @@
                   class="textbox-invalid"
                   style="
                     height: 80px;
-                    width: 700px;
+
                     color: white;
                     font-size: 40px;
                     text-align: center;
