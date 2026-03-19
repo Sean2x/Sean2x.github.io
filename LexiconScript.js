@@ -10,6 +10,7 @@ const scoreTotal = document.getElementById("scoreTotal");
 const previousTotal = document.getElementById("previousTotal");
 
 const shuffleButton = document.getElementById("shuffle-board");
+const topListDiv = document.getElementById("top-words");
 
 const letterValues = {
   A: 1,
@@ -71,6 +72,8 @@ const letterWeights = {
   Z: 0.5,
 };
 
+let topWords = []; // stores objects {word: "WORD", score: 12}
+
 //dictionaty
 let dictionary = new Set();
 
@@ -114,7 +117,7 @@ function generateGrid() {
   wordBar.textContent = "";
   usedButtons.length = 0;
 
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 25; i++) {
     const button = document.createElement("button");
     button.classList.add("square", "letter");
 
@@ -203,6 +206,19 @@ scoreWordButton.addEventListener("click", () => {
   totalScore += wordScore;
   scoreTotal.innerHTML = `Score: ${totalScore}`;
   previousTotal.innerHTML = `Last word: ${word} (${wordScore} points)`;
+
+  // --- TOP WORDS LOGIC ---
+  topWords.push({ word, score: wordScore });
+  // sort descending by score
+  topWords.sort((a, b) => b.score - a.score);
+  // keep only top 5
+  topWords = topWords.slice(0, 5);
+
+  // display top 5 somewhere
+
+  topListDiv.innerHTML = topWords
+    .map((w) => `${w.word} (${w.score})`)
+    .join("<br>");
 
   generateGrid();
   updateWordState();
