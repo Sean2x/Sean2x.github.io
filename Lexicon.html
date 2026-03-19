@@ -83,6 +83,19 @@
         border: 2px solid limegreen;
       }
 
+      .dim-hover {
+        /* Dim by default */
+        filter: brightness(0.3);
+        transition: filter 0.3s ease;
+        box-shadow: black 0px 0px 10px; /* smooth fade on hover */
+      }
+
+      .dim-hover:hover {
+        border: 2px solid red;
+        filter: brightness(1); /* brightens when hovered */
+        box-shadow: red 0px 0px 20px; /* stronger glow on hover */
+      }
+
       @media (max-width: 768px) {
         #grid {
           height: 30%;
@@ -170,6 +183,12 @@
             gap: 30px;
           "
         >
+          <div id="scoreTotal" style="font-size: 30px; color: white">
+            Score: 0
+          </div>
+          <div id="previousTotal" style="font-size: 24px; color: white">
+            Last word:
+          </div>
           <div
             id="texbox holder"
             style="
@@ -210,12 +229,14 @@
               "
             ></button>
           </div>
-          <div id="scoreTotal" style="font-size: 30px; color: white">
-            Score: 0
-          </div>
-          <div id="previousTotal" style="font-size: 24px; color: white">
-            Last word:
-          </div>
+          <button
+            id="new-board"
+            class="terminal-window dim-hover"
+            style="height: 60px; width: 300px; color: white"
+          >
+            New Board
+          </button>
+          <div id="grid"></div>
           <button
             id="score"
             class="terminal-window"
@@ -223,14 +244,6 @@
             disabled
           >
             Score it
-          </button>
-          <div id="grid"></div>
-          <button
-            id="new-board"
-            class="terminal-window"
-            style="height: 60px; width: 300px; color: white"
-          >
-            New Board
           </button>
         </div>
       </section>
