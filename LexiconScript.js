@@ -13,6 +13,7 @@ const shuffleButton = document.getElementById("shuffle-board");
 const topListDiv = document.getElementById("top-words");
 const seedInput = document.getElementById("seed-input");
 const setSeedButton = document.getElementById("set-seed");
+const wordScorePreview = document.getElementById("word-score-preview");
 
 const letterValues = {
   A: 1,
@@ -81,15 +82,14 @@ let dictionary = new Set();
 
 const today = new Date();
 baseSeed = Number(
-  `${today.getMonth() + 1}${today.getDate()}${today.getFullYear()}`
+  `${today.getMonth() + 1}${today.getDate()}${today.getFullYear()}`,
 );
 let currentRound = 1;
 
 const scoreColors = [
-  { threshold: 1, color: "#7c3d05" },     // low score
-  { threshold: 1.25, color: "#c0c0c0" }, // medium
-  { threshold: 1.75, color: "#FFD700" },  // high
-
+  { threshold: 1.75, color: "#b09603" }, // high
+  { threshold: 1.25, color: "#838383" }, // medium
+  { threshold: 1, color: "#5c2e06" }, // low
 ];
 
 async function loadDictionary() {
@@ -99,8 +99,6 @@ async function loadDictionary() {
   const words = text.split(/\r?\n/);
 
   dictionary = new Set(words.map((w) => w.trim().toUpperCase()));
-
-  console.log("Dictionary loaded:", dictionary.size, "words");
 }
 
 function getRandomLetter(rng) {
@@ -128,6 +126,7 @@ function generateGrid() {
   // Clear previous letters
   loadDictionary();
 
+  scoreTotal.textContent = `Score: ${totalScore}`;
   boardDiv.innerHTML = "";
   wordBar.textContent = "";
   usedButtons.length = 0;
@@ -158,6 +157,19 @@ function generateGrid() {
 
       updateWordState();
     });
+
+    const orb = document.createElement("div");
+    orb.classList.add("score-orb");
+
+    const value =
+      letter === "QU" ? letterValues["Q"] : letterValues[letter] || 0;
+
+    orb.style.backgroundColor = getScoreColor(value);
+
+    // optional: show value instead of letter
+    // orb.textContent = value;
+
+    button.appendChild(orb);
 
     boardDiv.appendChild(button);
   }
@@ -199,6 +211,10 @@ newSeedButton.addEventListener("click", () => {
   baseSeed = Math.floor(Math.random() * 1000000); // new random seed
   currentRound = 1; // reset rounds
   totalScore = 0;
+
+  topWords = [];
+  topListDiv.innerHTML = "";
+
   scoreTotal.textContent = `Score: ${totalScore}`;
   generateGrid();
 });
@@ -250,6 +266,8 @@ scoreWordButton.addEventListener("click", () => {
   currentRound++;
   generateGrid();
   updateWordState();
+
+  updateWordState();
 });
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -270,6 +288,14 @@ function updateWordState() {
     wordBar.classList.add("valid-word");
   } else {
     wordBar.classList.remove("valid-word");
+  }
+
+  // 🔥 NEW: score preview
+  if (word.length < 3 || !dictionary.has(word)) {
+    wordScorePreview.textContent = "Score: 0";
+  } else {
+    const previewScore = calculateWordScore(word);
+    wordScorePreview.textContent = `Score: ${previewScore}`;
   }
 }
 
@@ -330,6 +356,32 @@ setSeedButton.addEventListener("click", () => {
   baseSeed = newSeed;
   currentRound = 1;
   totalScore = 0;
+  topWords = [];
+  topListDiv.innerHTML = "";
 
   generateGrid();
 });
+
+function calculateWordScore(word) {
+  let score = 0;
+
+  for (let i = 0; i < word.length; i++) {
+    if (word[i] === "Q" && word[i + 1] === "U") {
+      score += letterValues["Q"];
+      i++; // skip U
+    } else {
+      score += letterValues[word[i]] || 0;
+    }
+  }
+
+  return score;
+}
+
+function getScoreColor(value) {
+  for (const tier of scoreColors) {
+    if (value >= tier.threshold) {
+      return tier.color;
+    }
+  }
+  return "#7c3d05"; // fallback
+}

@@ -1,183 +1,36 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <base target="_self" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Lexicon</title>
+    <meta
+      name="description"
+      content="This is my first web-Game, Lexicon. It's a word game where you have to make words out of a grid of letters. The longer the word, the more points you get. It's a fun way to improve your vocabulary and challenge yourself."
+    />
+    <script src=""></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="NewStyle.css" />
+    <link rel="icon" href="Images\favicon.ico" type="image/x-icon" />
 
-<head>
-  <base target="_self" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Lexicon</title>
-  <meta name="description"
-    content="This is my first web-Game, Lexicon. It's a word game where you have to make words out of a grid of letters. The longer the word, the more points you get. It's a fun way to improve your vocabulary and challenge yourself." />
-  <script src=""></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="NewStyle.css" />
-  <link rel="icon" href="Images\favicon.ico" type="image/x-icon" />
-
-  <style>
-    .square {
-      aspect-ratio: 1/1;
-      width: 100%;
-      height: 100%;
-
-      padding: 0px;
-      margin: 0px;
-      display: flex;
-      border-radius: 15px;
-      background: #00000086;
-      border: 2px solid var(--pink);
-      box-shadow: var(--glow);
-      color: white;
-      font-size: 40px;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .square.qu {
-      font-size: 28px;
-      /* smaller than 40px for other letters */
-      padding: 2px;
-      /* optional: reduce padding to fit visually */
-    }
-
-    #grid {
-      display: grid;
-      aspect-ratio: 1/1;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(4, 1fr);
-      gap: 10px;
-      height: 40%;
-      margin: 0px;
-      /* border: 2px solid rgb(255, 0, 0);
-        box-shadow: var(--glow); */
-    }
-
-    button:disabled {
-      color: #ffffff50;
-      border: 2px solid #b5179d36;
-      box-shadow: none;
-      cursor: default;
-    }
-
-    #textbox {
-      transition: all 0.2s ease;
-      width: 700px;
-    }
-
-    .textbox-invalid {
-      border: 2px solid #35303086;
-    }
-
-    .valid-word {
-      box-shadow: 0 0 10px limegreen;
-      border: 2px solid limegreen;
-    }
-
-    .dim-hover-newBoard {
-      /* Dim by default */
-      filter: brightness(0.3);
-      transition: filter 0.3s ease;
-      box-shadow: black 0px 0px 10px;
-      /* smooth fade on hover */
-    }
-
-    .dim-hover-newBoard:hover {
-      border: 2px solid red;
-      filter: brightness(1);
-      /* brightens when hovered */
-      box-shadow: red 0px 0px 20px;
-      /* stronger glow on hover */
-    }
-
-    .dim-hover-shuffle {
-      /* Dim by default */
-      filter: brightness(0.3);
-      transition: filter 0.3s ease;
-      box-shadow: black 0px 0px 10px;
-      /* smooth fade on hover */
-    }
-
-    .dim-hover-shuffle:hover {
-      border: 2px solid rgb(215, 238, 87);
-      filter: brightness(1);
-      /* brightens when hovered */
-      box-shadow: rgb(215, 238, 87) 0px 0px 20px;
-      /* stronger glow on hover */
-    }
-
-    .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      /* spacing between items */
-      width: 100%;
-    }
-
-    /* Left and right: fixed width */
-    .left,
-    .right {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 100%;
-      width: 100px;
-      /* predefined size */
-      text-align: center;
-      justify-content: center;
-      height: 50vh;
-    }
-
-    /* Middle always centered with a box */
-    .middle {
-      text-align: center;
-      padding: 1rem 2rem;
-      border: 2px solid var(--pink);
-      border-radius: 8px;
-      box-shadow: var(--glow);
-      background: var(--lightbg);
-    }
-
-    /* Responsive: vertical layout on small screens */
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        /* stack vertically */
-      }
-
-      /* Reorder items */
-      .middle {
-        order: 1;
-        /* comes first */
-      }
-
-      .left {
-        order: 2;
-        /* comes second */
-        height: 50vh;
-      }
-
-      .right {
-        order: 3;
-        /* stays last */
-      }
-
-      section {
-        width: 100vw;
-      }
-
-      #grid {
-        height: 30%;
-      }
-
-      #textbox {
-        font-size: 30px;
-        width: 60vw;
-
-      }
-
+    <style>
       .square {
+        position: relative;
         aspect-ratio: 1/1;
         width: 100%;
         height: 100%;
@@ -190,32 +43,216 @@
         border: 2px solid var(--pink);
         box-shadow: var(--glow);
         color: white;
-        font-size: 30px;
+        font-size: 40px;
         align-items: center;
         justify-content: center;
       }
 
       .square.qu {
-        font-size: 20px;
+        font-size: 28px;
         /* smaller than 40px for other letters */
         padding: 2px;
         /* optional: reduce padding to fit visually */
       }
-    }
 
-    div {
-      border: 1px solid rgba(0, 0, 255, 0);
-      /* visible for all divs */
+      #grid {
+        display: grid;
+        aspect-ratio: 1/1;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 10px;
+        height: 40%;
+        margin: 0px;
+        /* border: 2px solid rgb(255, 0, 0);
+        box-shadow: var(--glow); */
+      }
 
-    }
-  </style>
-</head>
+      button:disabled {
+        color: #ffffff50;
+        border: 2px solid #b5179d36;
+        box-shadow: none;
+        cursor: default;
+      }
 
-<canvas id="matrixCanvas"></canvas>
+      .square:disabled .score-orb {
+        opacity: 0.3; /* dims it */
+      }
 
-<body class="crt" style="background-color: #000000">
-  <!-- Header with Gradient Background -->
-  <header id="header" class="header" style="
+      #textbox {
+        transition: all 0.2s ease;
+        width: 700px;
+      }
+
+      .textbox-invalid {
+        border: 2px solid #35303086;
+      }
+
+      .valid-word {
+        box-shadow: 0 0 10px limegreen;
+        border: 2px solid limegreen;
+      }
+
+      .dim-hover-newBoard {
+        /* Dim by default */
+        filter: brightness(0.3);
+        transition: filter 0.3s ease;
+        box-shadow: black 0px 0px 10px;
+        /* smooth fade on hover */
+      }
+
+      .dim-hover-newBoard:hover {
+        border: 2px solid red;
+        filter: brightness(1);
+        /* brightens when hovered */
+        box-shadow: red 0px 0px 20px;
+        /* stronger glow on hover */
+      }
+
+      .dim-hover-shuffle {
+        /* Dim by default */
+        filter: brightness(0.3);
+        transition: filter 0.3s ease;
+        box-shadow: black 0px 0px 10px;
+        /* smooth fade on hover */
+      }
+
+      .dim-hover-shuffle:hover {
+        border: 2px solid rgb(215, 238, 87);
+        filter: brightness(1);
+        /* brightens when hovered */
+        box-shadow: rgb(215, 238, 87) 0px 0px 20px;
+        /* stronger glow on hover */
+      }
+
+      .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        /* spacing between items */
+        width: 100%;
+      }
+
+      /* Left and right: fixed width */
+      .left,
+      .right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        width: 100px;
+        /* predefined size */
+        text-align: center;
+        justify-content: center;
+        height: 50vh;
+      }
+
+      /* Middle always centered with a box */
+      .middle {
+        text-align: center;
+        padding: 1rem 2rem;
+        border: 2px solid var(--pink);
+        border-radius: 8px;
+        box-shadow: var(--glow);
+        background: var(--lightbg);
+      }
+
+      .score-orb {
+        position: absolute;
+        bottom: 4px;
+        right: 4px;
+
+        width: 15%;
+        height: 15%;
+        border-radius: 50%;
+
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: black;
+        font-weight: bold;
+      }
+
+      /* Responsive: vertical layout on small screens */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+          /* stack vertically */
+        }
+
+        /* Reorder items */
+        .middle {
+          order: 1;
+          /* comes first */
+        }
+
+        .left {
+          order: 2;
+          /* comes second */
+          height: 50vh;
+        }
+
+        .right {
+          order: 3;
+          /* stays last */
+        }
+
+        section {
+          width: 100vw;
+        }
+
+        #grid {
+          height: 30%;
+        }
+
+        #textbox {
+          font-size: 30px;
+          width: 60vw;
+        }
+
+        .square {
+          aspect-ratio: 1/1;
+          width: 100%;
+          height: 100%;
+
+          padding: 0px;
+          margin: 0px;
+          display: flex;
+          border-radius: 15px;
+          background: #00000086;
+          border: 2px solid var(--pink);
+          box-shadow: var(--glow);
+          color: white;
+          font-size: 30px;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .square.qu {
+          font-size: 20px;
+          /* smaller than 40px for other letters */
+          padding: 2px;
+          /* optional: reduce padding to fit visually */
+        }
+      }
+
+      div {
+        border: 1px solid rgba(0, 0, 255, 0);
+        /* visible for all divs */
+      }
+    </style>
+  </head>
+
+  <canvas id="matrixCanvas"></canvas>
+
+  <body class="crt" style="background-color: #000000">
+    <!-- Header with Gradient Background -->
+    <header
+      id="header"
+      class="header"
+      style="
         margin: 0;
         display: flex;
         justify-content: space-between;
@@ -226,33 +263,55 @@
           rgba(0, 0, 0, 1),
           rgba(0, 0, 0, 0)
         );
-      ">
-    <div id="header1" style="display: flex; gap: 1.5rem">
-      <div class="menu-toggle" onclick="toggleMenu()">
-        <i class="bi bi-list hamburger" style="font-size: 2rem"></i>
-        <i class="logo bi bi-rocket-takeoff-fill rocket" style="font-size: 2rem"></i>
-      </div>
+      "
+    >
+      <div id="header1" style="display: flex; gap: 1.5rem">
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <i class="bi bi-list hamburger" style="font-size: 2rem"></i>
+          <i
+            class="logo bi bi-rocket-takeoff-fill rocket"
+            style="font-size: 2rem"
+          ></i>
+        </div>
 
-      <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
-        <a href="index.html">About</a>
-        <a href="index.html">Projects</a>
-        <a href="https://sean2x.github.io/ConnectCard.html" target="_blank">Contact</a>
-        <a href="Images/Sean Lirazan Resume 2.2.pdf" download>Resume <i class="bi bi-download"></i></a>
-      </nav>
-    </div>
-    <div class="socials" style="gap: 2rem; display: flex">
-      <a href="https://www.instagram.com/sean.applies.engineering/" class="logo bi bi-instagram hover"
-        style="font-size: 2rem" target="_blank"></a>
-      <a href="https://github.com/Sean2x" class="logo bi bi-github" style="font-size: 2rem" target="_blank"></a>
-      <a href="#" class="logo bi bi-youtube" style="font-size: 2rem"></a>
-    </div>
-  </header>
-  <!-- Main Content -->
-  <main class="mx-auto px-0 py-8">
-    <!-- spelling Section -->
-    <section id="Spelling" style="display: flex; padding: 1rem; justify-content: center">
-      <div class="container" class="terminal-window">
-        <div class="left terminal-window" style="
+        <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
+          <a href="index.html">About</a>
+          <a href="index.html">Projects</a>
+          <a href="https://sean2x.github.io/ConnectCard.html" target="_blank"
+            >Contact</a
+          >
+          <a href="Images/Sean Lirazan Resume 2.2.pdf" download
+            >Resume <i class="bi bi-download"></i
+          ></a>
+        </nav>
+      </div>
+      <div class="socials" style="gap: 2rem; display: flex">
+        <a
+          href="https://www.instagram.com/sean.applies.engineering/"
+          class="logo bi bi-instagram hover"
+          style="font-size: 2rem"
+          target="_blank"
+        ></a>
+        <a
+          href="https://github.com/Sean2x"
+          class="logo bi bi-github"
+          style="font-size: 2rem"
+          target="_blank"
+        ></a>
+        <a href="#" class="logo bi bi-youtube" style="font-size: 2rem"></a>
+      </div>
+    </header>
+    <!-- Main Content -->
+    <main class="mx-auto px-0 py-8">
+      <!-- spelling Section -->
+      <section
+        id="Spelling"
+        style="display: flex; padding: 1rem; justify-content: center"
+      >
+        <div class="container" class="terminal-window">
+          <div
+            class="left terminal-window"
+            style="
               display: flex;
               flex-direction: column; /* stack items vertically */
               justify-content: flex-start; /* push everything to the top */
@@ -263,22 +322,25 @@
               font-size: 18px;
               color: white;
               text-align: start;
-            ">
-          <div id="scoreTotal" style="font-size: 30px; color: white">
-            Score: 0
-          </div>
-          <!-- <div
+            "
+          >
+            <div id="scoreTotal" style="font-size: 30px; color: white">
+              Score: 0
+            </div>
+            <!-- <div
               id="previousTotal"
               style="font-size: 24px; color: white; text-align: center"
             >
               Last word:
             </div> -->
-          <div id="top-words" style="color: rgb(121, 121, 121)">
-            <!-- Top 5 words will appear here -->
+            <div id="top-words" style="color: rgb(121, 121, 121)">
+              <!-- Top 5 words will appear here -->
+            </div>
           </div>
-        </div>
-        <div class="middle">
-          <div class="grid-item" style="
+          <div class="middle">
+            <div
+              class="grid-item"
+              style="
                 display: flex;
                 flex-direction: column; /* stack items vertically */
                 justify-content: flex-start; /* align items from top */
@@ -286,22 +348,36 @@
                 height: 100vh; /* container height */
                 width: 100%; /* full width */
                 gap: 30px;
-              ">
-            <div id="seed-round-holder">
-              <div id="seed" style="font-size: 24px; color: white">Seed: 019393</div>
-              <div id="round" style="font-size: 24px; color: white">Round: 1</div>
-
-
-            </div>
-            <div id="texbox holder" style="
+              "
+            >
+              <div id="seed-round-holder">
+                <div id="seed" style="font-size: 24px; color: white">
+                  Seed: 019393
+                </div>
+                <div id="round" style="font-size: 24px; color: white">
+                  Round: 1
+                </div>
+                <div
+                  id="word-score-preview"
+                  style="font-size: 24px; color: rgba(255, 255, 255, 0.507)"
+                >
+                  Score: 0
+                </div>
+              </div>
+              <div
+                id="texbox holder"
+                style="
                   width: 90%;
                   border: 2px solid rgba(255, 0, 0, 0);
                   display: flex;
                   flex-direction: row;
                   justify-content: center;
-                
-                ">
-              <div id="textbox" class="textbox-invalid" style="
+                "
+              >
+                <div
+                  id="textbox"
+                  class="textbox-invalid"
+                  style="
                     height: 80px;
 
                     color: white;
@@ -309,8 +385,12 @@
                     text-align: center;
                     align-self: center;
                     text-justify: center;
-                  "></div>
-              <button id="backspace" class="bi bi-backspace" style="
+                  "
+                ></div>
+                <button
+                  id="backspace"
+                  class="bi bi-backspace"
+                  style="
                     font-size: 48px;
                     position: relative;
                     right: 0px;
@@ -322,17 +402,24 @@
                     border: none;
                     outline: none;
                     box-shadow: none;
-                  "></button>
+                  "
+                ></button>
+              </div>
+
+              <div id="grid"></div>
+              <button
+                id="score"
+                class="terminal-window"
+                style="height: 60px; width: 300px; color: white"
+                disabled
+              >
+                Score it
+              </button>
             </div>
-
-
-            <div id="grid"></div>
-            <button id="score" class="terminal-window" style="height: 60px; width: 300px; color: white" disabled>
-              Score it
-            </button>
           </div>
-        </div>
-        <div class="right terminal-window" style="
+          <div
+            class="right terminal-window"
+            style="
               display: flex;
               flex-direction: column; /* stack items vertically */
               justify-content: flex-start; /* push everything to the top */
@@ -343,70 +430,93 @@
               font-size: 18px;
               color: white;
               text-align: start;
-            ">
-          <input id="seed-input" class="terminal-window" type="text" placeholder="Enter seed..."
-            style="width: 90%; height: 40px; text-align: center; background-color: var(--lightbg); color: white" />
-          <button id="set-seed" class="terminal-window" style="height: 100px; width:90%; color: white; text-align: center;">
-            Set Seed
-          </button>
-          <button id="new-seed" class="terminal-window dim-hover-newBoard"
-            style="height: 60px; width:90%; color: white">
-            New Seed
-          </button>
-          <button id="shuffle-board" class="terminal-window dim-hover-shuffle"
-            style="height: 60px; width:90%; color: white">
-            Shuffle Board
-          </button>
-
-          
-
+            "
+          >
+            <input
+              id="seed-input"
+              class="terminal-window"
+              type="text"
+              placeholder="Enter seed..."
+              style="
+                width: 90%;
+                height: 40px;
+                text-align: center;
+                background-color: var(--lightbg);
+                color: white;
+              "
+            />
+            <button
+              id="set-seed"
+              class="terminal-window"
+              style="
+                height: 100px;
+                width: 90%;
+                color: white;
+                text-align: center;
+              "
+            >
+              Set Seed
+            </button>
+            <button
+              id="new-seed"
+              class="terminal-window dim-hover-newBoard"
+              style="height: 60px; width: 90%; color: white"
+            >
+              New Seed
+            </button>
+            <button
+              id="shuffle-board"
+              class="terminal-window dim-hover-shuffle"
+              style="height: 60px; width: 90%; color: white"
+            >
+              Shuffle Board
+            </button>
+          </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
 
-  <!-- Footer -->
-  <script>
-    document.querySelectorAll("*").forEach((el) => {
-      el.style["touch-action"] = "manipulation";
-    });
-
-    new MutationObserver((elms) => {
-      elms.forEach(function (elm) {
-        for (var i = 0; i < elm.addedNodes.length; i++) {
-          if (elm.addedNodes[i].style) {
-            elm.addedNodes[i].style["touch-action"] = "manipulation";
-          }
-        }
+    <!-- Footer -->
+    <script>
+      document.querySelectorAll("*").forEach((el) => {
+        el.style["touch-action"] = "manipulation";
       });
-    }).observe(document.body, { childList: true, subtree: true });
+
+      new MutationObserver((elms) => {
+        elms.forEach(function (elm) {
+          for (var i = 0; i < elm.addedNodes.length; i++) {
+            if (elm.addedNodes[i].style) {
+              elm.addedNodes[i].style["touch-action"] = "manipulation";
+            }
+          }
+        });
+      }).observe(document.body, { childList: true, subtree: true });
+    </script>
+  </body>
+
+  <script src="Matrix.js"></script>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementsByClassName("nav")[0];
+      menu.classList.toggle("active");
+    }
   </script>
-</body>
 
-<script src="Matrix.js"></script>
+  <style>
+    /* Hide text column on small screens */
+    @media (max-width: 1000px) {
+      .contact-text {
+        display: none;
+      }
 
-<script>
-  function toggleMenu() {
-    const menu = document.getElementsByClassName("nav")[0];
-    menu.classList.toggle("active");
-  }
-</script>
-
-<style>
-  /* Hide text column on small screens */
-  @media (max-width: 1000px) {
-    .contact-text {
-      display: none;
+      /* Center icons horizontally */
+      .contact-icons {
+        margin: 0 auto;
+        align-items: center;
+      }
     }
+  </style>
 
-    /* Center icons horizontally */
-    .contact-icons {
-      margin: 0 auto;
-      align-items: center;
-    }
-  }
-</style>
-
-<script src="LexiconScript.js"></script>
-
+  <script src="LexiconScript.js"></script>
 </html>
