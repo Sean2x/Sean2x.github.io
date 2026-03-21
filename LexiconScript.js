@@ -4,7 +4,7 @@ const wordBar = document.getElementById("textbox");
 const backspaceButton = document.getElementById("backspace");
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-const newSeedButton = document.getElementById("new-seed");
+const newSeedButtons = document.querySelectorAll(".new-seed");
 const scoreWordButton = document.getElementById("score");
 const scoreTotal = document.getElementById("scoreTotal");
 // const previousTotal = document.getElementById("previousTotal");
@@ -221,16 +221,26 @@ backspaceButton.addEventListener("click", () => {
 });
 
 // new board listener
-newSeedButton.addEventListener("click", () => {
-  baseSeed = Math.floor(Math.random() * 1000000); // new random seed
-  currentRound = 1; // reset rounds
-  totalScore = 0;
+newSeedButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const input = btn
+      .closest(".modal, .right")
+      ?.querySelector("input")
+      ?.value.trim();
 
-  topWords = [];
-  topListDiv.innerHTML = "";
+    // (optional) use input if you want, otherwise ignore
 
-  scoreTotal.textContent = `Score: ${totalScore}`;
-  startGame(currentMode);
+    baseSeed = Math.floor(Math.random() * 1000000);
+    currentRound = 1;
+    totalScore = 0;
+
+    topWords = [];
+    topListDiv.innerHTML = "";
+
+    scoreTotal.textContent = `Score: ${totalScore}`;
+
+    startGame(currentMode);
+  });
 });
 
 //scoring function
@@ -531,4 +541,22 @@ modeButtons.forEach((button) => {
     button.classList.add("selected");
     button.classList.add("terminal-window");
   });
+});
+
+document.getElementById("setseed2").addEventListener("click", () => {
+  baseSeed = newSeed;
+  currentRound = 1;
+  totalScore = 0;
+  topWords = [];
+  topListDiv.innerHTML = "";
+
+  startGame(currentMode);
+
+  const modal = document.getElementById("game-over-modal");
+
+  modal.classList.remove("show");
+
+  startGame(currentMode);
+
+  updateWordState();
 });
