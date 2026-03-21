@@ -12,8 +12,10 @@ const scoreTotal = document.getElementById("scoreTotal");
 const shuffleButton = document.getElementById("shuffle-board");
 const topListDiv = document.getElementById("top-words");
 const seedInput = document.getElementById("seed-input");
-const setSeedButton = document.getElementById("set-seed");
+const setSeedButtons = document.querySelectorAll(".set-seed");
 const wordScorePreview = document.getElementById("word-score-preview");
+
+const gamemodeText = document.getElementById("gamemode");
 
 const letterValues = {
   A: 1,
@@ -91,6 +93,18 @@ const scoreColors = [
   { threshold: 1.25, color: "#838383" }, // medium
   { threshold: 1, color: "#5c2e06" }, // low
 ];
+
+const GameModes = {
+  ENDLESS: "endless",
+  RANKED: "ranked",
+  TIMED: "timed",
+};
+
+let currentMode = GameModes.RANKED;
+
+let maxRounds = 5;
+let timeLeft = 60; // seconds
+let timerInterval = null;
 
 async function loadDictionary() {
   const response = await fetch("Misc/expanded_wordsV3.txt");
@@ -176,7 +190,7 @@ function generateGrid() {
 
   // update UI
   document.getElementById("seed").textContent = `Seed: ${baseSeed}`;
-  document.getElementById("round").textContent = `Round: ${currentRound}`;
+  updateRoundDisplay();
 }
 
 // backspace listener
@@ -216,7 +230,7 @@ newSeedButton.addEventListener("click", () => {
   topListDiv.innerHTML = "";
 
   scoreTotal.textContent = `Score: ${totalScore}`;
-  generateGrid();
+  startGame(currentMode);
 });
 
 //scoring function
@@ -263,10 +277,7 @@ scoreWordButton.addEventListener("click", () => {
     .map((w) => `${w.word} (${w.score})`)
     .join("<br>");
 
-  currentRound++;
-  generateGrid();
-  updateWordState();
-
+  handleRoundAdvance();
   updateWordState();
 });
 
@@ -292,7 +303,7 @@ function updateWordState() {
 
   // 🔥 NEW: score preview
   if (word.length < 3 || !dictionary.has(word)) {
-    wordScorePreview.textContent = "Score: 0";
+    wordScorePreview.textContent = "Word Score: 0";
   } else {
     const previewScore = calculateWordScore(word);
     wordScorePreview.textContent = `Score: ${previewScore}`;
@@ -334,32 +345,33 @@ function createSeededRNG(seed) {
   };
 }
 
-setSeedButton.addEventListener("click", () => {
-  let input = seedInput.value.trim();
+setSeedButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    let input = btn
+      .closest(".modal, .right")
+      .querySelector("input")
+      .value.trim();
 
-  if (input === "") return;
+    if (!input) return;
 
-  // Convert to number safely
-  let newSeed;
-
-  // If it's a number → use it directly
-  if (!isNaN(input)) {
-    newSeed = Number(input);
-  } else {
-    // If it's text → convert to number (hash it)
-    newSeed = 0;
-    for (let i = 0; i < input.length; i++) {
-      newSeed += input.charCodeAt(i) * (i + 1);
+    let newSeed;
+    if (!isNaN(input)) {
+      newSeed = Number(input);
+    } else {
+      newSeed = 0;
+      for (let i = 0; i < input.length; i++) {
+        newSeed += input.charCodeAt(i) * (i + 1);
+      }
     }
-  }
 
-  baseSeed = newSeed;
-  currentRound = 1;
-  totalScore = 0;
-  topWords = [];
-  topListDiv.innerHTML = "";
+    baseSeed = newSeed;
+    currentRound = 1;
+    totalScore = 0;
+    topWords = [];
+    topListDiv.innerHTML = "";
 
-  generateGrid();
+    startGame(currentMode);
+  });
 });
 
 function calculateWordScore(word) {
@@ -385,3 +397,138 @@ function getScoreColor(value) {
   }
   return "#7c3d05"; // fallback
 }
+
+function startGame(mode) {
+  currentMode = mode;
+
+  totalScore = 0;
+  currentRound = 1;
+  topWords = [];
+  topListDiv.innerHTML = "";
+
+  stopTimer(); // 🔥 always stop first
+
+  if (mode === GameModes.TIMED) {
+    timeLeft = 60;
+    startTimer();
+  } else {
+    stopTimer();
+  }
+
+  generateGrid();
+}
+
+function handleRoundAdvance() {
+  if (currentMode === GameModes.ENDLESS) {
+    currentRound++;
+    generateGrid();
+  } else if (currentMode === GameModes.RANKED) {
+    if (currentRound >= maxRounds) {
+      endGame();
+    } else {
+      currentRound++;
+      generateGrid();
+    }
+  } else if (currentMode === GameModes.TIMED) {
+    // In timed mode, rounds don't matter
+    generateGrid();
+  }
+}
+
+function startTimer() {
+  timeLeft = 60;
+  clearInterval(timerInterval); // 🔥 prevent stacking timers
+
+  timerInterval = setInterval(() => {
+    timeLeft -= 0.05;
+
+    if (timeLeft <= 0) {
+      timeLeft = 0;
+      updateRoundDisplay();
+      endGame();
+      return;
+    }
+
+    updateRoundDisplay();
+  }, 50);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function endGame() {
+  stopTimer();
+
+  showGameOver();
+
+  // optional: disable board
+  document.querySelectorAll(".letter").forEach((btn) => (btn.disabled = true));
+
+  setTimeout(() => {
+    showGameOver();
+  }, 300);
+}
+
+document.getElementById("mode-endless").onclick = () => {
+  gamemodeText.innerText = "Endless";
+  startGame(GameModes.ENDLESS);
+};
+document.getElementById("mode-ranked").onclick = () => {
+  gamemodeText.innerText = "Ranked";
+  startGame(GameModes.RANKED);
+};
+document.getElementById("mode-timed").onclick = () => {
+  gamemodeText.innerText = "Timed";
+  startGame(GameModes.TIMED);
+};
+
+function updateRoundDisplay() {
+  const roundEl = document.getElementById("round");
+
+  if (currentMode === GameModes.TIMED) {
+    roundEl.textContent = `Time: ${timeLeft.toFixed(1)}s`;
+  } else if (currentMode === GameModes.RANKED) {
+    roundEl.textContent = `Round: ${currentRound} / ${maxRounds}`;
+  } else {
+    // Endless
+    roundEl.textContent = `Round: ${currentRound}`;
+  }
+}
+
+function showGameOver() {
+  const modal = document.getElementById("game-over-modal");
+  const finalScoreEl = document.getElementById("final-score");
+
+  finalScoreEl.textContent = `Score: ${totalScore}`;
+
+  modal.classList.add("show");
+}
+
+document.getElementById("try-again").addEventListener("click", () => {
+  const modal = document.getElementById("game-over-modal");
+
+  modal.classList.remove("show");
+
+  startGame(currentMode);
+
+  updateWordState();
+});
+
+startGame(currentMode);
+
+const modeButtons = document.querySelectorAll(
+  "#mode-endless, #mode-ranked, #mode-timed",
+);
+
+modeButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    // Remove selected from all buttons
+    modeButtons.forEach((b) => b.classList.remove("selected"));
+    modeButtons.forEach((b) => b.classList.remove("terminal-window"));
+
+    // Add selected to clicked button
+    button.classList.add("selected");
+    button.classList.add("terminal-window");
+  });
+});
