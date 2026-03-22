@@ -417,6 +417,7 @@ function startGame(mode) {
   topListDiv.innerHTML = "";
 
   scoreWordButton.disabled = false;
+  backspaceButton.disabled = false;
 
   stopTimer(); // 🔥 always stop first
 
@@ -477,8 +478,11 @@ function endGame() {
   // optional: disable board
   document.querySelectorAll(".letter").forEach((btn) => (btn.disabled = true));
 
+  wordBar.textContent = "";
+
   // 🔥 Disable scoring
   scoreWordButton.disabled = true;
+  backspaceButton.disabled = true;
 }
 
 document.getElementById("mode-endless").onclick = () => {
