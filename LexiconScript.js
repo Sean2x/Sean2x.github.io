@@ -416,6 +416,8 @@ function startGame(mode) {
   topWords = [];
   topListDiv.innerHTML = "";
 
+  scoreWordButton.disabled = false;
+
   stopTimer(); // 🔥 always stop first
 
   if (mode === GameModes.TIMED) {
@@ -475,9 +477,8 @@ function endGame() {
   // optional: disable board
   document.querySelectorAll(".letter").forEach((btn) => (btn.disabled = true));
 
-  setTimeout(() => {
-    showGameOver();
-  }, 300);
+  // 🔥 Disable scoring
+  scoreWordButton.disabled = true;
 }
 
 document.getElementById("mode-endless").onclick = () => {
@@ -519,10 +520,6 @@ document.getElementById("try-again").addEventListener("click", () => {
   const modal = document.getElementById("game-over-modal");
 
   modal.classList.remove("show");
-
-  startGame(currentMode);
-
-  updateWordState();
 });
 
 startGame(currentMode);
@@ -541,22 +538,4 @@ modeButtons.forEach((button) => {
     button.classList.add("selected");
     button.classList.add("terminal-window");
   });
-});
-
-document.getElementById("setseed2").addEventListener("click", () => {
-  baseSeed = newSeed;
-  currentRound = 1;
-  totalScore = 0;
-  topWords = [];
-  topListDiv.innerHTML = "";
-
-  startGame(currentMode);
-
-  const modal = document.getElementById("game-over-modal");
-
-  modal.classList.remove("show");
-
-  startGame(currentMode);
-
-  updateWordState();
 });
