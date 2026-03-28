@@ -107,14 +107,22 @@ let timeLeft = 60; // seconds
 let timerInterval = null;
 
 async function loadDictionary() {
-  const response = await fetch("Misc/expanded_wordsV3.txt");
+  const response = await fetch("Misc/wordlist-20210729.txt");
   const text = await response.text();
 
   const words = text.split(/\r?\n/);
 
-  dictionary = new Set(words.map((w) => w.trim().toUpperCase()));
+  dictionary = new Set(
+    words
+      .map((w) =>
+        w
+          .trim()
+          .replace(/^"+|"+$/g, "") // remove quotes at start/end
+          .toUpperCase(),
+      )
+      .filter((w) => w.length > 0), // remove empty lines
+  );
 }
-
 function getRandomLetter(rng) {
   const totalWeight = Object.values(letterWeights).reduce(
     (sum, w) => sum + w,
