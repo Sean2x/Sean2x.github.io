@@ -346,6 +346,13 @@ shuffleButton.addEventListener("click", () => {
     btn.textContent = letters[idx];
     btn.disabled = false; // reactivate all letters
     btn.classList.toggle("qu", letters[idx] === "QU");
+
+    const orb = btn.querySelector(".score-orb");
+
+    const value =
+      letter === "QU" ? letterValues["Q"] : letterValues[letter] || 0;
+
+    orb.style.backgroundColor = getScoreColor(value);
   });
 
   // Clear word bar and usedButtons
