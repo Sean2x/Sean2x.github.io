@@ -522,8 +522,17 @@ function updateRoundDisplay() {
 function showGameOver() {
   const modal = document.getElementById("game-over-modal");
   const finalScoreEl = document.getElementById("final-score");
+  const finalTopWordsEl = document.getElementById("final-top-words");
 
   finalScoreEl.textContent = `Score: ${totalScore}`;
+
+  if (topWords.length > 0) {
+    finalTopWordsEl.innerHTML = topWords
+      .map((w, idx) => `${idx + 1}. ${w.word} (${w.score})`)
+      .join("<br>");
+  } else {
+    finalTopWordsEl.textContent = "No words scored!";
+  }
 
   modal.classList.add("show");
 }

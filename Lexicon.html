@@ -220,6 +220,11 @@
         transform: scale(1);
       }
 
+      div {
+        border: 1px solid rgba(255, 0, 0, 0.959);
+        /* visible for all divs */
+      }
+
       /* Responsive: vertical layout on small screens */
       @media (max-width: 768px) {
         .modal-content {
@@ -295,11 +300,6 @@
           /* optional: reduce padding to fit visually */
         }
       }
-
-      div {
-        border: 1px solid rgba(0, 0, 255, 0);
-        /* visible for all divs */
-      }
     </style>
   </head>
 
@@ -346,6 +346,7 @@
           >
             Close
           </button>
+          <div id="final-top-words" style="color: rgb(121, 121, 121)"></div>
         </div>
       </div>
     </div>
