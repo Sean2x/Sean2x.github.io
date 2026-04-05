@@ -451,6 +451,7 @@ function handleRoundAdvance() {
       generateGrid();
     }
   } else if (currentMode === GameModes.TIMED) {
+    currentRound++;
     // In timed mode, rounds don't matter
     generateGrid();
   }
