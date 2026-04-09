@@ -499,16 +499,34 @@ document.getElementById("mode-endless").onclick = () => {
   startGame(GameModes.ENDLESS);
   const root = document.documentElement;
 
-  root.style.setProperty("--lightMain", "#00f5d4");
-  root.style.setProperty("--darkMain", "#577590");
+  root.style.setProperty("--lightMain", "#17abb5");
+  root.style.setProperty("--darkMain", "#0983b7");
+  root.style.setProperty(
+    "--glow",
+    "0 0 10px #00acf57d, 0 0 20px #0097f512, 0 0 30px #00b4f533",
+  );
 };
 document.getElementById("mode-ranked").onclick = () => {
   gamemodeText.innerText = "Ranked";
   startGame(GameModes.RANKED);
+
+  root.style.setProperty("--lightMain", "#b5179e");
+  root.style.setProperty("--darkMain", "#7209b7");
+  root.style.setProperty(
+    "--glow",
+    "0 0 10px #b5179d7d, 0 0 20px #b5179d12, 0 0 30px #b5179e33",
+  );
 };
 document.getElementById("mode-timed").onclick = () => {
   gamemodeText.innerText = "Timed";
   startGame(GameModes.TIMED);
+
+  root.style.setProperty("--lightMain", "#b2b517");
+  root.style.setProperty("--darkMain", "#b7a909");
+  root.style.setProperty(
+    "--glow",
+    "0 0 10px #abb5177d, 0 0 20px #b5b21712, 0 0 30px #9db51733",
+  );
 };
 
 function updateRoundDisplay() {

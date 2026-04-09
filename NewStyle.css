@@ -1,6 +1,6 @@
 /* <link rel="stylesheet" href="NewStyle.css" /> */
 :root {
-  --pink: #b5179e;
+  --lightMain: #b5179e;
   --darkMain: #7209b7;
   --bg: #00000000;
   --lightbg: #00000086;
@@ -14,13 +14,13 @@ h2,
 h3,
 span {
   font-family: "Share Tech Mono", "Courier New", monospace;
-  color: #b5179e;
+  color: var(--lightMain);
   font-weight: 1000;
   text-shadow: var(--glow);
 }
 
 .nav a {
-  color: #b5179e;
+  color: --lightMain;
   text-decoration: none;
   font-weight: bold;
   transition: color 0.2s;
@@ -89,7 +89,7 @@ span {
 }
 
 .border-glow {
-  border: 1px solid var(--pink);
+  border: 1px solid var(--lightMain);
   box-shadow:
     0 0 10px #b5179e80,
     inset 0 0 20px #b5179e1a;
@@ -97,7 +97,7 @@ span {
 
 .terminal-window {
   background: var(--lightbg);
-  border: 2px solid var(--pink);
+  border: 2px solid var(--lightMain);
   box-shadow: var(--glow);
   position: relative;
   overflow: hidden;
@@ -111,14 +111,14 @@ span {
   right: 0;
   height: 30px;
   background: linear-gradient(90deg, transparent, #b5179e1a, transparent);
-  border-bottom: 1px solid var(--pink);
+  border-bottom: 1px solid var(--lightMain);
   gap: 8px;
   padding: 8px 16px;
 }
 
 .terminal-header {
   background: rgba(74, 29, 29, 0.91);
-  border-bottom: 1px solid var(--pink);
+  border-bottom: 1px solid var(--lightMain);
   padding: 8px 16px;
   display: flex;
   align-items: center;
@@ -129,7 +129,7 @@ span {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  border: 1px solid var(--pink);
+  border: 1px solid var(--lightMain);
 }
 
 section,
