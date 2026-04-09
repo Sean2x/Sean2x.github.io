@@ -466,7 +466,7 @@ function startTimer() {
   clearInterval(timerInterval); // 🔥 prevent stacking timers
 
   timerInterval = setInterval(() => {
-    timeLeft -= 0.05;
+    timeLeft -= 0.1;
 
     if (timeLeft <= 0) {
       timeLeft = 0;
@@ -476,7 +476,7 @@ function startTimer() {
     }
 
     updateRoundDisplay();
-  }, 50);
+  }, 100);
 }
 
 function stopTimer() {
