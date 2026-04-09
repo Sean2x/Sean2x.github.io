@@ -497,6 +497,10 @@ function endGame() {
 document.getElementById("mode-endless").onclick = () => {
   gamemodeText.innerText = "Endless";
   startGame(GameModes.ENDLESS);
+  const root = document.documentElement;
+
+  root.style.setProperty("--lightMain", "#00f5d4");
+  root.style.setProperty("--darkMain", "#577590");
 };
 document.getElementById("mode-ranked").onclick = () => {
   gamemodeText.innerText = "Ranked";
