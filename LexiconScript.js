@@ -5,7 +5,7 @@ const backspaceButton = document.getElementById("backspace");
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 const newSeedButtons = document.querySelectorAll(".new-seed");
-const scoreWordButton = document.getElementById("score");
+const scoreWordButton = document.getElementById("scoreIt");
 const scoreTotal = document.getElementById("scoreTotal");
 // const previousTotal = document.getElementById("previousTotal");
 
@@ -16,6 +16,8 @@ const setSeedButtons = document.querySelectorAll(".set-seed");
 const wordScorePreview = document.getElementById("word-score-preview");
 
 const gamemodeText = document.getElementById("gamemode");
+
+const root = document.documentElement;
 
 const letterValues = {
   A: 1,
@@ -329,28 +331,30 @@ function updateWordState() {
 }
 
 shuffleButton.addEventListener("click", () => {
-  // Get current letters from buttons
-  const letters = Array.from(boardDiv.querySelectorAll(".letter")).map(
-    (btn) => btn.textContent,
-  );
+  const buttons = Array.from(boardDiv.querySelectorAll(".letter"));
 
-  // Shuffle the array
-  for (let i = letters.length - 1; i > 0; i--) {
+  // Fisher–Yates shuffle (same logic, just on DOM nodes)
+  for (let i = buttons.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [letters[i], letters[j]] = [letters[j], letters[i]];
+    [buttons[i], buttons[j]] = [buttons[j], buttons[i]];
   }
 
-  // Reassign letters to buttons and reset state
-  const buttons = boardDiv.querySelectorAll(".letter");
-  buttons.forEach((btn, idx) => {
-    btn.textContent = letters[idx];
-    btn.disabled = false; // reactivate all letters
-    btn.classList.toggle("qu", letters[idx] === "QU");
-  });
+  // Re-append in new order
+  buttons.forEach((btn) => boardDiv.appendChild(btn));
 
-  // Clear word bar and usedButtons
+  // reset gameplay state
   wordBar.textContent = "";
   usedButtons.length = 0;
+
+  // reset buttons
+  buttons.forEach((btn) => {
+    btn.disabled = false;
+    btn.classList.remove("used");
+
+    const letter = btn.textContent;
+    btn.classList.toggle("qu", letter === "QU");
+  });
+
   updateWordState();
 });
 
@@ -497,7 +501,6 @@ function endGame() {
 document.getElementById("mode-endless").onclick = () => {
   gamemodeText.innerText = "Endless";
   startGame(GameModes.ENDLESS);
-  const root = document.documentElement;
 
   root.style.setProperty("--lightMain", "#17abb5");
   root.style.setProperty("--darkMain", "#0983b7");
@@ -505,6 +508,7 @@ document.getElementById("mode-endless").onclick = () => {
     "--glow",
     "0 0 10px #00acf57d, 0 0 20px #0097f512, 0 0 30px #00b4f533",
   );
+  root.style.setProperty("--dimmed", "#17abb536");
 };
 document.getElementById("mode-ranked").onclick = () => {
   gamemodeText.innerText = "Ranked";
@@ -516,6 +520,7 @@ document.getElementById("mode-ranked").onclick = () => {
     "--glow",
     "0 0 10px #b5179d7d, 0 0 20px #b5179d12, 0 0 30px #b5179e33",
   );
+  root.style.setProperty("--dimmed", "#b5179e36");
 };
 document.getElementById("mode-timed").onclick = () => {
   gamemodeText.innerText = "Timed";
@@ -527,6 +532,7 @@ document.getElementById("mode-timed").onclick = () => {
     "--glow",
     "0 0 10px #abb5177d, 0 0 20px #b5b21712, 0 0 30px #9db51733",
   );
+  root.style.setProperty("--dimmed", "#b2b51736");
 };
 
 function updateRoundDisplay() {
