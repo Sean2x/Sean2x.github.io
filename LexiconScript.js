@@ -149,12 +149,12 @@ const usedButtons = [];
 function generateGrid() {
   // Clear previous letters
   loadDictionary();
-  updateWordState();
 
   scoreTotal.textContent = `Score: ${totalScore}`;
   boardDiv.innerHTML = "";
   wordBar.textContent = "";
   usedButtons.length = 0;
+  updateWordState();
 
   // 🔥 KEY LINE: unique seed per round
   const roundSeed = baseSeed * 1000 + currentRound;
