@@ -149,6 +149,7 @@ const usedButtons = [];
 function generateGrid() {
   // Clear previous letters
   loadDictionary();
+  updateWordState();
 
   scoreTotal.textContent = `Score: ${totalScore}`;
   boardDiv.innerHTML = "";
