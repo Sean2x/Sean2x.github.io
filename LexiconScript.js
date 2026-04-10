@@ -129,6 +129,7 @@ const GameState = {
   usedTiles: [],
 
   topWords: [],
+  wordHistory: [],
 
   baseSeed: null,
   timeLeft: null,
@@ -285,6 +286,7 @@ newSeedButtons.forEach((btn) => {
     GameState.score = 0;
 
     GameState.topWords = [];
+    GameState.wordHistory = [];
     topListDiv.innerHTML = "";
 
     scoreTotal.textContent = `Score: ${GameState.score}`;
@@ -325,17 +327,21 @@ scoreWordButton.addEventListener("click", () => {
   // previousTotal.innerHTML = `Last word: ${word} (${wordScore} points)`;
 
   // --- TOP WORDS LOGIC ---
+  // 🧾 Always track order
+  GameState.wordHistory.push({ word, score: wordScore });
+
+  // 🏆 Maintain top words (logic only)
   GameState.topWords.push({ word, score: wordScore });
-  // sort descending by score
   GameState.topWords.sort((a, b) => b.score - a.score);
-  // keep only top 5
   GameState.topWords = GameState.topWords.slice(0, 5);
 
-  // display top 5 somewhere
-
-  topListDiv.innerHTML = GameState.topWords
-    .map((w) => `${w.word} (${w.score})`)
+  topListDiv.innerHTML = GameState.wordHistory
+    .map((w, i) => `${i + 1}. ${w.word} (${w.score})`)
     .join("<br>");
+
+  // topListDiv.innerHTML = GameState.topWords
+  //   .map((w) => `${w.word} (${w.score})`)
+  //   .join("<br>");
 
   handleRoundAdvance();
   updateWordState();
@@ -432,6 +438,7 @@ setSeedButtons.forEach((btn) => {
     GameState.round = 1;
     GameState.score = 0;
     GameState.topWords = [];
+    GameState.wordHistory = [];
     topListDiv.innerHTML = "";
 
     startGame(GameState.mode);
@@ -468,6 +475,7 @@ function startGame(mode) {
   GameState.score = 0;
   GameState.round = 1;
   GameState.topWords = [];
+  GameState.wordHistory = [];
   topListDiv.innerHTML = "";
 
   scoreWordButton.disabled = false;
@@ -598,8 +606,11 @@ function showGameOver() {
   finalScoreEl.textContent = `Score: ${GameState.score}`;
 
   if (GameState.topWords.length > 0) {
-    finaltopWordsEl.innerHTML = GameState.topWords
-      .map((w, idx) => `${idx + 1}. ${w.word} (${w.score})`)
+    // finaltopWordsEl.innerHTML = GameState.topWords
+    //   .map((w, idx) => `${idx + 1}. ${w.word} (${w.score})`)
+    //   .join("<br>");
+    finaltopWordsEl.innerHTML = GameState.wordHistory
+      .map((w, i) => `${i + 1}. ${w.word} (${w.score})`)
       .join("<br>");
   } else {
     finaltopWordsEl.textContent = "No words scored!";
