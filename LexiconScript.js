@@ -2,12 +2,10 @@
 const boardDiv = document.getElementById("grid");
 const wordBar = document.getElementById("textbox");
 const backspaceButton = document.getElementById("backspace");
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 const newSeedButtons = document.querySelectorAll(".new-seed");
 const scoreWordButton = document.getElementById("scoreIt");
 const scoreTotal = document.getElementById("scoreTotal");
-// const previousTotal = document.getElementById("previousTotal");
 
 const shuffleButton = document.getElementById("shuffle-board");
 const topListDiv = document.getElementById("top-words");
@@ -19,102 +17,140 @@ const gamemodeText = document.getElementById("gamemode");
 
 const root = document.documentElement;
 
-const letterValues = {
-  A: 1,
-  D: 1,
-  E: 1,
-  G: 1,
-  I: 1,
-  L: 1,
-  N: 1,
-  O: 1,
-  R: 1,
-  S: 1,
-  T: 1,
-  U: 1,
-  B: 1.25,
-  C: 1.25,
-  F: 1.25,
-  H: 1.25,
-  M: 1.25,
-  P: 1.25,
-  V: 1.5,
-  W: 1.5,
-  Y: 1.5,
-  J: 1.75,
-  K: 1.75,
-  X: 2,
-  Z: 2,
-  Q: 2.75,
+const Config = {
+  grid: {
+    size: 16,
+  },
+
+  letters: {
+    alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+
+    values: {
+      A: 1,
+      D: 1,
+      E: 1,
+      G: 1,
+      I: 1,
+      L: 1,
+      N: 1,
+      O: 1,
+      R: 1,
+      S: 1,
+      T: 1,
+      U: 1,
+      B: 1.25,
+      C: 1.25,
+      F: 1.25,
+      H: 1.25,
+      M: 1.25,
+      P: 1.25,
+      V: 1.5,
+      W: 1.5,
+      Y: 1.5,
+      J: 1.75,
+      K: 1.75,
+      X: 2,
+      Z: 2,
+      Q: 2.75,
+    },
+
+    weights: {
+      A: 4,
+      E: 4,
+      I: 3,
+      O: 3,
+      U: 2,
+      N: 3,
+      R: 3,
+      T: 3,
+      S: 3,
+      L: 2,
+      D: 3,
+      C: 2,
+      M: 2,
+      P: 2,
+      G: 2,
+      H: 1,
+      F: 1,
+      Y: 1,
+      W: 1,
+      K: 1,
+      B: 1,
+      V: 1,
+      X: 0.5,
+      J: 0.5,
+      Q: 0.5,
+      Z: 0.5,
+    },
+  },
+
+  scoring: {
+    minWordLength: 3,
+
+    colorTiers: [
+      { threshold: 1.75, color: "#b09603" },
+      { threshold: 1.25, color: "#838383" },
+      { threshold: 1, color: "#5c2e06" },
+    ],
+  },
+
+  GameModes: {
+    ENDLESS: {
+      id: "endless",
+    },
+
+    RANKED: {
+      id: "ranked",
+      maxRounds: 5,
+    },
+
+    TIMED: {
+      id: "timed",
+      duration: 60,
+    },
+  },
+
+  rng: {
+    seedMultiplier: 1000,
+  },
+
+  ui: {
+    topWords: 5,
+  },
 };
 
-let totalScore = 0;
+const GameState = {
+  score: 0,
+  round: 1,
+  mode: Config.GameModes.RANKED.id,
 
-const letterWeights = {
-  A: 4,
-  E: 4,
-  I: 3,
-  O: 3,
-  U: 2, // vowels slightly higher
-  N: 3,
-  R: 3,
-  T: 3,
-  S: 3,
-  L: 2,
-  D: 3, // consonants roughly equal
-  C: 2,
-  M: 2,
-  P: 2,
-  G: 2,
-  H: 1,
-  F: 1,
-  Y: 1,
-  W: 1,
-  K: 1,
-  B: 1,
-  V: 1,
-  X: 0.5,
-  J: 0.5,
-  Q: 0.5,
-  Z: 0.5,
+  grid: [],
+  currentWord: "",
+  usedTiles: [],
+
+  topWords: [],
+
+  baseSeed: null,
+  timeLeft: null,
+
+  dictionary: new Set(),
 };
-
-let topWords = []; // stores objects {word: "WORD", score: 12}
-
-//dictionaty
-let dictionary = new Set();
 
 const today = new Date();
-baseSeed = Number(
+
+GameState.baseSeed = Number(
   `${today.getMonth() + 1}${today.getDate()}${today.getFullYear()}`,
 );
-let currentRound = 1;
 
-const scoreColors = [
-  { threshold: 1.75, color: "#b09603" }, // high
-  { threshold: 1.25, color: "#838383" }, // medium
-  { threshold: 1, color: "#5c2e06" }, // low
-];
-
-const GameModes = {
-  ENDLESS: "endless",
-  RANKED: "ranked",
-  TIMED: "timed",
-};
-
-let currentMode = GameModes.RANKED;
-
-let maxRounds = 5;
-let timeLeft = 60; // seconds
 let timerInterval = null;
 
-async function loadDictionary() {
+async function loadGameStatedictionary() {
   const response = await fetch("Misc/wordlist-20210729.txt");
   const text = await response.text();
 
   const words = text.split(/\r?\n/);
 
-  dictionary = new Set(
+  GameState.dictionary = new Set(
     words
       .map((w) =>
         w
@@ -126,14 +162,14 @@ async function loadDictionary() {
   );
 }
 function getRandomLetter(rng) {
-  const totalWeight = Object.values(letterWeights).reduce(
+  const totalWeight = Object.values(Config.letters.weights).reduce(
     (sum, w) => sum + w,
     0,
   );
 
   let rand = rng() * totalWeight;
 
-  for (const [letter, weight] of Object.entries(letterWeights)) {
+  for (const [letter, weight] of Object.entries(Config.letters.weights)) {
     if (rand < weight) {
       return letter === "Q" ? "QU" : letter;
     }
@@ -148,19 +184,20 @@ const usedButtons = [];
 // generate grid function
 function generateGrid() {
   // Clear previous letters
-  loadDictionary();
+  loadGameStatedictionary();
 
-  scoreTotal.textContent = `Score: ${totalScore}`;
+  scoreTotal.textContent = `Score: ${GameState.score}`;
   boardDiv.innerHTML = "";
   wordBar.textContent = "";
   usedButtons.length = 0;
   updateWordState();
 
   // 🔥 KEY LINE: unique seed per round
-  const roundSeed = baseSeed * 1000 + currentRound;
+  const roundSeed =
+    GameState.baseSeed * Config.rng.seedMultiplier + GameState.round;
   const rng = createSeededRNG(roundSeed);
 
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < Config.grid.size; i++) {
     const button = document.createElement("button");
     button.classList.add("square", "letter");
 
@@ -187,7 +224,9 @@ function generateGrid() {
     orb.classList.add("score-orb");
 
     const value =
-      letter === "QU" ? letterValues["Q"] : letterValues[letter] || 0;
+      letter === "QU"
+        ? Config.letters.values["Q"]
+        : Config.letters.values[letter] || 0;
 
     orb.style.backgroundColor = getScoreColor(value);
 
@@ -200,7 +239,7 @@ function generateGrid() {
   }
 
   // update UI
-  document.getElementById("seed").textContent = `Seed: ${baseSeed}`;
+  document.getElementById("seed").textContent = `Seed: ${GameState.baseSeed}`;
   updateRoundDisplay();
 }
 
@@ -241,16 +280,16 @@ newSeedButtons.forEach((btn) => {
 
     // (optional) use input if you want, otherwise ignore
 
-    baseSeed = Math.floor(Math.random() * 1000000);
-    currentRound = 1;
-    totalScore = 0;
+    GameState.baseSeed = Math.floor(Math.random() * 1000000);
+    GameState.round = 1;
+    GameState.score = 0;
 
-    topWords = [];
+    GameState.topWords = [];
     topListDiv.innerHTML = "";
 
-    scoreTotal.textContent = `Score: ${totalScore}`;
+    scoreTotal.textContent = `Score: ${GameState.score}`;
 
-    startGame(currentMode);
+    startGame(GameState.mode);
   });
 });
 
@@ -265,7 +304,7 @@ scoreWordButton.addEventListener("click", () => {
     return;
   }
 
-  if (!dictionary.has(word)) {
+  if (!GameState.dictionary.has(word)) {
     previousTotal.innerHTML = `"${word}" is not a valid word`;
     return;
   }
@@ -274,27 +313,27 @@ scoreWordButton.addEventListener("click", () => {
 
   for (let i = 0; i < word.length; i++) {
     if (word[i] === "Q" && word[i + 1] === "U") {
-      wordScore += letterValues["Q"];
+      wordScore += Config.letters.values["Q"];
       i++; // skip the U
     } else {
-      wordScore += letterValues[word[i]] || 0;
+      wordScore += Config.letters.values[word[i]] || 0;
     }
   }
 
-  totalScore += wordScore;
-  scoreTotal.innerHTML = `Score: ${totalScore}`;
+  GameState.score += wordScore;
+  scoreTotal.innerHTML = `Score: ${GameState.score}`;
   // previousTotal.innerHTML = `Last word: ${word} (${wordScore} points)`;
 
   // --- TOP WORDS LOGIC ---
-  topWords.push({ word, score: wordScore });
+  GameState.topWords.push({ word, score: wordScore });
   // sort descending by score
-  topWords.sort((a, b) => b.score - a.score);
+  GameState.topWords.sort((a, b) => b.score - a.score);
   // keep only top 5
-  topWords = topWords.slice(0, 5);
+  GameState.topWords = GameState.topWords.slice(0, 5);
 
   // display top 5 somewhere
 
-  topListDiv.innerHTML = topWords
+  topListDiv.innerHTML = GameState.topWords
     .map((w) => `${w.word} (${w.score})`)
     .join("<br>");
 
@@ -303,14 +342,16 @@ scoreWordButton.addEventListener("click", () => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-  loadDictionary();
+  loadGameStatedictionary();
   generateGrid(); // start game AFTER loading starts
 });
 
 function updateWordState() {
   const word = wordBar.textContent.toUpperCase();
 
-  const isValid = word.length >= 3 && dictionary.has(word);
+  const isValid =
+    word.length >= Config.scoring.minWordLength &&
+    GameState.dictionary.has(word);
 
   // Enable / disable score button
   scoreWordButton.disabled = !isValid;
@@ -323,7 +364,7 @@ function updateWordState() {
   }
 
   // 🔥 NEW: score preview
-  if (word.length < 3 || !dictionary.has(word)) {
+  if (word.length < 3 || !GameState.dictionary.has(word)) {
     wordScorePreview.textContent = "Word Score: 0";
   } else {
     const previewScore = calculateWordScore(word);
@@ -387,13 +428,13 @@ setSeedButtons.forEach((btn) => {
       }
     }
 
-    baseSeed = newSeed;
-    currentRound = 1;
-    totalScore = 0;
-    topWords = [];
+    GameState.baseSeed = newSeed;
+    GameState.round = 1;
+    GameState.score = 0;
+    GameState.topWords = [];
     topListDiv.innerHTML = "";
 
-    startGame(currentMode);
+    startGame(GameState.mode);
   });
 });
 
@@ -402,10 +443,10 @@ function calculateWordScore(word) {
 
   for (let i = 0; i < word.length; i++) {
     if (word[i] === "Q" && word[i + 1] === "U") {
-      score += letterValues["Q"];
+      score += Config.letters.values["Q"];
       i++; // skip U
     } else {
-      score += letterValues[word[i]] || 0;
+      score += Config.letters.values[word[i]] || 0;
     }
   }
 
@@ -413,7 +454,7 @@ function calculateWordScore(word) {
 }
 
 function getScoreColor(value) {
-  for (const tier of scoreColors) {
+  for (const tier of Config.scoring.colorTiers) {
     if (value >= tier.threshold) {
       return tier.color;
     }
@@ -422,11 +463,11 @@ function getScoreColor(value) {
 }
 
 function startGame(mode) {
-  currentMode = mode;
+  GameState.mode = mode;
 
-  totalScore = 0;
-  currentRound = 1;
-  topWords = [];
+  GameState.score = 0;
+  GameState.round = 1;
+  GameState.topWords = [];
   topListDiv.innerHTML = "";
 
   scoreWordButton.disabled = false;
@@ -434,8 +475,8 @@ function startGame(mode) {
 
   stopTimer(); // 🔥 always stop first
 
-  if (mode === GameModes.TIMED) {
-    timeLeft = 60;
+  if (mode === Config.GameModes.TIMED.id) {
+    GameState.timeLeft = Config.GameModes.TIMED.duration;
     startTimer();
   } else {
     stopTimer();
@@ -445,32 +486,32 @@ function startGame(mode) {
 }
 
 function handleRoundAdvance() {
-  if (currentMode === GameModes.ENDLESS) {
-    currentRound++;
+  if (GameState.mode === Config.GameModes.ENDLESS.id) {
+    GameState.round++;
     generateGrid();
-  } else if (currentMode === GameModes.RANKED) {
-    if (currentRound >= maxRounds) {
+  } else if (GameState.mode === Config.GameModes.RANKED.id) {
+    if (GameState.round >= Config.GameModes.RANKED.maxRounds) {
       endGame();
     } else {
-      currentRound++;
+      GameState.round++;
       generateGrid();
     }
-  } else if (currentMode === GameModes.TIMED) {
-    currentRound++;
+  } else if (GameState.mode === Config.GameModes.TIMED.id) {
+    GameState.round++;
     // In timed mode, rounds don't matter
     generateGrid();
   }
 }
 
 function startTimer() {
-  timeLeft = 60;
+  GameState.timeLeft = Config.GameModes.TIMED.duration;
   clearInterval(timerInterval); // 🔥 prevent stacking timers
 
   timerInterval = setInterval(() => {
-    timeLeft -= 0.1;
+    GameState.timeLeft -= 0.1;
 
-    if (timeLeft <= 0) {
-      timeLeft = 0;
+    if (GameState.timeLeft <= 0) {
+      GameState.timeLeft = 0;
       updateRoundDisplay();
       endGame();
       return;
@@ -501,7 +542,7 @@ function endGame() {
 
 document.getElementById("mode-endless").onclick = () => {
   gamemodeText.innerText = "Endless";
-  startGame(GameModes.ENDLESS);
+  startGame(Config.GameModes.ENDLESS.id);
 
   root.style.setProperty("--lightMain", "#17abb5");
   root.style.setProperty("--darkMain", "#0983b7");
@@ -513,7 +554,7 @@ document.getElementById("mode-endless").onclick = () => {
 };
 document.getElementById("mode-ranked").onclick = () => {
   gamemodeText.innerText = "Ranked";
-  startGame(GameModes.RANKED);
+  startGame(Config.GameModes.RANKED.id);
 
   root.style.setProperty("--lightMain", "#b5179e");
   root.style.setProperty("--darkMain", "#7209b7");
@@ -525,7 +566,7 @@ document.getElementById("mode-ranked").onclick = () => {
 };
 document.getElementById("mode-timed").onclick = () => {
   gamemodeText.innerText = "Timed";
-  startGame(GameModes.TIMED);
+  startGame(Config.GameModes.TIMED.id);
 
   root.style.setProperty("--lightMain", "#b2b517");
   root.style.setProperty("--darkMain", "#b7a909");
@@ -539,29 +580,29 @@ document.getElementById("mode-timed").onclick = () => {
 function updateRoundDisplay() {
   const roundEl = document.getElementById("round");
 
-  if (currentMode === GameModes.TIMED) {
-    roundEl.textContent = `Time: ${timeLeft.toFixed(1)}s`;
-  } else if (currentMode === GameModes.RANKED) {
-    roundEl.textContent = `Round: ${currentRound} / ${maxRounds}`;
+  if (GameState.mode === Config.GameModes.TIMED.id) {
+    roundEl.textContent = `Time: ${GameState.timeLeft.toFixed(1)}s`;
+  } else if (GameState.mode === Config.GameModes.RANKED.id) {
+    roundEl.textContent = `Round: ${GameState.round} / ${Config.GameModes.RANKED.maxRounds}`;
   } else {
     // Endless
-    roundEl.textContent = `Round: ${currentRound}`;
+    roundEl.textContent = `Round: ${GameState.round}`;
   }
 }
 
 function showGameOver() {
   const modal = document.getElementById("game-over-modal");
   const finalScoreEl = document.getElementById("final-score");
-  const finalTopWordsEl = document.getElementById("final-top-words");
+  const finaltopWordsEl = document.getElementById("final-top-words");
 
-  finalScoreEl.textContent = `Score: ${totalScore}`;
+  finalScoreEl.textContent = `Score: ${GameState.score}`;
 
-  if (topWords.length > 0) {
-    finalTopWordsEl.innerHTML = topWords
+  if (GameState.topWords.length > 0) {
+    finaltopWordsEl.innerHTML = GameState.topWords
       .map((w, idx) => `${idx + 1}. ${w.word} (${w.score})`)
       .join("<br>");
   } else {
-    finalTopWordsEl.textContent = "No words scored!";
+    finaltopWordsEl.textContent = "No words scored!";
   }
 
   modal.classList.add("show");
@@ -573,7 +614,7 @@ document.getElementById("try-again").addEventListener("click", () => {
   modal.classList.remove("show");
 });
 
-startGame(currentMode);
+startGame(GameState.mode);
 
 const modeButtons = document.querySelectorAll(
   "#mode-endless, #mode-ranked, #mode-timed",
