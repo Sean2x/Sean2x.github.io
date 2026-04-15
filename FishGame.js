@@ -118,4 +118,9 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-animate();
+window.addEventListener("load", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  animate();
+});
