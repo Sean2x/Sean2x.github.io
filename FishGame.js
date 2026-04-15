@@ -122,5 +122,7 @@ window.addEventListener("load", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
+  print(window.innerWidth, window.innerHeight);
+
   animate();
 });
