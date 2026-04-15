@@ -222,7 +222,7 @@
       <section
         id="about-me"
         style="display: flex; gap: 1rem; justify-content: center"
-        class="expand2"
+        class="expand2 apple-fade"
       >
         <div class="grid-item terminal-window expand" style="height: auto">
           <div
@@ -299,7 +299,7 @@
             height: 90%;
           "
         >
-          <div class="slide">
+          <div class="slide apple-fade" style="--delay: 0.15s">
             <div class="image-box">
               <img
                 src="Images/Siaton_Farms.png"
@@ -311,7 +311,7 @@
             <p>Controls Engineer | Winter 2023</p>
           </div>
 
-          <div class="slide">
+          <div class="slide apple-fade" style="--delay: 0.3s">
             <div class="image-box">
               <img
                 src="Images/MrDeere.png"
@@ -323,7 +323,7 @@
             <p>Robotics Engineer | Summer 2025</p>
           </div>
 
-          <div class="slide">
+          <div class="slide apple-fade" style="--delay: 0.5s">
             <div class="image-box">
               <img
                 src="Images/Lspace.png"
@@ -339,7 +339,7 @@
             <p>Lead Researcher | Fall 2025</p>
           </div>
           <!-- slide 4 -->
-          <div class="slide">
+          <div class="slide apple-fade" style="--delay: 0.75s">
             <div class="image-box">
               <img
                 src="Images/RTX.png"
@@ -439,14 +439,14 @@
             gap: 20px;
           "
         >
-          <div class="grid-item terminal-window">
+          <div class="grid-item terminal-window apple-fade">
             <div
               class="terminal-window-top"
               style="display: flex; align-items: center"
             >
               <div
                 class="terminal-btn"
-                style="border: 7px solid var(--lightMain)"
+                style="border: 6px solid var(--green)"
               ></div>
               <div
                 class="terminal-btn"
@@ -498,14 +498,17 @@
             </div>
           </div>
 
-          <div class="grid-item terminal-window">
+          <div
+            class="grid-item terminal-window apple-fade"
+            style="--delay: 0.15s"
+          >
             <div
               class="terminal-window-top"
               style="display: flex; align-items: center"
             >
               <div
                 class="terminal-btn"
-                style="border: 7px solid var(--lightMain)"
+                style="border: 6px solid var(--green)"
               ></div>
               <div
                 class="terminal-btn"
@@ -558,14 +561,14 @@
             </div>
           </div>
 
-          <div class="grid-item terminal-window">
+          <div class="grid-item terminal-window apple-fade">
             <div
               class="terminal-window-top"
               style="display: flex; align-items: center"
             >
               <div
                 class="terminal-btn"
-                style="border: 7px solid var(--lightMain)"
+                style="border: 6px solid var(--yellow)"
               ></div>
               <div
                 class="terminal-btn"
@@ -639,10 +642,14 @@
             min-width: 0;
           "
         >
-          <h1 style="font-size: 8rem">Colaborate?</h1>
-          <h1 style="font-size: 8rem">Sponsor?</h1>
-          <h1 style="font-size: 6rem">Or just ask questions</h1>
-          <p style="font-size: 3rem">My DMs are always open!</p>
+          <h1 class="apple-fade" style="font-size: 8rem">Colaborate?</h1>
+          <h1 class="apple-fade" style="font-size: 8rem">Sponsor?</h1>
+          <h1 class="apple-fade" style="font-size: 6rem">
+            Or just ask questions
+          </h1>
+          <p class="apple-fade" style="font-size: 3rem">
+            My DMs are always open!
+          </p>
         </div>
         <div
           class="contact-icons"
@@ -717,5 +724,24 @@
       const menu = document.getElementsByClassName("nav")[0];
       menu.classList.toggle("active");
     }
+  </script>
+  <script>
+    const elements = document.querySelectorAll(".apple-fade");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+            observer.unobserve(entry.target); // run once
+          }
+        });
+      },
+      {
+        threshold: 0.2, // triggers when 20% visible
+      },
+    );
+
+    elements.forEach((el) => observer.observe(el));
   </script>
 </html>

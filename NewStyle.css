@@ -6,8 +6,13 @@
   --lightbg: #00000086;
   --glow: 0 0 10px #b5179d7d, 0 0 20px #b5179d12, 0 0 30px #b5179e33;
   --dimmed: #b5179d36;
-  --Blue: #80f4ff;
+
+  --blue: #80f4ff;
   --darkBlue: #1a2b46;
+
+  --green: #0eaa09;
+  --yellow: #ffd726;
+  --red: #e00d0d;
 }
 
 p,
@@ -143,6 +148,20 @@ h1,
 h2,
 h3 {
   border: 1px solid #25abe000;
+}
+
+.apple-fade {
+  opacity: 0;
+  transform: translateY(70px);
+  transition:
+    opacity 1s cubic-bezier(0.25, 1, 0.35, 1),
+    transform 1s cubic-bezier(0.25, 1, 0.35, 1);
+}
+
+.apple-fade.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: var(--delay, 0s);
 }
 
 @media (max-width: 768px) {
