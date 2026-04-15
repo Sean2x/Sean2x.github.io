@@ -57,11 +57,26 @@ let mouse = {
   y: canvas.height / 2,
 };
 
+function setTarget(x, y) {
+  mouse.x = x;
+  mouse.y = y;
+}
+
+// Desktop
 window.addEventListener("mousemove", (e) => {
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
+  setTarget(e.clientX, e.clientY);
 });
 
+// Mobile (touch)
+window.addEventListener("touchstart", (e) => {
+  const t = e.touches[0];
+  setTarget(t.clientX, t.clientY);
+});
+
+window.addEventListener("touchmove", (e) => {
+  const t = e.touches[0];
+  setTarget(t.clientX, t.clientY);
+});
 // =====================
 // DRAW
 // =====================
