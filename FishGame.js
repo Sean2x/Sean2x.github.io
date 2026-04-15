@@ -62,21 +62,32 @@ function setTarget(x, y) {
   mouse.y = y;
 }
 
-// Desktop
+// 🖱️ Desktop
 window.addEventListener("mousemove", (e) => {
   setTarget(e.clientX, e.clientY);
 });
 
-// Mobile (touch)
-window.addEventListener("touchstart", (e) => {
-  const t = e.touches[0];
-  setTarget(t.clientX, t.clientY);
-});
+// 👆 Mobile start
+window.addEventListener(
+  "touchstart",
+  (e) => {
+    const t = e.touches[0];
+    setTarget(t.clientX, t.clientY);
+  },
+  { passive: false },
+);
 
-window.addEventListener("touchmove", (e) => {
-  const t = e.touches[0];
-  setTarget(t.clientX, t.clientY);
-});
+// 👆 Mobile move
+window.addEventListener(
+  "touchmove",
+  (e) => {
+    const t = e.touches[0];
+    setTarget(t.clientX, t.clientY);
+
+    e.preventDefault(); // 🔥 critical
+  },
+  { passive: false },
+);
 // =====================
 // DRAW
 // =====================
