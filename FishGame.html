@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <base target="_self" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Fish Avoiding Mouse</title>
+    <meta
+      name="description"
+      content="The fish that run away from the mouse. It's a simple game where you control a mouse and try to catch the fish. The fish will try to avoid you, so you have to be quick and strategic to catch them all. It's a fun way to pass the time and challenge your reflexes."
+    />
+    <link rel="stylesheet" href="NewStyle.css" />
+
+    <style>
+      :root {
+        --Ocean: #242057;
+        --Fish: #ff6347;
+        --Shark: #3b3a47;
+      }
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: var(--Ocean);
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+      const styles = getComputedStyle(document.documentElement);
+
+      const fishColor = styles.getPropertyValue("--Fish");
+      const sharkColor = styles.getPropertyValue("--Shark");
+
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      // Draw a simple fish (triangle)
+      function drawFish(x, y) {
+        ctx.fillStyle = fishColor; // tomato color for the fish
+
+        ctx.beginPath();
+        ctx.moveTo(x + 20, y); // front tip
+        ctx.lineTo(x - 20, y - 10); // top back
+        ctx.lineTo(x - 20, y + 10); // bottom back
+        ctx.closePath();
+
+        ctx.fill();
+      }
+
+      function drawShark(x, y) {
+        ctx.fillStyle = sharkColor; // tomato color for the fish
+
+        ctx.beginPath();
+        ctx.moveTo(x + 40, y); // front tip
+        ctx.lineTo(x - 40, y - 30); // top back
+        ctx.lineTo(x - 40, y + 30); // bottom back
+        ctx.closePath();
+
+        ctx.fill();
+      }
+
+      // draw one fish in the center
+      drawFish(canvas.width / 2, canvas.height / 2);
+      drawShark(canvas.width / 3, canvas.height / 2);
+    </script>
+  </body>
+</html>
