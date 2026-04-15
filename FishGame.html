@@ -23,11 +23,21 @@
       body {
         margin: 0;
         overflow: hidden;
-        background: var(--Ocean);
+      }
+
+      #bgVideo {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        z-index: -1; /* sits behind everything */
       }
       canvas {
-        display: block;
-
+        position: relative; /* THIS is what you meant */
+        z-index: 1;
         width: 100%;
         height: 100%;
       }
@@ -46,7 +56,11 @@
   </head>
 
   <body>
-    <div id="version">v1.1.4</div>
+    <div id="version">v1.2.0</div>
+
+    <video id="bgVideo" autoplay muted loop playsinline>
+      <source src="Images/ocean.mp4" type="video/mp4" />
+    </video>
     <canvas id="canvas"></canvas>
 
     <script src="FishGame.js"></script>

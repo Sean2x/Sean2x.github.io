@@ -9,11 +9,47 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+// =====================
+// CONFIG (ALL TUNING HERE)
+// =====================
+const CONFIG = {
+  panicRadius: 60,
+  alertRadius: 150,
+
+  speed: {
+    calm: 2,
+    alert: 3,
+    panic: 4,
+  },
+
+  force: {
+    alert: 0.6,
+    panic: 1.2,
+  },
+
+  drift: {
+    calm: 0.1,
+    alert: 0.06,
+    panic: 0.03,
+  },
+
+  damping: {
+    calm: 0.995,
+    alert: 1,
+    panic: 1,
+  },
+};
+
+// =====================
+// ENTITY
+// =====================
 let fish = {
   x: canvas.width / 2,
   y: canvas.height / 2,
   vx: 0,
   vy: 0,
+  angle: 0,
+  state: "calm",
 };
 
 let mouse = {
@@ -26,94 +62,124 @@ window.addEventListener("mousemove", (e) => {
   mouse.y = e.clientY;
 });
 
-function drawFish(x, y) {
-  ctx.fillStyle = fishColor; // tomato color for the fish
+// =====================
+// DRAW
+// =====================
+function drawFish(x, y, angle) {
+  ctx.fillStyle = fishColor;
+
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
 
   ctx.beginPath();
-  ctx.moveTo(x + 20, y); // front tip
-  ctx.lineTo(x - 20, y - 10); // top back
-  ctx.lineTo(x - 20, y + 10); // bottom back
+  ctx.moveTo(20, 0);
+  ctx.lineTo(-20, -10);
+  ctx.lineTo(-20, 10);
   ctx.closePath();
 
   ctx.fill();
+
+  ctx.restore();
 }
 
-function drawShark(x, y) {
-  ctx.fillStyle = sharkColor; // tomato color for the fish
-
-  ctx.beginPath();
-  ctx.moveTo(x + 40, y); // front tip
-  ctx.lineTo(x - 40, y - 30); // top back
-  ctx.lineTo(x - 40, y + 30); // bottom back
-  ctx.closePath();
-
-  ctx.fill();
-}
-
+// =====================
+// UPDATE
+// =====================
 function updateFish() {
   let dx = fish.x - mouse.x;
   let dy = fish.y - mouse.y;
-
   let dist = Math.sqrt(dx * dx + dy * dy);
 
-  // fear radius
-  let fearRadius = 250;
+  // ---------------------
+  // STATE (clean separation)
+  // ---------------------
+  if (dist < CONFIG.panicRadius) fish.state = "panic";
+  else if (dist < CONFIG.alertRadius) fish.state = "alert";
+  else fish.state = "calm";
 
-  if (dist < fearRadius && dist > 0) {
-    // normalize direction away from mouse
-    fish.vx += (dx / dist) * 0.8;
-    fish.vy += (dy / dist) * 0.8;
+  // ---------------------
+  // PARAMETERS (derived once)
+  // ---------------------
+  const state = fish.state;
+
+  const maxSpeed = CONFIG.speed[state];
+  const driftStrength = CONFIG.drift[state];
+  const damping = CONFIG.damping[state];
+
+  // ---------------------
+  // FORCE SYSTEM
+  // ---------------------
+  if (state !== "calm" && dist > 0) {
+    const force = state === "panic" ? CONFIG.force.panic : CONFIG.force.alert;
+
+    fish.vx += (dx / dist) * force;
+    fish.vy += (dy / dist) * force;
   }
 
-  // tiny random drift (keeps it alive)
-  fish.vx += (Math.random() - 0.5) * 0.2;
-  fish.vy += (Math.random() - 0.5) * 0.2;
+  // ---------------------
+  // DRIFT (life noise)
+  // ---------------------
+  fish.vx += (Math.random() - 0.5) * driftStrength;
+  fish.vy += (Math.random() - 0.5) * driftStrength;
 
-  // speed limit
+  // ---------------------
+  // DAMPING (stability control)
+  // ---------------------
+  fish.vx *= damping;
+  fish.vy *= damping;
+
+  // ---------------------
+  // SPEED LIMIT
+  // ---------------------
   let speed = Math.sqrt(fish.vx * fish.vx + fish.vy * fish.vy);
-  let maxSpeed = 1.5;
 
   if (speed > maxSpeed) {
     fish.vx = (fish.vx / speed) * maxSpeed;
     fish.vy = (fish.vy / speed) * maxSpeed;
   }
 
-  let margin = 40; // how far it "feels" walls
-  // left wall
-  if (fish.x < margin) {
-    fish.vx += 0.3;
-  }
-  // right wall
-  if (fish.x > canvas.width - margin) {
-    fish.vx -= 0.3;
-  }
-  // top wall
-  if (fish.y < margin) {
-    fish.vy += 0.3;
-  }
-  // bottom wall
-  if (fish.y > canvas.height - margin) {
-    fish.vy -= 0.3;
-  }
+  // ---------------------
+  // WALL AVOIDANCE
+  // ---------------------
+  const margin = 40;
 
-  // movement application
+  if (fish.x < margin) fish.vx += 0.3;
+  if (fish.x > canvas.width - margin) fish.vx -= 0.3;
+  if (fish.y < margin) fish.vy += 0.3;
+  if (fish.y > canvas.height - margin) fish.vy -= 0.3;
+
+  // ---------------------
+  // APPLY MOVEMENT
+  // ---------------------
   fish.x += fish.vx;
   fish.y += fish.vy;
 
-  //boundaries
-  if (fish.x < 0) fish.x = 0;
-  if (fish.x > canvas.width) fish.x = canvas.width;
+  // ---------------------
+  // ROTATION (smooth steering)
+  // ---------------------
+  let targetAngle = Math.atan2(fish.vy, fish.vx);
 
-  if (fish.y < 0) fish.y = 0;
-  if (fish.y > canvas.height) fish.y = canvas.height;
+  let diff = targetAngle - fish.angle;
+  diff = Math.atan2(Math.sin(diff), Math.cos(diff));
+
+  fish.angle += diff * 0.08;
+
+  // ---------------------
+  // BOUNDS CLAMP
+  // ---------------------
+  fish.x = Math.max(0, Math.min(canvas.width, fish.x));
+  fish.y = Math.max(0, Math.min(canvas.height, fish.y));
 }
 
-// 🎬 loop = life
+// =====================
+// LOOP
+// =====================
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   updateFish();
-  drawFish(fish.x, fish.y);
+  drawFish(fish.x, fish.y, fish.angle);
 
   requestAnimationFrame(animate);
 }
@@ -121,8 +187,6 @@ function animate() {
 window.addEventListener("load", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-
-  console.log(window.innerWidth, window.innerHeight);
 
   animate();
 });
