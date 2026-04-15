@@ -71,7 +71,7 @@ function updateFish() {
 
   // speed limit
   let speed = Math.sqrt(fish.vx * fish.vx + fish.vy * fish.vy);
-  let maxSpeed = 2;
+  let maxSpeed = 1.5;
 
   if (speed > maxSpeed) {
     fish.vx = (fish.vx / speed) * maxSpeed;
