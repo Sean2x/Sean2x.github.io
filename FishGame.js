@@ -81,7 +81,7 @@ function updateFish() {
   let margin = 40; // how far it "feels" walls
   // left wall
   if (fish.x < margin) {
-    fish.vx += 0.5;
+    fish.vx += 0.3;
   }
   // right wall
   if (fish.x > canvas.width - margin) {
