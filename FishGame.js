@@ -57,7 +57,7 @@ function updateFish() {
   let dist = Math.sqrt(dx * dx + dy * dy);
 
   // fear radius
-  let fearRadius = 150;
+  let fearRadius = 250;
 
   if (dist < fearRadius && dist > 0) {
     // normalize direction away from mouse
@@ -66,8 +66,8 @@ function updateFish() {
   }
 
   // tiny random drift (keeps it alive)
-  fish.vx += (Math.random() - 0.5) * 0.1;
-  fish.vy += (Math.random() - 0.5) * 0.1;
+  fish.vx += (Math.random() - 0.5) * 0.2;
+  fish.vy += (Math.random() - 0.5) * 0.2;
 
   // speed limit
   let speed = Math.sqrt(fish.vx * fish.vx + fish.vy * fish.vy);
@@ -78,8 +78,34 @@ function updateFish() {
     fish.vy = (fish.vy / speed) * maxSpeed;
   }
 
+  let margin = 40; // how far it "feels" walls
+  // left wall
+  if (fish.x < margin) {
+    fish.vx += 0.5;
+  }
+  // right wall
+  if (fish.x > canvas.width - margin) {
+    fish.vx -= 0.3;
+  }
+  // top wall
+  if (fish.y < margin) {
+    fish.vy += 0.3;
+  }
+  // bottom wall
+  if (fish.y > canvas.height - margin) {
+    fish.vy -= 0.3;
+  }
+
+  // movement application
   fish.x += fish.vx;
   fish.y += fish.vy;
+
+  //boundaries
+  if (fish.x < 0) fish.x = 0;
+  if (fish.x > canvas.width) fish.x = canvas.width;
+
+  if (fish.y < 0) fish.y = 0;
+  if (fish.y > canvas.height) fish.y = canvas.height;
 }
 
 // 🎬 loop = life
