@@ -16,6 +16,16 @@ let fish = {
   vy: 0,
 };
 
+let mouse = {
+  x: canvas.width / 2,
+  y: canvas.height / 2,
+};
+
+window.addEventListener("mousemove", (e) => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
 function drawFish(x, y) {
   ctx.fillStyle = fishColor; // tomato color for the fish
 
@@ -41,20 +51,33 @@ function drawShark(x, y) {
 }
 
 function updateFish() {
-  // random drift (feels like thinking)
+  let dx = fish.x - mouse.x;
+  let dy = fish.y - mouse.y;
+
+  let dist = Math.sqrt(dx * dx + dy * dy);
+
+  // fear radius
+  let fearRadius = 150;
+
+  if (dist < fearRadius && dist > 0) {
+    // normalize direction away from mouse
+    fish.vx += (dx / dist) * 0.8;
+    fish.vy += (dy / dist) * 0.8;
+  }
+
+  // tiny random drift (keeps it alive)
   fish.vx += (Math.random() - 0.5) * 0.1;
   fish.vy += (Math.random() - 0.5) * 0.1;
 
   // speed limit
   let speed = Math.sqrt(fish.vx * fish.vx + fish.vy * fish.vy);
-  let maxSpeed = 1;
+  let maxSpeed = 2;
 
   if (speed > maxSpeed) {
     fish.vx = (fish.vx / speed) * maxSpeed;
     fish.vy = (fish.vy / speed) * maxSpeed;
   }
 
-  // movement
   fish.x += fish.vx;
   fish.y += fish.vy;
 }
