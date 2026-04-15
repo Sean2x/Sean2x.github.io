@@ -34,46 +34,6 @@
   <body>
     <canvas id="canvas"></canvas>
 
-    <script>
-      const styles = getComputedStyle(document.documentElement);
-
-      const fishColor = styles.getPropertyValue("--Fish");
-      const sharkColor = styles.getPropertyValue("--Shark");
-
-      const canvas = document.getElementById("canvas");
-      const ctx = canvas.getContext("2d");
-
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      // Draw a simple fish (triangle)
-      function drawFish(x, y) {
-        ctx.fillStyle = fishColor; // tomato color for the fish
-
-        ctx.beginPath();
-        ctx.moveTo(x + 20, y); // front tip
-        ctx.lineTo(x - 20, y - 10); // top back
-        ctx.lineTo(x - 20, y + 10); // bottom back
-        ctx.closePath();
-
-        ctx.fill();
-      }
-
-      function drawShark(x, y) {
-        ctx.fillStyle = sharkColor; // tomato color for the fish
-
-        ctx.beginPath();
-        ctx.moveTo(x + 40, y); // front tip
-        ctx.lineTo(x - 40, y - 30); // top back
-        ctx.lineTo(x - 40, y + 30); // bottom back
-        ctx.closePath();
-
-        ctx.fill();
-      }
-
-      // draw one fish in the center
-      drawFish(canvas.width / 2, canvas.height / 2);
-      drawShark(canvas.width / 3, canvas.height / 2);
-    </script>
+    <script src="FishGame.js"></script>
   </body>
 </html>
