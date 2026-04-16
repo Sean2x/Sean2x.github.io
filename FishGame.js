@@ -106,6 +106,40 @@ function drawFish(x, y, angle) {
   ctx.drawImage(fishImg, -width / 2, -height / 2, width, height);
 
   ctx.restore();
+
+  drawNametag(x, y);
+}
+
+function drawNametag(x, y) {
+  const name = "name here";
+
+  const boxWidth = 70;
+  const boxHeight = 18;
+  const offsetY = 80;
+
+  ctx.save();
+
+  // NO translate/rotate based on fish angle
+  ctx.translate(x, y);
+
+  // optional floating animation
+  const bob = Math.sin(performance.now() * 0.003) * 1.5;
+
+  const bx = -boxWidth / 2;
+  const by = offsetY + bob;
+
+  // background
+  ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+  ctx.fillRect(bx, by, boxWidth, boxHeight);
+
+  // text
+  ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+  ctx.font = "12px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(name, 0, by + boxHeight / 2);
+
+  ctx.restore();
 }
 
 // =====================
