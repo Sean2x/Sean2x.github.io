@@ -9,6 +9,9 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+const fishImg = new Image();
+fishImg.src = "Images/Goldfish.png";
+
 // =====================
 // CONFIG (ALL TUNING HERE)
 // =====================
@@ -92,19 +95,15 @@ window.addEventListener(
 // DRAW
 // =====================
 function drawFish(x, y, angle) {
-  ctx.fillStyle = fishColor;
-
   ctx.save();
   ctx.translate(x, y);
-  ctx.rotate(angle);
+  ctx.rotate(angle - Math.PI / 2);
 
-  ctx.beginPath();
-  ctx.moveTo(20, 0);
-  ctx.lineTo(-20, -10);
-  ctx.lineTo(-20, 10);
-  ctx.closePath();
+  // 🐟 Draw fish image centered 4:5 w:h ratio
+  const width = 100;
+  const height = width * (5 / 4);
 
-  ctx.fill();
+  ctx.drawImage(fishImg, -width / 2, -height / 2, width, height);
 
   ctx.restore();
 }
