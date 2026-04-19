@@ -9,8 +9,39 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const fishImg = new Image();
-fishImg.src = "Images/Goldfish.png";
+// =====================
+// ASSETS
+// =====================
+
+const assets = {
+  body: new Image(),
+  tail: new Image(),
+  fins: new Image(),
+
+  eyes: {
+    calm: new Image(),
+    panic: new Image(),
+    squeeze: new Image(),
+    happy: new Image(),
+  },
+
+  mouth: {
+    open: new Image(),
+    closed: new Image(),
+  },
+};
+
+assets.body.src = "Images/BibblesAsset/GoldfishAssets_Body.png";
+assets.tail.src = "Images/BibblesAsset/GoldfishAssets_Tail.png";
+assets.fins.src = "Images/BibblesAsset/GoldfishAssets_Fins.png";
+
+assets.eyes.calm.src = "Images/BibblesAsset/GoldfishAssets_EyesCalm.png";
+assets.eyes.panic.src = "Images/BibblesAsset/GoldfishAssets_EyesPanic.png";
+assets.eyes.squeeze.src = "Images/BibblesAsset/GoldfishAssets_EyesSqueeze.png";
+assets.eyes.happy.src = "Images/BibblesAsset/GoldfishAssets_EyesHappy.png";
+
+assets.mouth.open.src = "Images/BibblesAsset/GoldfishAssets_Mouth1.png";
+assets.mouth.closed.src = "Images/BibblesAsset/GoldfishAssets_Mouth2.png";
 
 // =====================
 // CONFIG (ALL TUNING HERE)
@@ -20,7 +51,7 @@ const CONFIG = {
   alertRadius: 150,
 
   speed: {
-    calm: 2,
+    calm: 1,
     alert: 3,
     panic: 4,
   },
@@ -31,13 +62,13 @@ const CONFIG = {
   },
 
   drift: {
-    calm: 0.1,
-    alert: 0.06,
-    panic: 0.03,
+    calm: 0.04,
+    alert: 0.02,
+    panic: 0.01,
   },
 
   damping: {
-    calm: 0.995,
+    calm: 0.998,
     alert: 1,
     panic: 1,
   },
@@ -53,6 +84,15 @@ let fish = {
   vy: 0,
   angle: 0,
   state: "calm",
+
+  wanderTarget: null,
+  nextWanderTime: 0,
+
+  tailPhase: 0,
+  finPhase: 0,
+  blinkTimer: 0,
+  mouthTimer: 0,
+  mouthPhase: 0,
 };
 
 let mouse = {
@@ -65,6 +105,9 @@ function setTarget(x, y) {
   mouse.y = y;
 }
 
+// =====================
+// Listeners
+// =====================
 // 🖱️ Desktop
 window.addEventListener("mousemove", (e) => {
   setTarget(e.clientX, e.clientY);
@@ -97,30 +140,96 @@ window.addEventListener(
 function drawFish(x, y, angle) {
   ctx.save();
   ctx.translate(x, y);
-  ctx.rotate(angle - Math.PI / 2);
+  // ctx.rotate(angle - Math.PI / 2);
 
-  // 🐟 Draw fish image centered 4:5 w:h ratio
-  const width = 100;
-  const height = width * (5 / 4);
+  const bodyWidth = 100;
+  const bodyHeight = bodyWidth * 1.25;
 
-  ctx.drawImage(fishImg, -width / 2, -height / 2, width, height);
+  const bodyScale = 0.7;
+
+  const bw = bodyWidth * bodyScale;
+  const bh = bodyHeight;
+
+  // =====================
+  // 🐟 TAIL
+  // =====================
+  ctx.save();
+
+  const tailAnchorX = 0;
+  const tailAnchorY = -bodyWidth * 0.6;
+
+  const tailW = bodyWidth * 1;
+  const tailH = bodyHeight * 0.4;
+
+  const tailSwing = Math.sin(fish.tailPhase) * 0.2;
+
+  ctx.translate(tailAnchorX, tailAnchorY);
+  ctx.rotate(tailSwing);
+
+  ctx.drawImage(assets.tail, -tailW / 2, -tailH / 2, tailW, tailH);
+
+  ctx.restore();
+
+  // =====================
+  // 🐟 FINS (mid layer)
+  // =====================
+  ctx.save();
+
+  const finSwing = Math.sin(fish.finPhase) * 0.15;
+
+  const finX = bw * 0;
+  const finY = bh * 0.1;
+  const finSizeX = bw * 1.5;
+  const finSizeY = bh * 0.175;
+
+  ctx.translate(finX, finY);
+
+  ctx.drawImage(assets.fins, -finSizeX / 2, -finSizeY / 2, finSizeX, finSizeY);
+
+  ctx.restore();
+
+  // =====================
+  // 🐟 BODY
+  // =====================
+  ctx.save();
+
+  ctx.drawImage(assets.body, -bw / 2, -bh / 2, bw, bh);
+
+  ctx.restore();
+
+  // =====================
+  // 🐟 Mouth
+  // =====================
+
+  ctx.save();
+
+  const mouthImg = fish.mouthOpen ? assets.mouth.open : assets.mouth.closed;
+
+  const mouthY = bh * 0.5;
+  const mouthW = bw * 0.5;
+  const mouthH = mouthW * 0.55;
+
+  ctx.translate(0, mouthY);
+
+  ctx.drawImage(mouthImg, -mouthW / 2, -mouthH / 2, mouthW, mouthH);
 
   ctx.restore();
 
   drawNametag(x, y);
+
+  ctx.restore();
 }
 
 function drawNametag(x, y) {
-  const name = "name here";
+  const name = "Bibbles";
 
-  const boxWidth = 70;
+  const boxWidth = 50;
   const boxHeight = 18;
   const offsetY = 80;
 
   ctx.save();
 
   // NO translate/rotate based on fish angle
-  ctx.translate(x, y);
 
   // optional floating animation
   const bob = Math.sin(performance.now() * 0.003) * 1.5;
@@ -146,89 +255,161 @@ function drawNametag(x, y) {
 // UPDATE
 // =====================
 function updateFish() {
+  senseMouse();
+  applyBrain();
+  applyPhysics();
+  applyConstraints();
+  AnimateFish();
+}
+
+// =====================
+// Fish Logic
+// =====================
+
+function senseMouse() {
   let dx = fish.x - mouse.x;
   let dy = fish.y - mouse.y;
   let dist = Math.sqrt(dx * dx + dy * dy);
 
-  // ---------------------
-  // STATE (clean separation)
-  // ---------------------
+  fish.dx = dx;
+  fish.dy = dy;
+  fish.dist = dist;
+
   if (dist < CONFIG.panicRadius) fish.state = "panic";
   else if (dist < CONFIG.alertRadius) fish.state = "alert";
   else fish.state = "calm";
-
-  // ---------------------
-  // PARAMETERS (derived once)
-  // ---------------------
+}
+function applyBrain() {
   const state = fish.state;
 
-  const maxSpeed = CONFIG.speed[state];
-  const driftStrength = CONFIG.drift[state];
-  const damping = CONFIG.damping[state];
+  const force =
+    state === "panic"
+      ? CONFIG.force.panic
+      : state === "alert"
+        ? CONFIG.force.alert
+        : 0;
 
-  // ---------------------
-  // FORCE SYSTEM
-  // ---------------------
-  if (state !== "calm" && dist > 0) {
-    const force = state === "panic" ? CONFIG.force.panic : CONFIG.force.alert;
-
-    fish.vx += (dx / dist) * force;
-    fish.vy += (dy / dist) * force;
+  // =========================
+  // REACTION (existing)
+  // =========================
+  if (force > 0 && fish.dist > 0) {
+    fish.vx += (fish.dx / fish.dist) * force;
+    fish.vy += (fish.dy / fish.dist) * force;
   }
 
-  // ---------------------
-  // DRIFT (life noise)
-  // ---------------------
-  fish.vx += (Math.random() - 0.5) * driftStrength;
-  fish.vy += (Math.random() - 0.5) * driftStrength;
+  // =========================
+  // WANDER SYSTEM
+  // =========================
+  // const now = performance.now();
 
-  // ---------------------
-  // DAMPING (stability control)
-  // ---------------------
-  fish.vx *= damping;
-  fish.vy *= damping;
+  // // 🚨 Panic cancels current goal
+  // if (state === "panic") {
+  //   fish.wanderTarget = null;
+  // }
 
-  // ---------------------
-  // SPEED LIMIT
-  // ---------------------
-  let speed = Math.sqrt(fish.vx * fish.vx + fish.vy * fish.vy);
+  // // 🎯 Reached target → clear it + cooldown
+  // if (fish.wanderTarget) {
+  //   let dx = fish.wanderTarget.x - fish.x;
+  //   let dy = fish.wanderTarget.y - fish.y;
+  //   let dist = Math.hypot(dx, dy);
 
-  if (speed > maxSpeed) {
-    fish.vx = (fish.vx / speed) * maxSpeed;
-    fish.vy = (fish.vy / speed) * maxSpeed;
+  //   if (dist < 10) {
+  //     fish.wanderTarget = null;
+  //     fish.nextWanderTime = now + 2000 + Math.random() * 3000; // 1–3 sec delay
+  //   }
+  // }
+
+  // // ⏳ Only pick new target if:
+  // // - calm
+  // // - no current target
+  // // - cooldown passed
+  // if (state === "calm" && !fish.wanderTarget && now > fish.nextWanderTime) {
+  //   fish.wanderTarget = {
+  //     x: 100 + Math.random() * (canvas.width - 200),
+  //     y: 100 + Math.random() * (canvas.height - 200),
+  //   };
+  // }
+
+  // // 🚫 Alert or panic → delay next decision
+  // if ((state === "alert" || state === "panic") && fish.wanderTarget) {
+  //   fish.nextWanderTime = now + 1000 + Math.random() * 2000;
+  //   fish.wanderTarget = null;
+  // }
+
+  // // 🚶 Move toward target if exists
+  // if (fish.wanderTarget && state === "calm") {
+  //   let dx = fish.wanderTarget.x - fish.x;
+  //   let dy = fish.wanderTarget.y - fish.y;
+  //   let dist = Math.hypot(dx, dy);
+
+  //   if (dist > 0) {
+  //     fish.vx += (dx / dist) * 0.2;
+  //     fish.vy += (dy / dist) * 0.2;
+  //   }
+  // }
+}
+function applyPhysics() {
+  const state = fish.state;
+
+  fish.vx *= CONFIG.damping[state];
+  fish.vy *= CONFIG.damping[state];
+
+  let speed = Math.hypot(fish.vx, fish.vy);
+
+  if (speed > CONFIG.speed[state]) {
+    fish.vx = (fish.vx / speed) * CONFIG.speed[state];
+    fish.vy = (fish.vy / speed) * CONFIG.speed[state];
   }
 
-  // ---------------------
-  // WALL AVOIDANCE
-  // ---------------------
+  fish.x += fish.vx;
+  fish.y += fish.vy;
+
+  // rotation
+  let targetAngle = Math.atan2(fish.vy, fish.vx);
+  let diff = Math.atan2(
+    Math.sin(targetAngle - fish.angle),
+    Math.cos(targetAngle - fish.angle),
+  );
+
+  fish.angle += diff * 0.08;
+}
+function applyConstraints() {
+  //Wall margin
   const margin = 40;
 
+  //Walls
   if (fish.x < margin) fish.vx += 0.3;
   if (fish.x > canvas.width - margin) fish.vx -= 0.3;
   if (fish.y < margin) fish.vy += 0.3;
   if (fish.y > canvas.height - margin) fish.vy -= 0.3;
 
-  // ---------------------
-  // APPLY MOVEMENT
-  // ---------------------
-  fish.x += fish.vx;
-  fish.y += fish.vy;
-
-  // ---------------------
-  // ROTATION (smooth steering)
-  // ---------------------
-  let targetAngle = Math.atan2(fish.vy, fish.vx);
-
-  let diff = targetAngle - fish.angle;
-  diff = Math.atan2(Math.sin(diff), Math.cos(diff));
-
-  fish.angle += diff * 0.08;
-
-  // ---------------------
-  // BOUNDS CLAMP
-  // ---------------------
+  // Tp back inside
   fish.x = Math.max(0, Math.min(canvas.width, fish.x));
   fish.y = Math.max(0, Math.min(canvas.height, fish.y));
+}
+function AnimateFish() {
+  fish.tailPhase += Math.hypot(fish.vx, fish.vy) * 0.1;
+  fish.finPhase += 0.08;
+
+  // 👁️ blink logic
+  fish.blinkTimer--;
+
+  if (fish.blinkTimer <= 0) {
+    fish.blinking = true;
+    fish.blinkTimer = 120 + Math.random() * 200; // random blink delay
+  }
+
+  if (fish.blinking) {
+    if (Math.random() < 0.1) fish.blinking = false;
+  }
+
+  // 👄 mouth random movement
+  fish.mouthTimer--;
+
+  if (fish.mouthTimer <= 0) {
+    fish.mouthOpen = !fish.mouthOpen;
+    fish.mouthTimer = 200 + Math.random() * 120;
+  }
 }
 
 // =====================
