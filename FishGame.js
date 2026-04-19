@@ -50,7 +50,7 @@ assets.mouth.closed.src = "Images/BibblesAsset/GoldfishAssets_Mouth2.png";
 // CONFIG (ALL TUNING HERE)
 // =====================
 const CONFIG = {
-  panicRadius: 60,
+  panicRadius: 40,
   alertRadius: 250,
 
   speed: {
@@ -145,7 +145,7 @@ function drawFish(x, y, angle) {
   ctx.translate(x, y);
   ctx.rotate(angle - Math.PI / 2);
 
-  const bodyWidth = 100;
+  const bodyWidth = 50;
   const bodyHeight = bodyWidth * 1.25;
 
   const bodyScale = 0.7;
@@ -261,33 +261,40 @@ function drawFish(x, y, angle) {
   ctx.drawImage(mouthImg, -mouthW / 2, -mouthH / 2, mouthW, mouthH);
 
   ctx.restore();
+  ctx.restore();
 
   drawNametag(x, y);
 }
 
 function drawNametag(x, y) {
+  ctx.save();
   const name = "Bibbles";
 
-  const boxWidth = 50;
+  const boxWidth = 70;
   const boxHeight = 18;
-  const offsetY = 80;
-
-  const bob = Math.sin(performance.now() * 0.003) * 1.5;
-
-  const bx = x - boxWidth / 2;
-  const by = y + offsetY + bob;
+  const offsetY = 40;
 
   ctx.save();
 
+  // NO translate/rotate based on fish angle
+  ctx.translate(x, y);
+
+  // optional floating animation
+  const bob = Math.sin(performance.now() * 0.003) * 1.5;
+
+  const bx = -boxWidth / 2;
+  const by = offsetY + bob;
+
+  // background
   ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
   ctx.fillRect(bx, by, boxWidth, boxHeight);
 
+  // text
   ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
   ctx.font = "12px Arial";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-
-  ctx.fillText(name, x, by + boxHeight / 2);
+  ctx.fillText(name, 0, by + boxHeight / 2);
 
   ctx.restore();
 }
