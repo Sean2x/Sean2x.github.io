@@ -17,6 +17,7 @@ const assets = {
   body: new Image(),
   tail: new Image(),
   fins: new Image(),
+  bubble: new Image(),
 
   eyes: {
     calm: new Image(),
@@ -40,6 +41,8 @@ assets.eyes.panic.src = "Images/BibblesAsset/GoldfishAssets_EyesPanic.png";
 assets.eyes.squeeze.src = "Images/BibblesAsset/GoldfishAssets_EyesSqueeze.png";
 assets.eyes.happy.src = "Images/BibblesAsset/GoldfishAssets_EyesHappy.png";
 
+assets.bubble.src = "Images/BibblesAsset/GoldfishAssets_BubbleEye.png";
+
 assets.mouth.open.src = "Images/BibblesAsset/GoldfishAssets_Mouth1.png";
 assets.mouth.closed.src = "Images/BibblesAsset/GoldfishAssets_Mouth2.png";
 
@@ -48,7 +51,7 @@ assets.mouth.closed.src = "Images/BibblesAsset/GoldfishAssets_Mouth2.png";
 // =====================
 const CONFIG = {
   panicRadius: 60,
-  alertRadius: 150,
+  alertRadius: 250,
 
   speed: {
     calm: 1,
@@ -57,8 +60,8 @@ const CONFIG = {
   },
 
   force: {
-    alert: 0.6,
-    panic: 1.2,
+    alert: 0.005,
+    panic: 0.1,
   },
 
   drift: {
@@ -140,7 +143,7 @@ window.addEventListener(
 function drawFish(x, y, angle) {
   ctx.save();
   ctx.translate(x, y);
-  // ctx.rotate(angle - Math.PI / 2);
+  ctx.rotate(angle - Math.PI / 2);
 
   const bodyWidth = 100;
   const bodyHeight = bodyWidth * 1.25;
@@ -175,8 +178,6 @@ function drawFish(x, y, angle) {
   // =====================
   ctx.save();
 
-  const finSwing = Math.sin(fish.finPhase) * 0.15;
-
   const finX = bw * 0;
   const finY = bh * 0.1;
   const finSizeX = bw * 1.5;
@@ -189,11 +190,57 @@ function drawFish(x, y, angle) {
   ctx.restore();
 
   // =====================
+  // Eye Bubbles
+  // =====================
+
+  ctx.save();
+
+  const BubbleX = bw * 0;
+  const BubbleY = bh * 0.37;
+  const BubbleSizeX = bw * 1.5;
+  const BubbleSizeY = bh * 0.35;
+
+  ctx.translate(BubbleX, BubbleY);
+
+  ctx.drawImage(
+    assets.bubble,
+    -BubbleSizeX / 2,
+    -BubbleSizeY / 2,
+    BubbleSizeX,
+    BubbleSizeY,
+  );
+
+  ctx.restore();
+
+  // =====================
   // 🐟 BODY
   // =====================
   ctx.save();
 
   ctx.drawImage(assets.body, -bw / 2, -bh / 2, bw, bh);
+
+  ctx.restore();
+
+  // =====================
+  // Eyes
+  // =====================
+
+  ctx.save();
+
+  EyeImg = fish.blinking
+    ? assets.eyes.squeeze
+    : fish.state === "alert"
+      ? assets.eyes.panic
+      : assets.eyes.calm;
+
+  const EyeX = bw * 0;
+  const EyeY = bh * 0.35;
+  const EyeSizeX = bw * 1.2;
+  const EyeSizeY = bh * 0.25;
+
+  ctx.translate(EyeX, EyeY);
+
+  ctx.drawImage(EyeImg, -EyeSizeX / 2, -EyeSizeY / 2, EyeSizeX, EyeSizeY);
 
   ctx.restore();
 
@@ -216,8 +263,6 @@ function drawFish(x, y, angle) {
   ctx.restore();
 
   drawNametag(x, y);
-
-  ctx.restore();
 }
 
 function drawNametag(x, y) {
@@ -227,26 +272,22 @@ function drawNametag(x, y) {
   const boxHeight = 18;
   const offsetY = 80;
 
-  ctx.save();
-
-  // NO translate/rotate based on fish angle
-
-  // optional floating animation
   const bob = Math.sin(performance.now() * 0.003) * 1.5;
 
-  const bx = -boxWidth / 2;
-  const by = offsetY + bob;
+  const bx = x - boxWidth / 2;
+  const by = y + offsetY + bob;
 
-  // background
+  ctx.save();
+
   ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
   ctx.fillRect(bx, by, boxWidth, boxHeight);
 
-  // text
   ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
   ctx.font = "12px Arial";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(name, 0, by + boxHeight / 2);
+
+  ctx.fillText(name, x, by + boxHeight / 2);
 
   ctx.restore();
 }
