@@ -77,10 +77,10 @@ const CONFIG = {
   },
 
   swarm: {
-    radius: 90,
-    separationWeight: 0.9,
-    alignmentWeight: 0.6,
-    cohesionWeight: 0.4,
+    radius: 200,
+    separationWeight: 0.15,
+    alignmentWeight: 0.8,
+    cohesionWeight: 1.5,
   },
 };
 
@@ -320,6 +320,7 @@ function drawNametag(fish) {
 function updateFish(fish) {
   senseMouse(fish);
   applyBrain(fish);
+  applySwarm(fish, fishes);
   applyPhysics(fish);
   applyConstraints(fish);
   AnimateFish(fish);
@@ -360,57 +361,75 @@ function applyBrain(fish) {
     fish.vy += (fish.dy / fish.dist) * force;
   }
 
-  // =========================
-  // WANDER SYSTEM
-  // =========================
-  const now = performance.now();
-
-  // 🚨 Panic cancels current goal
-  if (state === "panic") {
-    fish.wanderTarget = null;
-  }
-
-  // 🎯 Reached target → clear it + cooldown
-  if (fish.wanderTarget) {
-    let dx = fish.wanderTarget.x - fish.x;
-    let dy = fish.wanderTarget.y - fish.y;
-    let dist = Math.hypot(dx, dy);
-
-    if (dist < 10) {
-      fish.wanderTarget = null;
-      fish.nextWanderTime = now + 2000 + Math.random() * 3000; // 1–3 sec delay
-    }
-  }
-
-  // ⏳ Only pick new target if:
-  // - calm
-  // - no current target
-  // - cooldown passed
-  if (state === "calm" && !fish.wanderTarget && now > fish.nextWanderTime) {
-    fish.wanderTarget = {
-      x: 100 + Math.random() * (canvas.width - 200),
-      y: 100 + Math.random() * (canvas.height - 200),
-    };
-  }
-
-  // 🚫 Alert or panic → delay next decision
-  if ((state === "alert" || state === "panic") && fish.wanderTarget) {
-    fish.nextWanderTime = now + 1000 + Math.random() * 2000;
-    fish.wanderTarget = null;
-  }
-
-  // 🚶 Move toward target if exists
-  if (fish.wanderTarget && state === "calm") {
-    let dx = fish.wanderTarget.x - fish.x;
-    let dy = fish.wanderTarget.y - fish.y;
-    let dist = Math.hypot(dx, dy);
-
-    if (dist > 0) {
-      fish.vx += (dx / dist) * 0.2;
-      fish.vy += (dy / dist) * 0.2;
-    }
+  if (state === "calm") {
+    fish.vx += (Math.random() - 0.5) * 0.02;
+    fish.vy += (Math.random() - 0.5) * 0.02;
   }
 }
+
+function applySwarm(fish, fishes) {
+  let separation = { x: 0, y: 0 };
+  let alignment = { x: 0, y: 0 };
+  let cohesion = { x: 0, y: 0 };
+
+  let swarmFactor =
+    fish.state === "panic" ? 0.1 : fish.state === "alert" ? 0.5 : 1;
+
+  let count = 0;
+
+  for (let other of fishes) {
+    if (other === fish) continue;
+
+    let dx = fish.x - other.x;
+    let dy = fish.y - other.y;
+    let dist = Math.hypot(dx, dy);
+
+    if (dist < CONFIG.swarm.radius && dist > 0) {
+      // separation (push away)
+      separation.x += dx / dist;
+      separation.y += dy / dist;
+
+      // alignment (match velocity)
+      alignment.x += other.vx;
+      alignment.y += other.vy;
+
+      // cohesion (move toward center)
+      cohesion.x += other.x;
+      cohesion.y += other.y;
+
+      count++;
+    }
+  }
+
+  if (count > 0) {
+    // average
+    separation.x /= count;
+    separation.y /= count;
+
+    alignment.x /= count;
+    alignment.y /= count;
+
+    cohesion.x /= count;
+    cohesion.y /= count;
+
+    // cohesion target direction
+    cohesion.x = cohesion.x - fish.x;
+    cohesion.y = cohesion.y - fish.y;
+
+    if (fish.state === "panic" || fish.state === "alert") return;
+
+    // apply forces
+    fish.vx += separation.x * CONFIG.swarm.separationWeight * swarmFactor;
+    fish.vy += separation.y * CONFIG.swarm.separationWeight * swarmFactor;
+
+    fish.vx += alignment.x * CONFIG.swarm.alignmentWeight * swarmFactor;
+    fish.vy += alignment.y * CONFIG.swarm.alignmentWeight * swarmFactor;
+
+    fish.vx += cohesion.x * 0.001 * CONFIG.swarm.cohesionWeight * swarmFactor;
+    fish.vy += cohesion.y * 0.001 * CONFIG.swarm.cohesionWeight * swarmFactor;
+  }
+}
+
 function applyPhysics(fish) {
   const state = fish.state;
 
