@@ -54,7 +54,7 @@ const CONFIG = {
   alertRadius: 250,
 
   speed: {
-    calm: 1,
+    calm: 0.5,
     alert: 1.5,
     panic: 2.5,
   },
