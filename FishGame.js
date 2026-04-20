@@ -246,7 +246,7 @@ function drawFish(fish) {
 
   const EyeImg = fish.blinking
     ? assets.eyes.squeeze
-    : fish.state != "calm"
+    : fish.state === "alert" || fish.state === "panic"
       ? assets.eyes.panic
       : assets.eyes.calm;
 
