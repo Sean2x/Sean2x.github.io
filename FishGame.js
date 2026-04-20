@@ -79,7 +79,7 @@ const CONFIG = {
   swarm: {
     radius: 200,
     separationWeight: 0.15,
-    alignmentWeight: 0.8,
+    alignmentWeight: 0.01,
     cohesionWeight: 1.5,
   },
 };
