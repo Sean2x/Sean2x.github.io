@@ -75,6 +75,13 @@ const CONFIG = {
     alert: 1,
     panic: 1,
   },
+
+  swarm: {
+    radius: 90,
+    separationWeight: 0.9,
+    alignmentWeight: 0.6,
+    cohesionWeight: 0.4,
+  },
 };
 
 // =====================
@@ -239,7 +246,7 @@ function drawFish(fish) {
 
   const EyeImg = fish.blinking
     ? assets.eyes.squeeze
-    : fish.state === "alert"
+    : fish.state != "calm"
       ? assets.eyes.panic
       : assets.eyes.calm;
 
@@ -491,15 +498,7 @@ window.addEventListener("load", () => {
 
 let fishes = [];
 
-const fishNames = [
-  "Bibbles",
-  "Noodle",
-  "Glim",
-  "Wiggle",
-  "Sushi",
-  "Finley",
-  "Blurp",
-];
+const fishNames = ["Fred", "Dora", "Demetrius", "Memo", "Oscar"];
 
 for (let i = 0; i < fishNames.length; i++) {
   fishes.push(
