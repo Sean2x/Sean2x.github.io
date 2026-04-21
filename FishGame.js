@@ -498,12 +498,30 @@ function AnimateFish(fish) {
 // LOOP
 // =====================
 function animate() {
+  const start = performance.now();
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   for (let fish of fishes) {
     updateFish(fish);
     drawFish(fish);
   }
+
+  frameCount++;
+
+  const now = performance.now();
+
+  // FPS update
+  if (now - lastFpsUpdate >= 1000) {
+    fps = frameCount;
+    frameCount = 0;
+    lastFpsUpdate = now;
+  }
+
+  // CPU per frame (THIS is correct)
+  const cpu = performance.now() - start;
+
+  versionEl.textContent = `v1.6 | FPS:${fps} | Fish:${fishes.length} | CPU:${cpu.toFixed(1)}ms`;
 
   requestAnimationFrame(animate);
 }
@@ -528,3 +546,9 @@ for (let i = 0; i < fishNames.length; i++) {
     ),
   );
 }
+
+const versionEl = document.getElementById("version");
+
+let fps = 0;
+let frameCount = 0;
+let lastFpsUpdate = performance.now();
