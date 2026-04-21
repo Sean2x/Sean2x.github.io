@@ -526,10 +526,13 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
+let versionEl;
+
 window.addEventListener("load", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
+  versionEl = document.getElementById("version");
   animate();
 });
 
@@ -546,8 +549,6 @@ for (let i = 0; i < fishNames.length; i++) {
     ),
   );
 }
-
-const versionEl = document.getElementById("version");
 
 let fps = 0;
 let frameCount = 0;
