@@ -521,7 +521,7 @@ function animate() {
   // CPU per frame (THIS is correct)
   const cpu = performance.now() - start;
 
-  versionEl.textContent = `v1.6 | FPS:${fps} | Fish:${fishes.length} | CPU:${cpu.toFixed(1)}ms`;
+  versionEl.textContent = `v1.7 | FPS:${fps} | Fish:${fishes.length} | CPU:${cpu.toFixed(1)}ms`;
 
   requestAnimationFrame(animate);
 }
