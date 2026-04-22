@@ -320,9 +320,9 @@ function drawNametag(fish) {
 // UPDATE
 // =====================
 function updateFish(fish, dt) {
-  senseMouse(fish);
-  applyBrain(fish);
-  applySwarm(fish, fishes);
+  senseMouse(fish, dt);
+  applyBrain(fish, dt);
+  applySwarm(fish, fishes, dt);
   applyPhysics(fish, dt);
   applyConstraints(fish);
   AnimateFish(fish);
@@ -332,7 +332,7 @@ function updateFish(fish, dt) {
 // Fish Logic
 // =====================
 
-function senseMouse(fish) {
+function senseMouse(fish, dt) {
   let dx = fish.x - mouse.x;
   let dy = fish.y - mouse.y;
   let dist = Math.sqrt(dx * dx + dy * dy);
@@ -345,7 +345,7 @@ function senseMouse(fish) {
   else if (dist < CONFIG.alertRadius) fish.state = "alert";
   else fish.state = "calm";
 }
-function applyBrain(fish) {
+function applyBrain(fish, dt) {
   const state = fish.state;
 
   const force =
@@ -359,17 +359,17 @@ function applyBrain(fish) {
   // REACTION (existing)
   // =========================
   if (force > 0 && fish.dist > 0) {
-    fish.vx += (fish.dx / fish.dist) * force;
-    fish.vy += (fish.dy / fish.dist) * force;
+    fish.vx += (fish.dx / fish.dist) * dt * 240;
+    fish.vy += (fish.dy / fish.dist) * dt * 240;
   }
 
   if (state === "calm") {
-    fish.vx += (Math.random() - 0.5) * 0.02;
-    fish.vy += (Math.random() - 0.5) * 0.02;
+    fish.vx += (Math.random() - 0.5) * 0.02 * dt * 240;
+    fish.vy += (Math.random() - 0.5) * 0.02 * dt * 240;
   }
 }
 
-function applySwarm(fish, fishes) {
+function applySwarm(fish, fishes, dt) {
   let separation = { x: 0, y: 0 };
   let alignment = { x: 0, y: 0 };
   let cohesion = { x: 0, y: 0 };
@@ -421,14 +421,20 @@ function applySwarm(fish, fishes) {
     if (fish.state === "panic" || fish.state === "alert") return;
 
     // apply forces
-    fish.vx += separation.x * CONFIG.swarm.separationWeight * swarmFactor;
-    fish.vy += separation.y * CONFIG.swarm.separationWeight * swarmFactor;
+    fish.vx +=
+      separation.x * CONFIG.swarm.separationWeight * swarmFactor * dt * 240;
+    fish.vy +=
+      separation.y * CONFIG.swarm.separationWeight * swarmFactor * dt * 240;
 
-    fish.vx += alignment.x * CONFIG.swarm.alignmentWeight * swarmFactor;
-    fish.vy += alignment.y * CONFIG.swarm.alignmentWeight * swarmFactor;
+    fish.vx +=
+      alignment.x * CONFIG.swarm.alignmentWeight * swarmFactor * dt * 240;
+    fish.vy +=
+      alignment.y * CONFIG.swarm.alignmentWeight * swarmFactor * dt * 240;
 
-    fish.vx += cohesion.x * 0.001 * CONFIG.swarm.cohesionWeight * swarmFactor;
-    fish.vy += cohesion.y * 0.001 * CONFIG.swarm.cohesionWeight * swarmFactor;
+    fish.vx +=
+      cohesion.x * 0.001 * CONFIG.swarm.cohesionWeight * swarmFactor * dt * 240;
+    fish.vy +=
+      cohesion.y * 0.001 * CONFIG.swarm.cohesionWeight * swarmFactor * dt * 240;
   }
 }
 
@@ -529,7 +535,7 @@ function animate() {
   // CPU per frame
   const cpu = performance.now() - start;
 
-  versionEl.textContent = `v1.8 | FPS:${fps} | Fish:${fishes.length} | CPU:${cpu.toFixed(1)}ms | dt:${(dt * 1000).toFixed(1)}ms`;
+  versionEl.textContent = `v1.9 | FPS:${fps} | Fish:${fishes.length} | CPU:${cpu.toFixed(1)}ms | dt:${(dt * 1000).toFixed(1)}ms`;
 
   requestAnimationFrame(animate);
 }
