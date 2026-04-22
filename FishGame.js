@@ -373,6 +373,11 @@ function applyBrain(fish, dt) {
     fish.vx += (Math.random() - 0.5) * 0.02 * dt * 240;
     fish.vy += (Math.random() - 0.5) * 0.02 * dt * 240;
   }
+
+  if (!mouse.active) {
+    fish.state = "calm";
+    return;
+  }
 }
 
 function applySwarm(fish, fishes, dt) {
