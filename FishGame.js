@@ -91,8 +91,8 @@ const CONFIG = {
 // =====================
 
 let mouse = {
-  x: canvas.width / 2,
-  y: canvas.height / 2,
+  x: canvas.width,
+  y: canvas.height,
 };
 
 function createFish(x, y, name) {
