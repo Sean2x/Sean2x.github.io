@@ -9,6 +9,8 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+const FIXED_DT = 1 / 240;
+
 // =====================
 // ASSETS
 // =====================
@@ -317,11 +319,11 @@ function drawNametag(fish) {
 // =====================
 // UPDATE
 // =====================
-function updateFish(fish) {
+function updateFish(fish, dt) {
   senseMouse(fish);
   applyBrain(fish);
   applySwarm(fish, fishes);
-  applyPhysics(fish);
+  applyPhysics(fish, dt);
   applyConstraints(fish);
   AnimateFish(fish);
 }
@@ -430,7 +432,7 @@ function applySwarm(fish, fishes) {
   }
 }
 
-function applyPhysics(fish) {
+function applyPhysics(fish, dt) {
   const state = fish.state;
 
   fish.vx *= CONFIG.damping[state];
@@ -443,8 +445,8 @@ function applyPhysics(fish) {
     fish.vy = (fish.vy / speed) * CONFIG.speed[state];
   }
 
-  fish.x += fish.vx;
-  fish.y += fish.vy;
+  fish.x += fish.vx * dt * 240;
+  fish.y += fish.vy * dt * 240;
 
   // rotation
   let targetAngle = Math.atan2(fish.vy, fish.vx);
@@ -453,7 +455,7 @@ function applyPhysics(fish) {
     Math.cos(targetAngle - fish.angle),
   );
 
-  fish.angle += diff * 0.08;
+  fish.angle += diff * 0.08 * dt * 240;
 }
 function applyConstraints(fish) {
   //Wall margin
