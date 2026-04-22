@@ -134,6 +134,7 @@ let mouse = {
 // 🖱️ Desktop
 window.addEventListener("mousemove", (e) => {
   setTarget(e.clientX, e.clientY);
+  mouse.active = true;
 });
 
 // 👆 Mobile start
