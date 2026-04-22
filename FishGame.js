@@ -142,7 +142,7 @@ window.addEventListener(
   (e) => {
     const t = e.touches[0];
     setTarget(t.clientX, t.clientY);
-    active: true;
+    mouse.active = true;
   },
   { passive: false },
 );
