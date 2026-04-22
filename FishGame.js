@@ -497,19 +497,25 @@ function AnimateFish(fish) {
 // =====================
 // LOOP
 // =====================
+let lastTime = performance.now();
+
 function animate() {
   const start = performance.now();
+
+  const now = performance.now();
+
+  // ✅ delta time in seconds
+  const dt = Math.min((now - lastTime) / 1000, 0.033);
+  lastTime = now;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   for (let fish of fishes) {
-    updateFish(fish);
+    updateFish(fish, dt); // ✅ pass dt in
     drawFish(fish);
   }
 
   frameCount++;
-
-  const now = performance.now();
 
   // FPS update
   if (now - lastFpsUpdate >= 1000) {
@@ -518,10 +524,10 @@ function animate() {
     lastFpsUpdate = now;
   }
 
-  // CPU per frame (THIS is correct)
+  // CPU per frame
   const cpu = performance.now() - start;
 
-  versionEl.textContent = `v1.7 | FPS:${fps} | Fish:${fishes.length} | CPU:${cpu.toFixed(1)}ms`;
+  versionEl.textContent = `v1.7 | FPS:${fps} | Fish:${fishes.length} | CPU:${cpu.toFixed(1)}ms | dt:${(dt * 1000).toFixed(1)}ms`;
 
   requestAnimationFrame(animate);
 }
