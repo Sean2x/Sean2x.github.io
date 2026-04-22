@@ -93,6 +93,7 @@ const CONFIG = {
 let mouse = {
   x: canvas.width,
   y: canvas.height,
+  active: false,
 };
 
 function createFish(x, y, name) {
@@ -125,6 +126,7 @@ function createFish(x, y, name) {
 function setTarget(x, y) {
   mouse.x = x;
   mouse.y = y;
+  active: true;
 }
 
 // =====================
@@ -156,6 +158,10 @@ window.addEventListener(
   },
   { passive: false },
 );
+
+window.addEventListener("touchend", () => {
+  mouse.active = false;
+});
 // =====================
 // DRAW
 // =====================
