@@ -353,6 +353,11 @@ function senseMouse(fish, dt) {
 function applyBrain(fish, dt) {
   const state = fish.state;
 
+  if (!mouse.active) {
+    fish.state = "calm";
+    return;
+  }
+
   const force =
     state === "panic"
       ? CONFIG.force.panic
@@ -373,10 +378,7 @@ function applyBrain(fish, dt) {
     fish.vy += (Math.random() - 0.5) * 0.02 * dt * 240;
   }
 
-  if (!mouse.active) {
-    fish.state = "calm";
-    return;
-  }
+  
 }
 
 function applySwarm(fish, fishes, dt) {
