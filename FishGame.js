@@ -535,7 +535,7 @@ function animate() {
   // CPU per frame
   const cpu = performance.now() - start;
 
-  versionEl.textContent = `v1.9 | FPS:${fps} | Fish:${fishes.length} | CPU:${cpu.toFixed(1)}ms | dt:${(dt * 1000).toFixed(1)}ms`;
+  // versionEl.textContent = `v1.9 | FPS:${fps} | Fish:${fishes.length} | CPU:${cpu.toFixed(1)}ms | dt:${(dt * 1000).toFixed(1)}ms`;
 
   requestAnimationFrame(animate);
 }
