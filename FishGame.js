@@ -90,12 +90,6 @@ const CONFIG = {
 // ENTITY
 // =====================
 
-let mouse = {
-  x: canvas.width,
-  y: canvas.height,
-  active: false,
-};
-
 function createFish(x, y, name) {
   return {
     name,
@@ -126,9 +120,14 @@ function createFish(x, y, name) {
 function setTarget(x, y) {
   mouse.x = x;
   mouse.y = y;
-  active: true;
+  
 }
 
+let mouse = {
+  x: canvas.width,
+  y: canvas.height,
+  active: false,
+};
 // =====================
 // Listeners
 // =====================
@@ -153,7 +152,7 @@ window.addEventListener(
   (e) => {
     const t = e.touches[0];
     setTarget(t.clientX, t.clientY);
-
+    active: true;
     e.preventDefault(); // 🔥 critical
   },
   { passive: false },
