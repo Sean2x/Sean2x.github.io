@@ -90,12 +90,6 @@ const CONFIG = {
 // ENTITY
 // =====================
 
-let mouse = {
-  x: canvas.width,
-  y: canvas.height,
-  active: false,
-};
-
 function createFish(x, y, name) {
   return {
     name,
@@ -126,15 +120,21 @@ function createFish(x, y, name) {
 function setTarget(x, y) {
   mouse.x = x;
   mouse.y = y;
-  active: true;
+  
 }
 
+let mouse = {
+  x: canvas.width,
+  y: canvas.height,
+  active: false,
+};
 // =====================
 // Listeners
 // =====================
 // 🖱️ Desktop
 window.addEventListener("mousemove", (e) => {
   setTarget(e.clientX, e.clientY);
+  mouse.active = true;
 });
 
 // 👆 Mobile start
@@ -143,6 +143,7 @@ window.addEventListener(
   (e) => {
     const t = e.touches[0];
     setTarget(t.clientX, t.clientY);
+    mouse.active = true;
   },
   { passive: false },
 );
@@ -153,7 +154,7 @@ window.addEventListener(
   (e) => {
     const t = e.touches[0];
     setTarget(t.clientX, t.clientY);
-
+    
     e.preventDefault(); // 🔥 critical
   },
   { passive: false },
@@ -354,6 +355,11 @@ function senseMouse(fish, dt) {
 function applyBrain(fish, dt) {
   const state = fish.state;
 
+  if (!mouse.active) {
+    fish.state = "calm";
+    return;
+  }
+
   const force =
     state === "panic"
       ? CONFIG.force.panic
@@ -374,10 +380,7 @@ function applyBrain(fish, dt) {
     fish.vy += (Math.random() - 0.5) * 0.02 * dt * 240;
   }
 
-  if (!mouse.active) {
-    fish.state = "calm";
-    return;
-  }
+  
 }
 
 function applySwarm(fish, fishes, dt) {
@@ -546,7 +549,7 @@ function animate() {
   // CPU per frame
   const cpu = performance.now() - start;
 
-  // versionEl.textContent = `v1.9 | FPS:${fps} | Fish:${fishes.length} | CPU:${cpu.toFixed(1)}ms | dt:${(dt * 1000).toFixed(1)}ms`;
+  // versionEl.textContent = `v2.1 | FPS:${fps} | Fish:${fishes.length} | CPU:${cpu.toFixed(1)}ms | dt:${(dt * 1000).toFixed(1)}ms`;
 
   requestAnimationFrame(animate);
 }
