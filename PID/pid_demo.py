@@ -143,7 +143,7 @@ def move():
             previous_x, previous_y,
             x, y,
             fill="red",
-            width=2
+            width=3
         )
 
     previous_x = x
