@@ -55,6 +55,9 @@ line_y = 200  # y-coordinate of the line
 start_pos = [50, 400]
 ball_radius = 10
 
+previous_x = start_pos[0]
+previous_y = start_pos[1]
+
 kp = 0.31  # Proportional gain
 
 dy = 0
@@ -92,6 +95,7 @@ kd = 0
 
 def move():
     global dy, frame, acceleration
+    global previous_x, previous_y
 
     frame += 1
 
@@ -135,12 +139,15 @@ def move():
    
 
     if frame % 1 == 0:
-        canvas.create_oval(
-            x - 2, y - 2,
-            x + 2, y + 2,
+        canvas.create_line(
+            previous_x, previous_y,
+            x, y,
             fill="red",
-            outline="red"
+            width=2
         )
+
+    previous_x = x
+    previous_y = y
 
     canvas.tag_raise(dot)
 
