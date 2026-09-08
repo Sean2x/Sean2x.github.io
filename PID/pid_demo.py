@@ -1,15 +1,69 @@
-import tkinter as tk
-from turtle import position
 
-# Create window
+# =========================
+# IMPORTS
+
+import tkinter as tk
+
+# =========================
+# WINDOW SETTINGS
+
 window = tk.Tk()
 window.title("My First Simulator")
 
+# =========================
+# GUI
+
 # Create drawing area
-canvas = tk.Canvas(window, width=800, height=400)
-canvas.pack()
+canvas = tk.Canvas(
+    window, 
+    width=800, 
+    height=400,
+
+
+    )
+
+
+info = tk.Label(
+    window,
+    text="INFO\n\nPosition: 0\nVelocity: 0\nAcceleration: 0",
+    font=("Arial", 14),
+    justify="left",
+    width=70,
+    anchor="w",
+    bg="black",
+    fg="#b5179e"
+    
+)
+
+slider = tk.Scale(
+    window,
+    from_=0,
+    to=10,
+    orient="horizontal"
+)
+
+canvas.pack(fill="x")
+slider.pack(fill="x")
+info.pack(fill="x")
+
+
+# =========================
+# VARIABLES
 
 line_y = 200  # y-coordinate of the line
+
+start_pos = [50, 400]
+ball_radius = 10
+
+kp = 0.31  # Proportional gain
+
+dy = 0
+acceleration = 0
+frame = 0
+
+
+# =========================
+# SIMULATION OBJECTS
 
 # Create a target
 target = canvas.create_line(
@@ -18,9 +72,6 @@ target = canvas.create_line(
     dash=(1, 90)
 )
 
-start_pos = [50, 400]
-ball_radius = 10
-
 # Create a dot
 dot = canvas.create_oval(
     start_pos[0] - ball_radius, start_pos[1] - ball_radius,
@@ -28,41 +79,59 @@ dot = canvas.create_oval(
     fill="blue"
 )
 
+# =========================
+# PID
+# =========================
 
+kp = 0.31
+ki = 0
+kd = 0
 
-kp = 0.31  # Proportional gain
+# =========================
+# SIMULATION
 
-dy = 0
-
-frame = 0
-
-
-# Move the dot
 def move():
-    global dy, frame
+    global dy, frame, acceleration
 
     frame += 1
 
+    # -------------------------
+    # READ POSITION
+    # -------------------------
     position = canvas.coords(dot)               # Sensor
     x = (position[0] + position[2]) / 2
     y = (position[1] + position[3]) / 2
 
-    error = line_y - y                          # Error
+    # -------------------------
+    # PID
+    # -------------------------
+    error = line_y - y
+    acceleration = kp * error
 
-    acceleration = kp * error                   # Proportional
-    dy += acceleration * 0.05
+    # -------------------------
+    # PHYSICS
+    # -------------------------
+
+    dy += acceleration * 0.05       # Propotional
+    dy *= 0.95                      # Damping
 
 
-
-
-
-    
-
-
-    dy *= 0.98                                  # Plant
-
+    # -------------------------
+    # MOVE OBJECT
+    # -------------------------
 
     canvas.move(dot, 1, dy)
+
+    # -------------------------
+    # UPDATE DISPLAY
+    # -------------------------
+
+    info.config(
+        text=f"INFO\n\n"
+             f"Position: {y:.2f}\n"
+             f"Velocity: {dy:.2f}\n"
+             f"Acceleration: {acceleration:.2f}"
+    )
    
 
     if frame % 1 == 0:
@@ -77,8 +146,10 @@ def move():
 
     window.after(10, move)
 
-# Start moving
+# =========================
+# START PROGRAM
+# =========================
+
 move()
 
-# Keep window running
 window.mainloop()
