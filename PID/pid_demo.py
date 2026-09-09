@@ -14,15 +14,16 @@ window.title("My First Simulator")
 # Methods
 
 def start_simulation():
-    global x, velocity, acceleration, previous_x, previous_y, kp
+    global x, velocity, acceleration, previous_x, previous_y, kp, dampening
 
-    slider.set(kp)
+    KP.set(kp)
+    Dampening.set(dampening)
 
     move()
 
 
 def reset_simulation():
-    global x, velocity, acceleration, previous_x, previous_y, kp
+    global x, velocity, acceleration, previous_x, previous_y, kp, dampening
 
     velocity = 0
     acceleration = 0
@@ -38,8 +39,8 @@ def reset_simulation():
         start_pos[0] + ball_radius, start_pos[1] + ball_radius)
     canvas.delete("trail")
 
-    kp = slider.get()
-    
+    kp = KP.get()
+    dampening = Dampening.get()
 
 # =========================
 # GUI
@@ -66,12 +67,22 @@ info = tk.Label(
     
 )
 
-slider = tk.Scale(
+KP = tk.Scale(
     window,
     from_=0,
     to=1,
     resolution=0.01,
-    orient="horizontal"
+    orient="horizontal",
+    label="Kp",
+)
+
+Dampening = tk.Scale(
+    window,
+    from_=.5,
+    to=1,
+    resolution=0.01,
+    orient="horizontal",
+    label="Dampening Coeff",
 )
 
 reset_button = tk.Button(
@@ -83,7 +94,8 @@ reset_button = tk.Button(
 
 
 canvas.pack(fill="x")
-slider.pack(fill="x")
+KP.pack(fill="x")
+Dampening.pack(fill="x")
 info.pack(fill="x")
 reset_button.pack()
 
@@ -99,9 +111,12 @@ ball_radius = 10
 previous_x = start_pos[0]
 previous_y = start_pos[1]
 
-dy = 0
+dt = .05
+
+velocity = 0
 acceleration = 0
 frame = 0
+dampening = 0.95
 
 
 # =========================
@@ -133,7 +148,7 @@ kd = 0
 # SIMULATION
 
 def move():
-    global dy, frame, acceleration
+    global x, dy, frame, acceleration, velocity
     global previous_x, previous_y
 
     frame += 1
@@ -155,15 +170,15 @@ def move():
     # PHYSICS
     # -------------------------
 
-    dy += acceleration * 0.05       # Propotional
-    dy *= 0.95                      # Damping
+    velocity += acceleration * dt       # Propotional
+    velocity *= (dampening)                 # Damping
 
 
     # -------------------------
     # MOVE OBJECT
     # -------------------------
 
-    canvas.move(dot, 1, dy)
+    canvas.move(dot, 1, velocity)
 
     # -------------------------
     # UPDATE DISPLAY
@@ -172,7 +187,7 @@ def move():
     info.config(
         text=f"INFO\n\n"
              f"Position: {y:.2f}\n"
-             f"Velocity: {dy:.2f}\n"
+             f"Velocity: {velocity:.2f}\n"
              f"Acceleration: {acceleration:.2f}"
     )
    
