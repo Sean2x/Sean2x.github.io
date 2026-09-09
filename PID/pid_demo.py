@@ -13,6 +13,12 @@ window.title("My First Simulator")
 # =========================
 # Methods
 
+def update_sliders(value):
+    global kp, dampening
+
+    kp = KP.get()
+    dampening = Dampening.get()
+
 def start_simulation():
     global x, velocity, acceleration, previous_x, previous_y, kp, dampening
 
@@ -74,6 +80,7 @@ KP = tk.Scale(
     resolution=0.01,
     orient="horizontal",
     label="Kp",
+    command=update_sliders
 )
 
 Dampening = tk.Scale(
@@ -83,6 +90,7 @@ Dampening = tk.Scale(
     resolution=0.01,
     orient="horizontal",
     label="Dampening Coeff",
+    command=update_sliders
 )
 
 reset_button = tk.Button(
