@@ -10,6 +10,17 @@ import tkinter as tk
 window = tk.Tk()
 window.title("My First Simulator")
 
+# =========================
+# Methods
+
+def start_simulation():
+    global x, velocity, acceleration, previous_x, previous_y, kp
+
+    slider.set(kp)
+
+    move()
+
+
 def reset_simulation():
     global x, velocity, acceleration, previous_x, previous_y, kp
 
@@ -186,7 +197,7 @@ def move():
 # START PROGRAM
 # =========================
 
-move()
+start_simulation()
 
 window.mainloop()
 
