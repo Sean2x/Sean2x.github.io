@@ -10,6 +10,26 @@ import tkinter as tk
 window = tk.Tk()
 window.title("My First Simulator")
 
+def reset_simulation():
+    global x, velocity, acceleration, previous_x, previous_y, kp
+
+    velocity = 0
+    acceleration = 0
+
+
+    previous_x = start_pos[0]
+    previous_y = start_pos[1]
+
+
+    canvas.coords(
+        dot, 
+        start_pos[0] - ball_radius, start_pos[1] - ball_radius,
+        start_pos[0] + ball_radius, start_pos[1] + ball_radius)
+    canvas.delete("trail")
+
+    kp = slider.get()
+    
+
 # =========================
 # GUI
 
@@ -38,13 +58,23 @@ info = tk.Label(
 slider = tk.Scale(
     window,
     from_=0,
-    to=10,
+    to=1,
+    resolution=0.01,
     orient="horizontal"
 )
+
+reset_button = tk.Button(
+    window,
+    text="Reset",
+    command=reset_simulation
+)
+
+
 
 canvas.pack(fill="x")
 slider.pack(fill="x")
 info.pack(fill="x")
+reset_button.pack()
 
 
 # =========================
@@ -58,8 +88,6 @@ ball_radius = 10
 previous_x = start_pos[0]
 previous_y = start_pos[1]
 
-kp = 0.31  # Proportional gain
-
 dy = 0
 acceleration = 0
 frame = 0
@@ -71,7 +99,7 @@ frame = 0
 # Create a target
 target = canvas.create_line(
     0, line_y,
-    800, line_y,
+    10000, line_y,
     dash=(1, 90)
 )
 
@@ -143,7 +171,8 @@ def move():
             previous_x, previous_y,
             x, y,
             fill="red",
-            width=3
+            width=3,
+            tags="trail",
         )
 
     previous_x = x
@@ -160,3 +189,4 @@ def move():
 move()
 
 window.mainloop()
+
