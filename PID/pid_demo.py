@@ -205,8 +205,8 @@ dot = canvas.create_oval(
 # =========================
 
 kp = 0.2
-ki = 0
-kd = 0
+ki = .03
+kd = .04
 
 integral = 0
 previous_error = 0
