@@ -16,7 +16,7 @@ window.title("My First Simulator")
 def toggle_pause():
     global pause_simulation
     pause_simulation = not pause_simulation
-    if pause_simulation:
+    if not pause_simulation:
         pause_button.config(text="Resume")
     else:
         pause_button.config(text="Pause")
@@ -138,7 +138,7 @@ dt = .05
 velocity = 0
 acceleration = 0
 frame = 0
-dampening = 0.95
+dampening = 0.99
 pause_simulation = True
 
 
@@ -163,7 +163,7 @@ dot = canvas.create_oval(
 # PID
 # =========================
 
-kp = 0.31
+kp = 0.2
 ki = 0
 kd = 0
 
