@@ -2,6 +2,7 @@
 # =========================
 # IMPORTS
 
+from dbm import error
 import tkinter as tk
 
 # =========================
@@ -37,10 +38,13 @@ def start_simulation():
 
 
 def reset_simulation():
-    global x, velocity, acceleration, previous_x, previous_y, kp, dampening
+    global x, velocity, acceleration, previous_x, previous_y, kp, dampening, integral, previous_error
 
     velocity = 0
     acceleration = 0
+    
+    integral = 0
+    previous_error = 0
 
 
     previous_x = start_pos[0]
@@ -167,11 +171,14 @@ kp = 0.2
 ki = 0
 kd = 0
 
+integral = 0
+previous_error = 0
+
 # =========================
 # SIMULATION
 
 def move():
-    global x, dy, frame, acceleration, velocity
+    global x, dy, frame, acceleration, velocity, integral, previous_error
     global previous_x, previous_y
 
 
@@ -190,13 +197,36 @@ def move():
         # PID
         # -------------------------
         error = line_y - y
-        acceleration = kp * error
-    
+        
+        # P
+        proportional = kp * error
+        
+        # I
+        integral += error * dt
+        integral_output = ki * integral
+        
+        # I Clamping
+        
+        # D
+        if dt != 0 :
+            derivative = (error - previous_error) / dt
+        else:
+            derivative = 0
+            
+        derivative_output = kd * derivative
+        
+        # PID
+        
+        acceleration = proportional + integral_output + derivative_output
+        
+        # prev error
+        previous_error = error
+
         # -------------------------
         # PHYSICS
         # -------------------------
     
-        velocity += acceleration * dt       # Propotional
+        velocity += acceleration * dt       # Propotional 
         velocity *= (dampening)                 # Damping
     
     
