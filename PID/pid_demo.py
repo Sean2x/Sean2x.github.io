@@ -13,6 +13,14 @@ window.title("My First Simulator")
 # =========================
 # Methods
 
+def toggle_pause():
+    global pause_simulation
+    pause_simulation = not pause_simulation
+    if pause_simulation:
+        pause_button.config(text="Resume")
+    else:
+        pause_button.config(text="Pause")
+
 def update_sliders(value):
     global kp, dampening
 
@@ -54,7 +62,7 @@ def reset_simulation():
 # Create drawing area
 canvas = tk.Canvas(
     window, 
-    width=800, 
+    width=1600, 
     height=400,
 
 
@@ -99,6 +107,11 @@ reset_button = tk.Button(
     command=reset_simulation
 )
 
+pause_button = tk.Button(
+    window,
+    text="Pause",
+    command=toggle_pause
+)
 
 
 canvas.pack(fill="x")
@@ -106,6 +119,7 @@ KP.pack(fill="x")
 Dampening.pack(fill="x")
 info.pack(fill="x")
 reset_button.pack()
+pause_button.pack()
 
 
 # =========================
@@ -125,6 +139,7 @@ velocity = 0
 acceleration = 0
 frame = 0
 dampening = 0.95
+pause_simulation = True
 
 
 # =========================
@@ -159,60 +174,65 @@ def move():
     global x, dy, frame, acceleration, velocity
     global previous_x, previous_y
 
-    frame += 1
 
-    # -------------------------
-    # READ POSITION
-    # -------------------------
-    position = canvas.coords(dot)               # Sensor
-    x = (position[0] + position[2]) / 2
-    y = (position[1] + position[3]) / 2
+    if pause_simulation == True:
 
-    # -------------------------
-    # PID
-    # -------------------------
-    error = line_y - y
-    acceleration = kp * error
-
-    # -------------------------
-    # PHYSICS
-    # -------------------------
-
-    velocity += acceleration * dt       # Propotional
-    velocity *= (dampening)                 # Damping
-
-
-    # -------------------------
-    # MOVE OBJECT
-    # -------------------------
-
-    canvas.move(dot, 1, velocity)
-
-    # -------------------------
-    # UPDATE DISPLAY
-    # -------------------------
-
-    info.config(
-        text=f"INFO\n\n"
-             f"Position: {y:.2f}\n"
-             f"Velocity: {velocity:.2f}\n"
-             f"Acceleration: {acceleration:.2f}"
-    )
-   
-
-    if frame % 1 == 0:
-        canvas.create_line(
-            previous_x, previous_y,
-            x, y,
-            fill="red",
-            width=3,
-            tags="trail",
+        frame += 1
+        
+        # -------------------------
+        # READ POSITION
+        # -------------------------
+        position = canvas.coords(dot)               # Sensor
+        x = (position[0] + position[2]) / 2
+        y = (position[1] + position[3]) / 2
+        
+        # -------------------------
+        # PID
+        # -------------------------
+        error = line_y - y
+        acceleration = kp * error
+    
+        # -------------------------
+        # PHYSICS
+        # -------------------------
+    
+        velocity += acceleration * dt       # Propotional
+        velocity *= (dampening)                 # Damping
+    
+    
+        # -------------------------
+        # MOVE OBJECT
+        # -------------------------
+    
+        canvas.move(dot, 1, velocity)
+    
+        # -------------------------
+        # UPDATE DISPLAY
+        # -------------------------
+    
+        info.config(
+            text=f"INFO\n\n"
+                    f"Position: {y:.2f}\n"
+                    f"Velocity: {velocity:.2f}\n"
+                    f"Acceleration: {acceleration:.2f}"
         )
-
-    previous_x = x
-    previous_y = y
-
-    canvas.tag_raise(dot)
+        
+    
+        if frame % 1 == 0:
+            canvas.create_line(
+                previous_x, previous_y,
+                x, y,
+                fill="red",
+                width=3,
+                tags="trail",
+            )
+    
+        previous_x = x
+        previous_y = y
+    
+        canvas.tag_raise(dot)
+    
+        
 
     window.after(10, move)
 
