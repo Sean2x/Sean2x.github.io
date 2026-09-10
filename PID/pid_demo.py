@@ -26,6 +26,8 @@ def update_sliders(value):
     global kp, dampening
 
     kp = KP.get()
+    ki = KI.get()
+    kd = KD.get()
     dampening = Dampening.get()
 
 def start_simulation():
@@ -38,7 +40,7 @@ def start_simulation():
 
 
 def reset_simulation():
-    global x, velocity, acceleration, previous_x, previous_y, kp, dampening, integral, previous_error
+    global x, velocity, acceleration, previous_x, previous_y, kp, ki, kd, dampening, integral, previous_error
 
     velocity = 0
     acceleration = 0
@@ -58,6 +60,8 @@ def reset_simulation():
     canvas.delete("trail")
 
     kp = KP.get()
+    ki = KI.get()
+    kd = KD.get()
     dampening = Dampening.get()
 
 # =========================
@@ -95,6 +99,37 @@ KP = tk.Scale(
     command=update_sliders
 )
 
+KI = tk.Scale(
+    window,
+    from_=0,
+    to=1,
+    resolution=0.01,
+    orient="horizontal",
+    label="Ki",
+    command=update_sliders
+)
+
+KD = tk.Scale(
+    window,
+    from_=0,
+    to=1,
+    resolution=0.01,
+    orient="horizontal",
+    label="Kd",
+    command=update_sliders
+)
+
+
+KP = tk.Scale(
+    window,
+    from_=0,
+    to=1,
+    resolution=0.01,
+    orient="horizontal",
+    label="Kp",
+    command=update_sliders
+)
+
 Dampening = tk.Scale(
     window,
     from_=.5,
@@ -120,6 +155,8 @@ pause_button = tk.Button(
 
 canvas.pack(fill="x")
 KP.pack(fill="x")
+KI.pack(fill="x")
+KD.pack(fill="x")
 Dampening.pack(fill="x")
 info.pack(fill="x")
 reset_button.pack()
