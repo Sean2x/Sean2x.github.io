@@ -23,30 +23,37 @@ def toggle_pause():
         pause_button.config(text="Pause")
 
 def update_sliders(value):
-    global kp, dampening
+    global kp, ki, kd, dampening, target_y
 
+    
     kp = KP.get()
     ki = KI.get()
     kd = KD.get()
     dampening = Dampening.get()
 
 def start_simulation():
-    global x, velocity, acceleration, previous_x, previous_y, kp, dampening
-
+    global x, velocity, acceleration, previous_x, previous_y, kp, dampening, ki, kd, integral, previous_error, frame, target_y
+    
+    Target.delete(0, "end")
+    Target.insert(0, target_y)
     KP.set(kp)
+    KI.set(ki)
+    KD.set(kd)
     Dampening.set(dampening)
 
     move()
 
 
 def reset_simulation():
-    global x, velocity, acceleration, previous_x, previous_y, kp, ki, kd, dampening, integral, previous_error
+    global x, velocity, acceleration, previous_x, previous_y, kp, ki, kd, dampening, integral, previous_error, frame
 
     velocity = 0
     acceleration = 0
     
     integral = 0
     previous_error = 0
+    
+    frame = 0
 
 
     previous_x = start_pos[0]
@@ -59,10 +66,7 @@ def reset_simulation():
         start_pos[0] + ball_radius, start_pos[1] + ball_radius)
     canvas.delete("trail")
 
-    kp = KP.get()
-    ki = KI.get()
-    kd = KD.get()
-    dampening = Dampening.get()
+
 
 # =========================
 # GUI
@@ -79,13 +83,13 @@ canvas = tk.Canvas(
 
 info = tk.Label(
     window,
-    text="INFO\n\nPosition: 0\nVelocity: 0\nAcceleration: 0",
+    text="INFO\n\nPosition: 0\nVelocity: 0\nAcceleration: 0\n Integral: 0\n Output: 0",
     font=("Arial", 14),
     justify="left",
     width=70,
     anchor="w",
-    bg="black",
-    fg="#b5179e"
+    bg="white",
+    fg="black"
     
 )
 
@@ -140,6 +144,14 @@ Dampening = tk.Scale(
     command=update_sliders
 )
 
+Target = tk.Spinbox(
+    window,
+    from_=0,
+    to=400,
+    increment=50,
+    command=update_sliders,
+)
+
 reset_button = tk.Button(
     window,
     text="Reset",
@@ -154,11 +166,15 @@ pause_button = tk.Button(
 
 
 canvas.pack(fill="x")
+
+Target.pack(fill="x")
 KP.pack(fill="x")
 KI.pack(fill="x")
 KD.pack(fill="x")
 Dampening.pack(fill="x")
+
 info.pack(fill="x")
+
 reset_button.pack()
 pause_button.pack()
 
@@ -166,7 +182,7 @@ pause_button.pack()
 # =========================
 # VARIABLES
 
-line_y = 200  # y-coordinate of the line
+target_y = 200  # y-coordinate of the line
 
 start_pos = [50, 400]
 ball_radius = 10
@@ -188,8 +204,8 @@ pause_simulation = True
 
 # Create a target
 target = canvas.create_line(
-    0, line_y,
-    10000, line_y,
+    0, target_y,
+    10000, target_y,
     dash=(1, 90)
 )
 
@@ -216,12 +232,23 @@ previous_error = 0
 
 def move():
     global x, dy, frame, acceleration, velocity, integral, previous_error
-    global previous_x, previous_y
+    global previous_x, previous_y, target_y, kp, ki, kd, dampening
 
 
     if pause_simulation == True:
 
         frame += 1
+        
+        # -------------------------
+        # READ TARGER
+        # -------------------------
+        target_y = 400 -float(Target.get())
+        
+        canvas.coords(
+            target,
+            0, target_y,
+            10000, target_y
+        )
         
         # -------------------------
         # READ POSITION
@@ -230,10 +257,12 @@ def move():
         x = (position[0] + position[2]) / 2
         y = (position[1] + position[3]) / 2
         
+        
+        
         # -------------------------
         # PID
         # -------------------------
-        error = line_y - y
+        error = target_y - y
         
         # P
         proportional = kp * error
@@ -281,7 +310,9 @@ def move():
             text=f"INFO\n\n"
                     f"Position: {y:.2f}\n"
                     f"Velocity: {velocity:.2f}\n"
-                    f"Acceleration: {acceleration:.2f}"
+                    f"Acceleration: {acceleration:.2f}\n"
+                    f"Integral: {integral:.2f} \n"
+                    f"Output: {integral_output:.2f}"
         )
         
     
@@ -296,6 +327,8 @@ def move():
     
         previous_x = x
         previous_y = y
+        
+        
     
         canvas.tag_raise(dot)
     
