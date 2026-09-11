@@ -6,7 +6,49 @@ import time
 window = tk.Tk()
 window.title("Zero-G Flight Simulator")
 
+# =========================
+# RESET SIMULATION
 
+def reset_simulation():
+
+    global ball_x
+    global ball_y
+    global point_index
+
+    global x_speed
+    global y_speed
+    global velocity
+    global angle
+    global elevation
+
+    global previous_y_speed
+    global vertical_acceleration
+    global g_force
+
+    # Reset ball position
+    point_index = 0
+    ball_x, ball_y = points[0]
+
+    # Reset physics
+    x_speed = 0
+    y_speed = 0
+    velocity = 0
+    angle = 0
+    elevation = 400 - ball_y
+
+    previous_y_speed = 0
+    vertical_acceleration = 0
+    g_force = 1
+
+    # Move ball visually
+    canvas.coords(
+        ball,
+        ball_x - 10,
+        ball_y - 10,
+        ball_x + 10,
+        ball_y + 10
+    )
+    
 # =========================
 # CANVAS
 
@@ -67,18 +109,21 @@ canvas.create_line(
 
 
 # =========================
-# BALL
+# Plane
 
-ball = canvas.create_oval(
-    395, 195,
-    415, 215,
-    fill="white",
-    outline=""
-)
+
 
 
 # Ball position
 ball_x, ball_y = points[0]
+
+airplane_image = tk.PhotoImage(file="Sean2x.github.io\\PID\\airplane.png")
+
+airplane = canvas.create_image(
+    ball_x,
+    ball_y,
+    image=airplane_image
+)
 
 # Movement speed
 speed = 1
@@ -145,12 +190,20 @@ def move_ball():
 
     global previous_y_speed
     global vertical_acceleration
+    global g_force
 
 
     # =========================
     # END OF TRAJECTORY
 
     if point_index >= len(points) - 1:
+        reset_simulation()
+
+        window.after(
+            16,
+            move_ball
+        )
+
         return
 
 
@@ -196,20 +249,16 @@ def move_ball():
     # DRAW BALL
 
     canvas.coords(
-        ball,
-
-        ball_x - 10,
-        ball_y - 10,
-
-        ball_x + 10,
-        ball_y + 10
+    airplane,
+    ball_x,
+    ball_y
     )
 
 
     # =========================
     # FLIGHT DATA
 
-    if point_index < len(points) - 1:
+    if point_index < len(points) - 2:
 
         next_x, next_y = points[point_index + 1]
         future_x, future_y = points[point_index + 2]
