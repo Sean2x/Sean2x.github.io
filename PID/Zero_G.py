@@ -119,6 +119,8 @@ ball_x, ball_y = points[0]
 
 airplane_image = tk.PhotoImage(file="Sean2x.github.io\\PID\\airplane.png")
 
+airplane_image = airplane_image.subsample(2, 2)
+
 airplane = canvas.create_image(
     ball_x,
     ball_y,
