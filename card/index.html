@@ -1,0 +1,395 @@
+<!doctype html>
+<!-- Contact card — the NFC tag points here (sean2x.github.io/card).
+     Kept lightweight on purpose: it's often opened on mobile data right
+     after a tap, so no Tailwind/Bootstrap, just icons + fonts. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sean Lirazan · Contact</title>
+    <meta
+      name="description"
+      content="Sean Lirazan — mechanical engineer building robotics systems. Email, save my contact, or connect on LinkedIn, Instagram, YouTube, and GitHub."
+    />
+    <meta name="theme-color" content="#000000" />
+    <link rel="canonical" href="https://sean2x.github.io/card/" />
+    <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png" />
+
+    <!-- Link previews (iMessage, LinkedIn, Discord, X, ...) -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Sean Lirazan" />
+    <meta property="og:title" content="Sean Lirazan · Contact" />
+    <meta
+      property="og:description"
+      content="Mechanical engineer building robotics systems. Let's connect."
+    />
+    <meta property="og:url" content="https://sean2x.github.io/card/" />
+    <meta
+      property="og:image"
+      content="https://sean2x.github.io/assets/img/og-image.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        /* Same tokens as assets/css/style.css (matrix.js reads these) */
+        --lightMain: #b5179e;
+        --darkMain: #7209b7;
+        --dimmed: #b5179d36;
+        --glow: 0 0 10px #b5179d7d, 0 0 20px #b5179d12, 0 0 30px #b5179e33;
+        --text: #eadbe7;
+        --text-dim: #b9a3b5;
+        --panel: rgba(8, 0, 10, 0.82);
+        --mono: "Share Tech Mono", "Courier New", monospace;
+        --sans: "Inter", system-ui, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        touch-action: manipulation;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100svh;
+        background: #000;
+        color: var(--text);
+        font-family: var(--sans);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #matrixCanvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.45;
+      }
+
+      .wrap {
+        position: relative;
+        z-index: 1;
+        width: min(440px, 100%);
+        margin: 0 auto;
+        padding: max(2rem, env(safe-area-inset-top)) 1rem 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--dimmed);
+        border-radius: 20px;
+        box-shadow:
+          0 10px 40px rgba(0, 0, 0, 0.6),
+          0 0 30px #b5179e1f;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+      }
+
+      /* ---- Profile ---- */
+      .profile {
+        padding: 2rem 1.5rem 1.75rem;
+        text-align: center;
+        animation: rise 0.7s cubic-bezier(0.25, 1, 0.35, 1) both;
+      }
+
+      .avatar {
+        width: 116px;
+        height: 116px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--lightMain);
+        box-shadow: var(--glow);
+      }
+
+      h1 {
+        margin: 1rem 0 0.25rem;
+        font-family: var(--mono);
+        font-size: 2.2rem;
+        font-weight: normal;
+        color: var(--lightMain);
+        text-shadow: var(--glow);
+      }
+
+      .role {
+        margin: 0;
+        font-family: var(--mono);
+        font-size: clamp(0.8rem, 3.6vw, 0.95rem);
+        letter-spacing: 0.02em;
+        color: var(--text);
+      }
+
+      .quote {
+        margin: 1.25rem auto 1.5rem;
+        max-width: 30ch;
+        font-style: italic;
+        color: var(--text-dim);
+        line-height: 1.55;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 46px;
+        padding: 0.6rem 0.75rem;
+        white-space: nowrap;
+        border: 2px solid var(--lightMain);
+        border-radius: 12px;
+        font-family: var(--mono);
+        font-size: 0.95rem;
+        color: var(--lightMain);
+        text-decoration: none;
+        background: rgba(0, 0, 0, 0.5);
+        transition:
+          background-color 0.2s ease,
+          color 0.2s ease,
+          transform 0.2s ease;
+      }
+
+      .btn:hover,
+      .btn:focus-visible {
+        background: var(--lightMain);
+        color: #000;
+      }
+
+      .btn:active {
+        transform: scale(0.97);
+      }
+
+      .btn.primary {
+        background: var(--lightMain);
+        color: #000;
+      }
+
+      .btn.primary:hover {
+        background: #d63bbd;
+      }
+
+      .btn.wide {
+        grid-column: 1 / -1;
+      }
+
+      /* ---- Links ---- */
+      .links {
+        padding: 1.25rem;
+        animation: rise 0.7s 0.12s cubic-bezier(0.25, 1, 0.35, 1) both;
+      }
+
+      .links h2 {
+        margin: 0 0 1rem;
+        text-align: center;
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        font-weight: normal;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--text-dim);
+      }
+
+      .link {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        padding: 0.8rem 1rem;
+        border: 1px solid var(--dimmed);
+        border-radius: 14px;
+        color: var(--text);
+        text-decoration: none;
+        background: rgba(20, 0, 22, 0.55);
+        transition:
+          border-color 0.2s ease,
+          background-color 0.2s ease,
+          transform 0.2s ease;
+      }
+
+      .link + .link {
+        margin-top: 0.6rem;
+      }
+
+      .link:hover,
+      .link:focus-visible {
+        border-color: var(--lightMain);
+        background: #b5179e1f;
+        transform: translateY(-1px);
+      }
+
+      .link-icon {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        font-size: 1.15rem;
+        color: var(--lightMain);
+        background: #b5179e1a;
+      }
+
+      .link-text {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+
+      .link-text strong {
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      .link-text span {
+        font-family: var(--mono);
+        font-size: 0.8rem;
+        color: var(--text-dim);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .link .bi-arrow-up-right {
+        margin-left: auto;
+        color: var(--text-dim);
+        font-size: 0.85rem;
+      }
+
+      footer {
+        text-align: center;
+        font-family: var(--mono);
+        font-size: 0.8rem;
+      }
+
+      footer a {
+        color: var(--text-dim);
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        color: var(--lightMain);
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .profile,
+        .links {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="matrixCanvas"></canvas>
+
+    <main class="wrap">
+      <!-- Profile -->
+      <section class="panel profile">
+        <img
+          class="avatar"
+          src="../assets/img/headshot.jpeg"
+          alt="Sean Lirazan"
+          width="116"
+          height="116"
+        />
+        <h1>Sean Lirazan</h1>
+        <p class="role">Mechanical Engineer · Robotics Systems</p>
+        <p class="quote">"You don't need a cape. Just a wrench and a reason."</p>
+
+        <div class="actions">
+          <a class="btn primary" href="mailto:seanlirazan@gmail.com">
+            <i class="bi bi-envelope-fill"></i> Email me
+          </a>
+          <a class="btn" href="sean-lirazan.vcf" download="Sean Lirazan.vcf">
+            <i class="bi bi-person-plus-fill"></i> Save contact
+          </a>
+          <a class="btn wide" href="../index.html#about-me">
+            <i class="bi bi-person-badge"></i> About me
+          </a>
+        </div>
+      </section>
+
+      <!-- Links -->
+      <section class="panel links">
+        <h2>Connect with me</h2>
+
+        <a class="link" href="https://www.linkedin.com/in/seanlirazan/" target="_blank" rel="noopener">
+          <span class="link-icon"><i class="bi bi-linkedin"></i></span>
+          <span class="link-text">
+            <strong>LinkedIn</strong>
+            <span>in/seanlirazan</span>
+          </span>
+          <i class="bi bi-arrow-up-right"></i>
+        </a>
+
+        <a class="link" href="https://www.instagram.com/sean.applies.engineering/" target="_blank" rel="noopener">
+          <span class="link-icon"><i class="bi bi-instagram"></i></span>
+          <span class="link-text">
+            <strong>Instagram</strong>
+            <span>@sean.applies.engineering</span>
+          </span>
+          <i class="bi bi-arrow-up-right"></i>
+        </a>
+
+        <a class="link" href="https://www.youtube.com/@SeanAppliesEngineering" target="_blank" rel="noopener">
+          <span class="link-icon"><i class="bi bi-youtube"></i></span>
+          <span class="link-text">
+            <strong>YouTube</strong>
+            <span>@SeanAppliesEngineering</span>
+          </span>
+          <i class="bi bi-arrow-up-right"></i>
+        </a>
+
+        <a class="link" href="https://github.com/Sean2x" target="_blank" rel="noopener">
+          <span class="link-icon"><i class="bi bi-github"></i></span>
+          <span class="link-text">
+            <strong>GitHub</strong>
+            <span>github.com/Sean2x</span>
+          </span>
+          <i class="bi bi-arrow-up-right"></i>
+        </a>
+
+        <a class="link" href="https://www.snapchat.com/t/ayYvhvwP" target="_blank" rel="noopener">
+          <span class="link-icon"><i class="bi bi-snapchat"></i></span>
+          <span class="link-text">
+            <strong>Snapchat</strong>
+            <span>Add me on Snapchat</span>
+          </span>
+          <i class="bi bi-arrow-up-right"></i>
+        </a>
+      </section>
+
+      <footer>
+        <a href="../index.html">sean2x.github.io</a>
+      </footer>
+    </main>
+
+    <script src="../assets/js/matrix.js"></script>
+  </body>
+</html>

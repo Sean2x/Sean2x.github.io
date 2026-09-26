@@ -6,9 +6,12 @@ this essentially documents my website and all projects HTML/CSS/JS it links to
 
 ```
 index.html              Home page
-ConnectCard.html        Contact card (kept at the root so shared links keep working)
+ConnectCard.html        Redirect to card/ (old NFC tag URL) — keep until all tags are rewritten
 Lexicon.html,
 FishGame.html           Redirects from the old game URLs — safe to delete eventually
+
+card/                   Contact card — the NFC tag points to sean2x.github.io/card
+  sean-lirazan.vcf      "Save contact" file
 
 projects/
   index.html            All projects (cards are generated from assets/js/projects.js)
