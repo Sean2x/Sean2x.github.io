@@ -723,6 +723,56 @@ h3 {
 }
 
 /* ==========================================================================
+   Resume page (resume/index.html)
+   ========================================================================== */
+.resume-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px 60px;
+}
+
+.resume-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Sits above the CRT scanline overlay (z-index 50) so the text stays crisp */
+.resume-viewer {
+  z-index: 60;
+  border-radius: 15px;
+  padding: clamp(10px, 2vw, 20px);
+}
+
+.resume-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 300px;
+}
+
+/* Each page renders as white paper */
+.resume-page-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+}
+
+.resume-status {
+  margin: auto;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-weight: normal;
+  color: #eadbe7;
+  text-shadow: none;
+}
+
+/* ==========================================================================
    Project write-up pages (projects/*.html)
    A calm reading column: mono + glow for headings, plain sans for prose.
    ========================================================================== */

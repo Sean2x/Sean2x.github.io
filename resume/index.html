@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resume | Sean Lirazan</title>
+    <meta name="description" content="Resume of Sean Lirazan — mechanical engineering student at Iowa State University, open to robotics roles starting 2027." />
+    <link rel="canonical" href="https://sean2x.github.io/resume/" />
+    <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
+
+    <!-- Link previews (LinkedIn, iMessage, Discord, X, ...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sean Lirazan" />
+    <meta property="og:title" content="Resume | Sean Lirazan" />
+    <meta property="og:description" content="Resume of Sean Lirazan — mechanical engineering student at Iowa State University, open to robotics roles starting 2027." />
+    <meta property="og:url" content="https://sean2x.github.io/resume/" />
+    <meta property="og:image" content="https://sean2x.github.io/assets/img/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+
+  <body class="crt">
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- Header -->
+    <header id="header" class="header">
+      <div id="header1">
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <i class="bi bi-list hamburger"></i>
+          <a href="../index.html" aria-label="Home"
+            ><i class="logo bi bi-rocket-takeoff-fill rocket"></i
+          ></a>
+        </div>
+
+        <nav class="nav">
+          <a href="../index.html#about-me">About</a>
+          <a href="../projects/">Projects</a>
+          <a href="../card/" target="_blank">Contact</a>
+          <a href="../resume/">
+            Resume
+          </a>
+        </nav>
+      </div>
+
+      <div class="socials">
+        <a
+          href="https://www.instagram.com/sean.applies.engineering/"
+          class="logo bi bi-instagram"
+          target="_blank"
+          aria-label="Instagram"
+        ></a>
+        <a
+          href="https://github.com/Sean2x"
+          class="logo bi bi-github"
+          target="_blank"
+          aria-label="GitHub"
+        ></a>
+        <a
+          href="https://www.youtube.com/@SeanAppliesEngineering"
+          class="logo bi bi-youtube"
+          target="_blank"
+          aria-label="YouTube"
+        ></a>
+      </div>
+    </header>
+
+    <main class="resume-page">
+      <div class="page-intro">
+        <h1>Resume</h1>
+        <div class="resume-actions">
+          <a
+            class="btn-terminal primary"
+            href="../assets/docs/Sean-Lirazan-Resume.pdf"
+            download
+          >
+            Download PDF <i class="bi bi-download"></i>
+          </a>
+          <a
+            class="btn-terminal"
+            href="../assets/docs/Sean-Lirazan-Resume.pdf"
+            target="_blank"
+          >
+            Open in new tab <i class="bi bi-box-arrow-up-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Pages are drawn here by PDF.js from assets/docs/Sean-Lirazan-Resume.pdf,
+           so replacing that PDF is all it takes to update this page. -->
+      <section class="resume-viewer terminal-window" aria-label="Resume preview">
+        <div class="resume-pages" id="resumePages">
+          <p class="resume-status">Loading resume…</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="../assets/js/matrix.js"></script>
+    <script src="../assets/js/site.js"></script>
+    <script type="module">
+      // Render every page of the PDF to a canvas sized to the viewer
+      import * as pdfjs from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs";
+      pdfjs.GlobalWorkerOptions.workerSrc =
+        "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs";
+
+      const PDF_URL = "../assets/docs/Sean-Lirazan-Resume.pdf";
+      const container = document.getElementById("resumePages");
+
+      async function render() {
+        const pdf = await pdfjs.getDocument(PDF_URL).promise;
+        const width = container.clientWidth;
+        const dpr = window.devicePixelRatio || 1;
+        const pages = [];
+
+        for (let n = 1; n <= pdf.numPages; n++) {
+          const page = await pdf.getPage(n);
+          const base = page.getViewport({ scale: 1 });
+          const viewport = page.getViewport({ scale: (width / base.width) * dpr });
+          const canvas = document.createElement("canvas");
+          canvas.className = "resume-page-canvas";
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          canvas.setAttribute("role", "img");
+          canvas.setAttribute("aria-label", `Resume page ${n} of ${pdf.numPages}`);
+          await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+          pages.push(canvas);
+        }
+        container.replaceChildren(...pages);
+      }
+
+      render().catch(() => {
+        container.innerHTML =
+          '<p class="resume-status">Couldn\'t display the preview — use the buttons above to open or download the PDF.</p>';
+      });
+
+      // Re-render crisply after the viewer width changes (e.g. phone rotation)
+      let lastWidth = container.clientWidth;
+      let timer;
+      window.addEventListener("resize", () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          if (Math.abs(container.clientWidth - lastWidth) > 40) {
+            lastWidth = container.clientWidth;
+            render().catch(() => {});
+          }
+        }, 250);
+      });
+    </script>
+  </body>
+</html>

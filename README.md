@@ -10,6 +10,8 @@ ConnectCard.html        Redirect to card/ (old NFC tag URL) — keep until all t
 Lexicon.html,
 FishGame.html           Redirects from the old game URLs — safe to delete eventually
 
+resume/                 Resume viewer (renders assets/docs/Sean-Lirazan-Resume.pdf) + download
+
 card/                   Contact card — the NFC tag points to sean2x.github.io/card
   sean-lirazan.vcf      "Save contact" file
 
