@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <title>Fish Avoiding Mouse</title>
+    <meta
+      name="description"
+      content="The fish that run away from the mouse. It's a simple game where you control a mouse and try to catch the fish. The fish will try to avoid you, so you have to be quick and strategic to catch them all. It's a fun way to pass the time and challenge your reflexes."
+    />
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="icon" href="../../assets/img/favicon.ico" type="image/x-icon" />
+
+    <style>
+      :root {
+        --Ocean: #242057;
+        --Fish: #ff6347;
+        --Shark: #3b3a47;
+      }
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+
+      #bgVideo {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        z-index: -1; /* sits behind everything */
+      }
+      canvas {
+        position: relative; /* THIS is what you meant */
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+
+      #version {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        color: white;
+        font-family: monospace;
+        font-size: 20px;
+        opacity: 0.7;
+        z-index: 9999;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="version">v2.0.1</div>
+
+    <video id="bgVideo" autoplay muted loop playsinline>
+      <source src="ocean.mp4" type="video/mp4" />
+    </video>
+    <canvas id="canvas"></canvas>
+
+    <script src="fish-swarm.js"></script>
+  </body>
+</html>

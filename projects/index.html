@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Projects | Sean Lirazan</title>
+    <meta name="description" content="Every project Sean Lirazan has built, with write-ups on how each one came together." />
+    <link rel="canonical" href="https://sean2x.github.io/projects/" />
+    <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
+
+    <!-- Link previews (LinkedIn, iMessage, Discord, X, ...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sean Lirazan" />
+    <meta property="og:title" content="Projects | Sean Lirazan" />
+    <meta property="og:description" content="Every project Sean Lirazan has built, with write-ups on how each one came together." />
+    <meta property="og:url" content="https://sean2x.github.io/projects/" />
+    <meta property="og:image" content="https://sean2x.github.io/assets/img/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+
+  <body class="crt">
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- Header -->
+    <header id="header" class="header">
+      <div id="header1">
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <i class="bi bi-list hamburger"></i>
+          <a href="../index.html" aria-label="Home"
+            ><i class="logo bi bi-rocket-takeoff-fill rocket"></i
+          ></a>
+        </div>
+
+        <nav class="nav">
+          <a href="../index.html#about-me">About</a>
+          <a href="../projects/">Projects</a>
+          <a href="../ConnectCard.html" target="_blank">Contact</a>
+          <a href="../assets/docs/Sean-Lirazan-Resume.pdf" download>
+            Resume <i class="bi bi-download"></i>
+          </a>
+        </nav>
+      </div>
+
+      <div class="socials">
+        <a
+          href="https://www.instagram.com/sean.applies.engineering/"
+          class="logo bi bi-instagram"
+          target="_blank"
+          aria-label="Instagram"
+        ></a>
+        <a
+          href="https://github.com/Sean2x"
+          class="logo bi bi-github"
+          target="_blank"
+          aria-label="GitHub"
+        ></a>
+        <a
+          href="https://www.youtube.com/@SeanAppliesEngineering"
+          class="logo bi bi-youtube"
+          target="_blank"
+          aria-label="YouTube"
+        ></a>
+      </div>
+    </header>
+
+    <main>
+      <div class="page-intro">
+        <h1>Projects</h1>
+        <p>Everything I've built, newest first.</p>
+      </div>
+
+      <!-- Cards rendered by site.js from assets/js/projects.js -->
+      <section id="projects">
+        <div class="project-list" data-projects></div>
+      </section>
+    </main>
+
+    <script src="../assets/js/matrix.js"></script>
+    <script src="../assets/js/projects.js"></script>
+    <script src="../assets/js/site.js"></script>
+  </body>
+</html>

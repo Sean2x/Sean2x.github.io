@@ -2,13 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Fish Swarm | Sean Lirazan</title>
-    <meta name="description" content="Fish Swarm — project write-up by Sean Lirazan" />
-    <link rel="icon" href="../Images/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Ever wondered what it would be like to be a fish? Chase a swarm of fish that try to dodge your cursor—be quick and strategic to catch them all." />
+    <link rel="canonical" href="https://sean2x.github.io/projects/fish-swarm.html" />
+    <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
+
+    <!-- Link previews (LinkedIn, iMessage, Discord, X, ...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sean Lirazan" />
+    <meta property="og:title" content="Fish Swarm | Sean Lirazan" />
+    <meta property="og:description" content="Ever wondered what it would be like to be a fish? Chase a swarm of fish that try to dodge your cursor—be quick and strategic to catch them all." />
+    <meta property="og:url" content="https://sean2x.github.io/projects/fish-swarm.html" />
+    <meta property="og:image" content="https://sean2x.github.io/assets/img/projects/fish-swarm.png" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -19,10 +26,10 @@
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Share+Tech+Mono&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../NewStyle.css" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
 
   <body class="crt">
@@ -40,9 +47,9 @@
 
         <nav class="nav">
           <a href="../index.html#about-me">About</a>
-          <a href="../projects.html">Projects</a>
+          <a href="../projects/">Projects</a>
           <a href="../ConnectCard.html" target="_blank">Contact</a>
-          <a href="../Images/Sean Lirazan Resume 2.2.pdf" download>
+          <a href="../assets/docs/Sean-Lirazan-Resume.pdf" download>
             Resume <i class="bi bi-download"></i>
           </a>
         </nav>
@@ -62,68 +69,147 @@
           aria-label="GitHub"
         ></a>
         <a
-          href="../index.html#youtube"
+          href="https://www.youtube.com/@SeanAppliesEngineering"
           class="logo bi bi-youtube"
+          target="_blank"
           aria-label="YouTube"
         ></a>
       </div>
     </header>
 
     <main class="post">
-      <a class="back-link" href="../projects.html">
+      <a class="back-link" href="./">
         <i class="bi bi-arrow-left"></i> All projects
       </a>
 
-      <article class="post-window terminal-window">
-        <div class="terminal-window-top">
-          <div class="terminal-btn is-yellow"></div>
-          <div class="terminal-btn"></div>
-          <div class="terminal-btn"></div>
-          <span>fish-swarm</span>
-        </div>
+      <header class="post-header">
+        <ul class="post-tags">
+          <li>JavaScript</li>
+          <li>Canvas</li>
+          <li>Game</li>
+        </ul>
+        <h1 class="post-title">Fish Swarm</h1>
+        <p class="post-lede">
+          Ever wondered what it would be like to be a fish? Chase a swarm of fish that try to dodge your cursor—be quick and strategic to catch them all.
+        </p>
 
-        <header>
-          <h1>Fish Swarm</h1>
-          <p class="post-meta">JavaScript · Canvas · Game</p>
-        </header>
-
-        <!--
-          Hero: swap in a screenshot or a video demo, e.g.
-          <img src="../Images/your-screenshot.png" alt="..." />
-          <video src="../Images/your-demo.mp4" controls muted playsinline></video>
-        -->
-        <div class="post-hero">
-          <img src="../Images/Goldfish.png" alt="Goldfish from Fish Swarm" />
-        </div>
-
-        <div class="post-body">
-          <h2>Overview</h2>
-          <p>
-            Ever wondered what it would be like to be a fish? In this simple
-            game, you control a mouse trying to catch fish that are swimming
-            around the screen. The fish will try to avoid you, so you have to be
-            quick and strategic to catch them all. It's a fun way to pass the
-            time and challenge your reflexes.
-          </p>
-          <!--
-            Ideas for more sections:
-            <h2>Why I built it</h2>
-            <h2>How it works</h2>
-            <h2>Challenges</h2>
-            <h2>What I learned</h2>
-            <h2>What's next</h2>
-          -->
-        </div>
-
+        <!-- Quick facts — replace the dashes -->
+        <dl class="post-facts">
+          <div>
+            <dt>Timeline</dt>
+            <dd>—</dd>
+          </div>
+          <div>
+            <dt>Role</dt>
+            <dd>—</dd>
+          </div>
+          <div>
+            <dt>Tools</dt>
+            <dd>JavaScript, Canvas</dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd>Playable</dd>
+          </div>
+        </dl>
         <div class="post-links">
-          <a class="btn-terminal" href="../FishGame.html">
+          <a class="btn-terminal" href="../games/fish-swarm/">
             Play Fish Swarm <i class="bi bi-play-fill"></i>
           </a>
         </div>
+      </header>
+
+      <!-- Hero: the demo clip, with the thumbnail shown until it plays -->
+      <figure class="post-hero">
+        <video
+          src="../assets/video/projects/fish-swarm.mp4"
+          poster="../assets/img/projects/fish-swarm.png"
+          controls
+          playsinline
+          preload="none"
+        ></video>
+      </figure>
+
+      <article class="post-body">
+        <!--
+          Writing tips:
+          - Delete each <p class="todo"> as you replace it with your own words.
+          - Add photos anywhere with:
+              <figure>
+                <img src="../assets/img/projects/fish-swarm-step1.jpg" alt="..." />
+                <figcaption>What the reader is looking at</figcaption>
+              </figure>
+        -->
+
+        <section>
+          <h2>The spark</h2>
+          <!-- Where did the idea come from? What problem or curiosity started it? -->
+          <p class="todo">Coming soon: where the idea for this project came from.</p>
+        </section>
+
+        <section>
+          <h2>Goals</h2>
+          <!-- What did "done" look like? Keep it to a short list. -->
+          <p class="todo">Coming soon: what I set out to build.</p>
+        </section>
+
+        <section>
+          <h2>The journey</h2>
+          <!-- The story, in order. Copy an <li> per milestone; add a figure to any of them. -->
+          <ol class="timeline">
+            <li class="timeline-entry">
+              <span class="timeline-date">Step 1</span>
+              <h3>First prototype</h3>
+              <p class="todo">Coming soon.</p>
+            </li>
+            <li class="timeline-entry">
+              <span class="timeline-date">Step 2</span>
+              <h3>Iterating</h3>
+              <p class="todo">Coming soon.</p>
+            </li>
+            <li class="timeline-entry">
+              <span class="timeline-date">Step 3</span>
+              <h3>Shipping it</h3>
+              <p class="todo">Coming soon.</p>
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Challenges</h2>
+          <!-- What broke, what was harder than expected, and how you got past it. -->
+          <p class="todo">Coming soon: the hardest problems and how I solved them.</p>
+        </section>
+
+        <!-- One-sentence takeaway, highlighted -->
+        <aside class="callout">
+          <strong>Key lesson</strong>
+          <p class="todo">Coming soon.</p>
+        </aside>
+
+        <section>
+          <h2>Results</h2>
+          <!-- What it does now. Numbers, screenshots, and clips work well here. -->
+          <p class="todo">Coming soon: how it turned out.</p>
+        </section>
+
+        <section>
+          <h2>What I learned</h2>
+          <p class="todo">Coming soon.</p>
+        </section>
+
+        <section>
+          <h2>What's next</h2>
+          <p class="todo">Coming soon.</p>
+        </section>
       </article>
+
+      <!-- Previous / next project links, filled in from projects.js -->
+      <nav class="post-nav" data-post-nav="fish-swarm"></nav>
     </main>
 
-    <script src="../Matrix.js"></script>
-    <script src="../site.js"></script>
+    <script src="../assets/js/matrix.js"></script>
+    <script src="../assets/js/projects.js"></script>
+    <script src="../assets/js/site.js"></script>
   </body>
 </html>

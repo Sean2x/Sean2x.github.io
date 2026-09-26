@@ -1,5 +1,11 @@
-// Shared page behavior: mobile menu, project cards, hover previews, scroll reveal.
-// Load after projects.js (when the page lists projects).
+// Shared page behavior: mobile menu, project cards, hover previews,
+// write-up prev/next links, scroll reveal.
+// Load after projects.js (on pages that list projects).
+
+// Site root, derived from this script's own URL (assets/js/site.js), so
+// project paths resolve the same from any folder depth
+const SITE_ROOT = new URL("../../", document.currentScript.src);
+const fromRoot = (path) => new URL(path, SITE_ROOT).href;
 
 function toggleMenu() {
   document.querySelector(".nav").classList.toggle("active");
@@ -14,16 +20,17 @@ const escapeHtml = (s) =>
       ],
   );
 
+const projectPage = (p) => fromRoot(`projects/${p.slug}.html`);
+
 function projectCard(p) {
-  const page = `projects/${p.slug}.html`;
   const still = p.image
-    ? `<img src="${escapeHtml(p.image)}" alt="" loading="lazy" />`
+    ? `<img src="${fromRoot(p.image)}" alt="" loading="lazy" />`
     : `<i class="bi bi-${escapeHtml(p.icon || "code-slash")}"></i>`;
   const video = p.video
-    ? `<video src="${escapeHtml(p.video)}" muted loop playsinline preload="none"></video>`
+    ? `<video src="${fromRoot(p.video)}" muted loop playsinline preload="none"></video>`
     : "";
   const play = p.play
-    ? `<a class="btn-terminal" href="${escapeHtml(p.play)}">Play <i class="bi bi-play-fill"></i></a>`
+    ? `<a class="btn-terminal" href="${fromRoot(p.play)}">Play <i class="bi bi-play-fill"></i></a>`
     : "";
 
   return `
@@ -36,7 +43,7 @@ function projectCard(p) {
       </div>
       <div class="project-media">${still}${video}</div>
       <div class="project-info">
-        <h3><a class="project-link" href="${page}">${escapeHtml(p.title)}</a></h3>
+        <h3><a class="project-link" href="${projectPage(p)}">${escapeHtml(p.title)}</a></h3>
         <p class="project-tags">${p.tags.map(escapeHtml).join(" · ")}</p>
         <p class="project-summary">${escapeHtml(p.summary)}</p>
         <div class="project-actions">
@@ -60,14 +67,33 @@ function renderProjects() {
   });
 }
 
-// Play a card's preview clip while hovered; show the still image otherwise
+// Previous/next links at the end of a write-up: <nav data-post-nav="slug">
+function renderPostNav() {
+  const nav = document.querySelector("[data-post-nav]");
+  if (!nav || typeof PROJECTS === "undefined") return;
+  const i = PROJECTS.findIndex((p) => p.slug === nav.dataset.postNav);
+  if (i < 0) return;
+  const link = (p, dir) =>
+    p
+      ? `<a class="post-nav-link ${dir}" href="${projectPage(p)}">
+           <span>${dir === "prev" ? "← Previous" : "Next →"}</span>
+           <strong>${escapeHtml(p.title)}</strong>
+         </a>`
+      : "<span></span>";
+  nav.innerHTML = link(PROJECTS[i - 1], "prev") + link(PROJECTS[i + 1], "next");
+}
+
+// Play a card's preview clip while hovered with a mouse; touch devices keep
+// the still (a tap navigates, so it shouldn't start a download)
 function setupHoverPreviews() {
   document.querySelectorAll(".project-card").forEach((card) => {
     const video = card.querySelector(".project-media video");
     if (!video) return;
     video.addEventListener("playing", () => card.classList.add("previewing"));
-    card.addEventListener("mouseenter", () => video.play().catch(() => {}));
-    card.addEventListener("mouseleave", () => {
+    card.addEventListener("pointerenter", (e) => {
+      if (e.pointerType === "mouse") video.play().catch(() => {});
+    });
+    card.addEventListener("pointerleave", () => {
       card.classList.remove("previewing");
       video.pause();
       video.currentTime = 0;
@@ -94,5 +120,6 @@ function setupReveal() {
 }
 
 renderProjects();
+renderPostNav();
 setupHoverPreviews();
 setupReveal();

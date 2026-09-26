@@ -4,14 +4,32 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      content="width=device-width, initial-scale=1"
     />
     <title>Sean Lirazan | Portfolio</title>
     <meta
       name="description"
-      content="Professional portfolio with internship carousel and project showcase"
+      content="Sean Lirazan — mechanical engineer building robotics systems. Internships at NASA, Collins Aerospace, and John Deere, plus projects and write-ups."
     />
-    <link rel="icon" href="Images/favicon.ico" type="image/x-icon" />
+    <link rel="canonical" href="https://sean2x.github.io/" />
+    <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon" />
+
+    <!-- Link previews (LinkedIn, iMessage, Discord, X, ...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sean Lirazan" />
+    <meta property="og:title" content="Sean Lirazan | Mechanical Engineer" />
+    <meta
+      property="og:description"
+      content="Mechanical engineer building robotics systems. Internships at NASA, Collins Aerospace, and John Deere, plus projects and write-ups."
+    />
+    <meta property="og:url" content="https://sean2x.github.io/" />
+    <meta
+      property="og:image"
+      content="https://sean2x.github.io/assets/img/og-image.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -25,7 +43,7 @@
       href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="NewStyle.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
   </head>
 
   <body class="crt">
@@ -41,9 +59,9 @@
 
         <nav class="nav">
           <a href="#about-me">About</a>
-          <a href="#projects">Projects</a>
+          <a href="projects/">Projects</a>
           <a href="ConnectCard.html" target="_blank">Contact</a>
-          <a href="Images/Sean Lirazan Resume 2.2.pdf" download>
+          <a href="assets/docs/Sean-Lirazan-Resume.pdf" download>
             Resume <i class="bi bi-download"></i>
           </a>
         </nav>
@@ -62,7 +80,12 @@
           target="_blank"
           aria-label="GitHub"
         ></a>
-        <a href="#youtube" class="logo bi bi-youtube" aria-label="YouTube"></a>
+        <a
+          href="https://www.youtube.com/@SeanAppliesEngineering"
+          class="logo bi bi-youtube"
+          target="_blank"
+          aria-label="YouTube"
+        ></a>
       </div>
     </header>
 
@@ -79,7 +102,7 @@
 
           <div class="headshot-wrap">
             <img
-              src="Images/Headshot.jpeg"
+              src="assets/img/headshot.jpeg"
               class="terminal-window headshot"
               alt="Headshot of Sean Lirazan"
             />
@@ -108,7 +131,7 @@
           <div class="carousel-track">
             <div class="slide">
               <div class="image-box">
-                <img src="Images/Siaton_Farms.png" alt="Siaton Farms logo" />
+                <img src="assets/img/internships/siaton-farms.png" alt="Siaton Farms logo" />
               </div>
               <h3>Siaton Farms</h3>
               <p>Controls Engineer | Winter 2023</p>
@@ -116,7 +139,7 @@
 
             <div class="slide">
               <div class="image-box padded">
-                <img src="Images/MrDeere.png" alt="John Deere logo" />
+                <img src="assets/img/internships/john-deere.png" alt="John Deere logo" />
               </div>
               <h3>John Deere</h3>
               <p>Robotics Engineer | Summer 2025</p>
@@ -124,7 +147,7 @@
 
             <div class="slide">
               <div class="image-box padded logo-tint">
-                <img src="Images/RTX.png" alt="Collins Aerospace logo" />
+                <img src="assets/img/internships/collins-aerospace.png" alt="Collins Aerospace logo" />
               </div>
               <h3>Collins Aerospace</h3>
               <p>Systems Engineer | Spring 2026</p>
@@ -132,7 +155,7 @@
 
             <div class="slide">
               <div class="image-box padded">
-                <img src="Images/Nasa.png" alt="NASA logo" />
+                <img src="assets/img/internships/nasa.png" alt="NASA logo" />
               </div>
               <h3>NASA</h3>
               <p>Controls Engineer | Fall 2026</p>
@@ -145,7 +168,13 @@
       <section id="youtube">
         <div class="youtube-row">
           <div class="youtube-side desktop-only">
-            <h2>@SeanAppliesEngineering</h2>
+            <h2>
+              <a
+                href="https://www.youtube.com/@SeanAppliesEngineering"
+                target="_blank"
+                >@SeanAppliesEngineering</a
+              >
+            </h2>
           </div>
 
           <div class="youtube-center">
@@ -170,7 +199,7 @@
         <h2 class="section-title">Projects</h2>
         <div class="project-list" data-projects="3"></div>
         <div class="see-all">
-          <a class="btn-terminal" href="projects.html">
+          <a class="btn-terminal" href="projects/">
             See all projects <i class="bi bi-arrow-right"></i>
           </a>
         </div>
@@ -198,14 +227,18 @@
             target="_blank"
             aria-label="LinkedIn"
           ></a>
-          <a href="#" class="logo bi bi-envelope" aria-label="Email"></a>
+          <a
+            href="mailto:seanlirazan@gmail.com"
+            class="logo bi bi-envelope"
+            aria-label="Email"
+          ></a>
         </div>
       </section>
     </main>
 
-    <script src="Matrix.js"></script>
-    <script src="projects.js"></script>
-    <script src="site.js"></script>
+    <script src="assets/js/matrix.js"></script>
+    <script src="assets/js/projects.js"></script>
+    <script src="assets/js/site.js"></script>
     <script>
       // Internship carousel: endless auto-scroll; slides grow toward the
       // center and fade in/out at the edges
