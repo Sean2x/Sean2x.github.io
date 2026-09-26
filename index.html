@@ -90,38 +90,67 @@
     </header>
 
     <main>
-      <!-- About Me -->
-      <section id="about-me" class="apple-fade">
-        <div class="grid-item terminal-window">
-          <div class="terminal-window-top">
-            <div class="terminal-btn is-main"></div>
-            <div class="terminal-btn"></div>
-            <div class="terminal-btn"></div>
-            <span>About Me</span>
-          </div>
+      <!-- About Me: full-screen intro -->
+      <section id="about-me" class="hero">
+        <img
+          src="assets/img/headshot.jpeg"
+          class="hero-photo apple-fade"
+          alt="Headshot of Sean Lirazan"
+        />
 
-          <div class="headshot-wrap">
-            <img
-              src="assets/img/headshot.jpeg"
-              class="terminal-window headshot"
-              alt="Headshot of Sean Lirazan"
-            />
-          </div>
+        <div class="hero-text">
+          <p class="hero-kicker apple-fade" style="--delay: 0.1s">Hi, I'm</p>
+          <h1 class="hero-name apple-fade" style="--delay: 0.2s">
+            Sean Lirazan
+          </h1>
+          <!-- Typed out once by the script at the bottom; full text without JS.
+               data-text reserves the final size so nothing shifts while typing. -->
+          <p
+            class="hero-role apple-fade"
+            style="--delay: 0.3s"
+            data-text="Mechanical Engineer · Robotics Systems"
+          >
+            <span class="hero-role-live"
+              ><span class="typed">Mechanical Engineer · Robotics Systems</span
+              ><span class="caret" aria-hidden="true"></span
+            ></span>
+          </p>
+          <p class="hero-bio apple-fade" style="--delay: 0.4s">
+            I'm an engineer who blends mechanical, electrical, and software
+            design to build fantastical projects — the kind I hope will one day
+            inspire others. I believe science is genuinely magical: scratch the
+            surface and you'll find a world of fantasy.
+          </p>
 
-          <div class="about-text">
-            <h1 class="name">Sean Lirazan</h1>
-            <h2>
-              Mechanical Engineer | Robotics Systems | Building the Magic of
-              Creation
-            </h2>
-            <p class="desc">
-              I'm an engineer who mixes Mechanical, Electrical and Software to
-              build fantastical projects that will one day inspire others. I
-              believe science is genuinely magical, and just scraping the
-              surface can expose you to a world of fantasy.
-            </p>
+          <ul class="hero-facts apple-fade" style="--delay: 0.5s">
+            <li>
+              <i class="bi bi-mortarboard"></i>
+              B.S. Mechanical Engineering · Iowa State University · 2027
+            </li>
+            <li><i class="bi bi-geo-alt"></i> Los Angeles, CA</li>
+            <li>
+              <i class="bi bi-briefcase"></i>
+              Open to robotics roles starting 2027
+            </li>
+          </ul>
+
+          <div class="hero-actions apple-fade" style="--delay: 0.6s">
+            <a
+              class="btn-terminal primary"
+              href="assets/docs/Sean-Lirazan-Resume.pdf"
+              download
+            >
+              Resume <i class="bi bi-download"></i>
+            </a>
+            <a class="btn-terminal" href="projects/">
+              Projects <i class="bi bi-arrow-right"></i>
+            </a>
           </div>
         </div>
+
+        <a class="scroll-cue" href="#carousel" aria-label="Scroll down">
+          <i class="bi bi-chevron-down"></i>
+        </a>
       </section>
 
       <!-- Internships -->
@@ -240,6 +269,21 @@
     <script src="assets/js/projects.js"></script>
     <script src="assets/js/site.js"></script>
     <script>
+      // Hero tagline: type it out once, then leave the caret blinking
+      (function () {
+        const el = document.querySelector(".hero-role .typed");
+        if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          return;
+        }
+        const text = el.textContent;
+        el.textContent = "";
+        let i = 0;
+        setTimeout(function type() {
+          el.textContent = text.slice(0, ++i);
+          if (i < text.length) setTimeout(type, 55);
+        }, 700); // start once the fade-in has settled
+      })();
+
       // Internship carousel: endless auto-scroll; slides grow toward the
       // center and fade in/out at the edges
       (function () {
