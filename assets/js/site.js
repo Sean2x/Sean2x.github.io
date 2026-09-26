@@ -83,21 +83,45 @@ function renderPostNav() {
   nav.innerHTML = link(PROJECTS[i - 1], "prev") + link(PROJECTS[i + 1], "next");
 }
 
-// Play a card's preview clip while hovered with a mouse; touch devices keep
-// the still (a tap navigates, so it shouldn't start a download)
+// Preview clips: with a mouse they play on hover; on touch screens (no
+// hover) they play while the card is mostly on screen. The still shows
+// otherwise, and reduced-motion visitors only ever see the still.
 function setupHoverPreviews() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const touch = matchMedia("(hover: none)").matches;
+
+  const start = (video) => video.play().catch(() => {});
+  const stop = (card, video) => {
+    card.classList.remove("previewing");
+    video.pause();
+    video.currentTime = 0;
+  };
+
+  const inView = touch
+    ? new IntersectionObserver(
+        (entries) => {
+          entries.forEach(({ target: card, isIntersecting }) => {
+            const video = card.querySelector(".project-media video");
+            isIntersecting ? start(video) : stop(card, video);
+          });
+        },
+        { threshold: 0.6 },
+      )
+    : null;
+
   document.querySelectorAll(".project-card").forEach((card) => {
     const video = card.querySelector(".project-media video");
     if (!video) return;
     video.addEventListener("playing", () => card.classList.add("previewing"));
+
+    if (touch) {
+      inView.observe(card);
+      return;
+    }
     card.addEventListener("pointerenter", (e) => {
-      if (e.pointerType === "mouse") video.play().catch(() => {});
+      if (e.pointerType === "mouse") start(video);
     });
-    card.addEventListener("pointerleave", () => {
-      card.classList.remove("previewing");
-      video.pause();
-      video.currentTime = 0;
-    });
+    card.addEventListener("pointerleave", () => stop(card, video));
   });
 }
 

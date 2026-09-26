@@ -80,6 +80,16 @@ h3 {
   animation: scanline 8s linear infinite;
 }
 
+/* Media that should stay crisp: lifted above the CRT scanlines
+   (.crt::before, z-index 50) */
+.video-frame,
+.project-card,
+.post-hero,
+.resume-viewer {
+  position: relative;
+  z-index: 60;
+}
+
 ::-webkit-scrollbar {
   width: 14px;
 }
@@ -739,9 +749,7 @@ h3 {
   margin-top: 1rem;
 }
 
-/* Sits above the CRT scanline overlay (z-index 50) so the text stays crisp */
 .resume-viewer {
-  z-index: 60;
   border-radius: 15px;
   padding: clamp(10px, 2vw, 20px);
 }
