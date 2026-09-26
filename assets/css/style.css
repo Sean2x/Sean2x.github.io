@@ -81,13 +81,18 @@ h3 {
 }
 
 /* Media that should stay crisp: lifted above the CRT scanlines
-   (.crt::before, z-index 50) */
+   (.crt::before, z-index 50). Cards themselves keep the CRT look. */
 .video-frame,
-.project-card,
+.project-media,
 .post-hero,
 .resume-viewer {
   position: relative;
   z-index: 60;
+}
+
+/* Clicks/hover on a card's media fall through to the card and its link */
+.project-media {
+  pointer-events: none;
 }
 
 ::-webkit-scrollbar {
@@ -152,9 +157,11 @@ h3 {
     transform 1s cubic-bezier(0.25, 1, 0.35, 1) var(--delay, 0s);
 }
 
+/* End on `none`, not translateY(0): a lingering transform would trap
+   children (e.g. .project-media) under the CRT scanlines */
 .apple-fade.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 /* ==========================================================================
