@@ -439,23 +439,237 @@ h3 {
   overflow: hidden;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 0 20px;
 }
 
-.project-icon {
+/* Full-width card: media on the left, text on the right */
+.project-card {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 30px;
+  align-items: center;
+  padding: 50px 30px 30px;
+  border-radius: 15px;
+  transition:
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.project-card:hover {
+  background: #0d000bcc;
+  box-shadow:
+    0 0 20px #b5179eaa,
+    0 0 40px #b5179e44;
+}
+
+.project-media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--dimmed);
+  background: #111111bd;
   display: flex;
   align-items: center;
-  margin: 20px;
-  font-size: 200px;
+  justify-content: center;
+}
+
+.project-media img,
+.project-media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Stills are shown whole (logos, sprites, odd-sized screenshots) */
+.project-media img {
+  object-fit: contain;
+  padding: 10px;
+}
+
+.project-media .bi {
+  font-size: clamp(60px, 10vw, 140px);
   color: var(--lightMain);
   text-shadow: var(--glow);
 }
 
-.project-body {
-  padding-top: 10px;
+/* Preview clip sits over the still and fades in once it's playing */
+.project-media video {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.project-card.previewing .project-media video {
+  opacity: 1;
+}
+
+.project-info h3 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.project-link {
+  text-decoration: none;
+}
+
+/* Whole card is clickable via the title link */
+.project-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.project-tags {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.project-summary {
+  font-weight: normal;
+  line-height: 1.6;
+}
+
+.project-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Sits above the card-wide link so it stays separately clickable */
+.project-actions .btn-terminal {
+  position: relative;
+  z-index: 2;
+}
+
+.read-more .bi {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.project-card:hover .read-more .bi {
+  transform: translateX(6px);
+}
+
+.see-all {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0 20px;
+}
+
+/* Outlined terminal-style button */
+.btn-terminal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border: 2px solid var(--lightMain);
+  border-radius: 8px;
+  background: var(--lightbg);
+  box-shadow: var(--glow);
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-terminal:hover {
+  background: var(--lightMain);
+  color: #000;
+  text-shadow: none;
+}
+
+/* ==========================================================================
+   Projects index page
+   ========================================================================== */
+.page-intro {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+
+.page-intro h1 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+}
+
+.page-intro p {
+  font-weight: normal;
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   Project write-up pages (projects/*.html)
+   ========================================================================== */
+.post {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 20px 60px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  text-decoration: none;
+}
+
+.post-window {
+  border-radius: 15px;
+  padding: 60px 40px 40px;
+}
+
+.post-meta {
+  opacity: 0.7;
+}
+
+.post-hero {
+  margin: 30px 0;
+}
+
+.post-hero video,
+.post-hero img {
+  display: block;
+  max-width: 100%;
+  max-height: 60vh;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+.post-hero video {
+  width: 100%;
+}
+
+.post-body h2 {
+  margin-top: 2rem;
+}
+
+/* Long-form text reads better without the heavy glow */
+.post-body p,
+.post-body li {
+  font-weight: normal;
+  line-height: 1.7;
+  text-shadow: none;
+}
+
+.post-body li {
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  color: var(--lightMain);
+}
+
+.post-body img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.post-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
 /* ==========================================================================
@@ -578,7 +792,17 @@ h3 {
     width: 78vw;
   }
 
-  .grid-container {
+  .project-list {
+    padding: 0;
+  }
+
+  .project-card {
     grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 45px 16px 20px;
+  }
+
+  .post-window {
+    padding: 50px 16px 24px;
   }
 }
