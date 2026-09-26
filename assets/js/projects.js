@@ -20,16 +20,16 @@
 //   play     optional link to a live demo, shown as a button on the card
 const PROJECTS = [
   {
-    slug: "portfolio-website",
-    title: "Portfolio Website",
+    slug: "fish-swarm",
+    title: "Fish Swarm",
     summary:
-      "My first serious dive into the raw mechanics of the web—learning how HTML structures ideas, CSS shapes them visually, and JavaScript gives them motion and behavior.",
-    tags: ["HTML", "CSS", "JavaScript"],
-    light: "green",
-    image: "assets/img/projects/portfolio-website.png",
-    icon: "code-slash",
-    video: "assets/video/projects/portfolio-website.mp4",
-    play: "",
+      "Ever wondered what it would be like to be a fish? Chase a swarm of fish that try to dodge your cursor—be quick and strategic to catch them all.",
+    tags: ["JavaScript", "Canvas", "Game"],
+    light: "yellow",
+    image: "assets/img/projects/fish-swarm.png",
+    icon: "water",
+    video: "assets/video/projects/fish-swarm.mp4",
+    play: "games/fish-swarm/",
   },
   {
     slug: "lexicon",
@@ -44,15 +44,15 @@ const PROJECTS = [
     play: "games/lexicon/",
   },
   {
-    slug: "fish-swarm",
-    title: "Fish Swarm",
+    slug: "portfolio-website",
+    title: "Portfolio Website",
     summary:
-      "Ever wondered what it would be like to be a fish? Chase a swarm of fish that try to dodge your cursor—be quick and strategic to catch them all.",
-    tags: ["JavaScript", "Canvas", "Game"],
-    light: "yellow",
-    image: "assets/img/projects/fish-swarm.png",
-    icon: "water",
-    video: "assets/video/projects/fish-swarm.mp4",
-    play: "games/fish-swarm/",
+      "My first serious dive into the raw mechanics of the web—learning how HTML structures ideas, CSS shapes them visually, and JavaScript gives them motion and behavior.",
+    tags: ["HTML", "CSS", "JavaScript"],
+    light: "green",
+    image: "assets/img/projects/portfolio-website.png",
+    icon: "code-slash",
+    video: "assets/video/projects/portfolio-website.mp4",
+    play: "",
   },
 ];

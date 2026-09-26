@@ -93,59 +93,62 @@
     <main>
       <!-- About Me: full-screen intro -->
       <section id="about-me" class="hero">
-        <img
-          src="assets/img/headshot.jpeg"
-          class="hero-photo apple-fade"
-          alt="Headshot of Sean Lirazan"
-        />
+        <!-- Semi-transparent panel keeps the text readable over the Matrix rain -->
+        <div class="hero-panel terminal-window">
+          <img
+            src="assets/img/headshot.jpeg"
+            class="hero-photo apple-fade"
+            alt="Headshot of Sean Lirazan"
+          />
 
-        <div class="hero-text">
-          <p class="hero-kicker apple-fade" style="--delay: 0.1s">Hi, I'm</p>
-          <h1 class="hero-name apple-fade" style="--delay: 0.2s">
-            Sean Lirazan
-          </h1>
-          <!-- Typed out once by the script at the bottom; full text without JS.
-               data-text reserves the final size so nothing shifts while typing. -->
-          <p
-            class="hero-role apple-fade"
-            style="--delay: 0.3s"
-            data-text="Mechanical Engineer · Robotics Systems"
-          >
-            <span class="hero-role-live"
-              ><span class="typed">Mechanical Engineer · Robotics Systems</span
-              ><span class="caret" aria-hidden="true"></span
-            ></span>
-          </p>
-          <p class="hero-bio apple-fade" style="--delay: 0.4s">
-            I'm an engineer who blends mechanical, electrical, and software
-            design to build fantastical projects — the kind I hope will one day
-            inspire others. I believe science is genuinely magical: scratch the
-            surface and you'll find a world of fantasy.
-          </p>
-
-          <ul class="hero-facts apple-fade" style="--delay: 0.5s">
-            <li>
-              <i class="bi bi-mortarboard"></i>
-              B.S. Mechanical Engineering · Iowa State University · 2027
-            </li>
-            <li><i class="bi bi-geo-alt"></i> Los Angeles, CA</li>
-            <li>
-              <i class="bi bi-briefcase"></i>
-              Open to robotics roles starting 2027
-            </li>
-          </ul>
-
-          <div class="hero-actions apple-fade" style="--delay: 0.6s">
-            <a
-              class="btn-terminal primary"
-              href="assets/docs/Sean-Lirazan-Resume.pdf"
-              download
+          <div class="hero-text">
+            <p class="hero-kicker apple-fade" style="--delay: 0.1s">Hi, I'm</p>
+            <h1 class="hero-name apple-fade" style="--delay: 0.2s">
+              Sean Lirazan
+            </h1>
+            <!-- Typed out once by the script at the bottom; full text without JS.
+                 data-text reserves the final size so nothing shifts while typing. -->
+            <p
+              class="hero-role apple-fade"
+              style="--delay: 0.3s"
+              data-text="Mechanical Engineer · Robotics Systems"
             >
-              Resume <i class="bi bi-download"></i>
-            </a>
-            <a class="btn-terminal" href="projects/">
-              Projects <i class="bi bi-arrow-right"></i>
-            </a>
+              <span class="hero-role-live"
+                ><span class="typed">Mechanical Engineer · Robotics Systems</span
+                ><span class="caret" aria-hidden="true"></span
+              ></span>
+            </p>
+            <p class="hero-bio apple-fade" style="--delay: 0.4s">
+              I'm an engineer who blends mechanical, electrical, and software
+              design to build fantastical projects — the kind I hope will one day
+              inspire others. I believe science is genuinely magical: scratch the
+              surface and you'll find a world of fantasy.
+            </p>
+
+            <ul class="hero-facts apple-fade" style="--delay: 0.5s">
+              <li>
+                <i class="bi bi-mortarboard"></i>
+                B.S. Mechanical Engineering · Iowa State University · 2027
+              </li>
+              <li><i class="bi bi-geo-alt"></i> Los Angeles, CA</li>
+              <li>
+                <i class="bi bi-briefcase"></i>
+                Open to robotics roles starting 2027
+              </li>
+            </ul>
+
+            <div class="hero-actions apple-fade" style="--delay: 0.6s">
+              <a
+                class="btn-terminal primary"
+                href="assets/docs/Sean-Lirazan-Resume.pdf"
+                download
+              >
+                Resume <i class="bi bi-download"></i>
+              </a>
+              <a class="btn-terminal" href="projects/">
+                Projects <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -237,31 +240,31 @@
 
       <!-- Contact -->
       <section id="contact">
-        <div class="contact-text">
-          <h1 class="big apple-fade">Collaborate?</h1>
-          <h1 class="big apple-fade">Sponsor?</h1>
-          <h1 class="medium apple-fade">Or just ask questions</h1>
-          <p class="apple-fade">My DMs are always open!</p>
-        </div>
+        <div class="contact-panel terminal-window apple-fade">
+          <div class="contact-text">
+            <h2>Collaborate? Sponsor?</h2>
+            <p>Or just ask questions — my DMs are always open.</p>
+          </div>
 
-        <div class="contact-icons">
-          <a
-            href="https://www.instagram.com/sean.applies.engineering/"
-            class="logo bi bi-instagram"
-            target="_blank"
-            aria-label="Instagram"
-          ></a>
-          <a
-            href="https://www.linkedin.com/in/seanlirazan/"
-            class="logo bi bi-linkedin"
-            target="_blank"
-            aria-label="LinkedIn"
-          ></a>
-          <a
-            href="mailto:seanlirazan@gmail.com"
-            class="logo bi bi-envelope"
-            aria-label="Email"
-          ></a>
+          <div class="contact-links">
+            <a class="btn-terminal primary" href="mailto:seanlirazan@gmail.com">
+              <i class="bi bi-envelope"></i> Email
+            </a>
+            <a
+              class="btn-terminal"
+              href="https://www.linkedin.com/in/seanlirazan/"
+              target="_blank"
+            >
+              <i class="bi bi-linkedin"></i> LinkedIn
+            </a>
+            <a
+              class="btn-terminal"
+              href="https://www.instagram.com/sean.applies.engineering/"
+              target="_blank"
+            >
+              <i class="bi bi-instagram"></i> Instagram
+            </a>
+          </div>
         </div>
       </section>
     </main>
