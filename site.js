@@ -53,6 +53,10 @@ function renderProjects() {
   document.querySelectorAll("[data-projects]").forEach((list) => {
     const limit = parseInt(list.dataset.projects, 10) || PROJECTS.length;
     list.innerHTML = PROJECTS.slice(0, limit).map(projectCard).join("");
+    // Stagger cards that reveal together
+    list.querySelectorAll(".project-card").forEach((card, i) => {
+      card.style.setProperty("--delay", `${(i % 3) * 0.15}s`);
+    });
   });
 }
 
