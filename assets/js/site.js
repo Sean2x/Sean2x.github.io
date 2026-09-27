@@ -138,9 +138,17 @@ function setupReveal() {
     },
     { threshold: 0.2 },
   );
-  document
-    .querySelectorAll(".apple-fade")
-    .forEach((el) => observer.observe(el));
+  const all = [...document.querySelectorAll(".apple-fade")];
+
+  // The intro is the first screen, so its pieces animate on load. Waiting
+  // for them to scroll into view fails on phones: they start 70px low,
+  // fully clipped by the panel, so they'd never count as visible.
+  const intro = all.filter((el) => el.closest(".hero"));
+  requestAnimationFrame(() =>
+    requestAnimationFrame(() => intro.forEach((el) => el.classList.add("show"))),
+  );
+
+  all.filter((el) => !el.closest(".hero")).forEach((el) => observer.observe(el));
 }
 
 renderProjects();

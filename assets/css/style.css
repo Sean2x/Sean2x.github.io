@@ -299,6 +299,14 @@ h3 {
   padding: 2rem clamp(1rem, 4vw, 3rem) 5rem;
 }
 
+/* Never scroll internally: before its pieces fade in they sit 70px low,
+   which would otherwise give the panel a scrollbar on phones (where
+   .terminal-window gets overflow: auto) */
+.terminal-window.hero-panel {
+  overflow: hidden;
+  overflow: clip;
+}
+
 /* Same semi-transparent terminal panel as the project cards */
 .hero-panel {
   display: grid;
