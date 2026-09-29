@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Lexicon | Sean Lirazan</title>
-    <meta name="description" content="A spelling game built with HTML, CSS, and JavaScript—an interactive way for players to test their spelling." />
+    <meta name="description" content="A browser spelling game inspired by Bookworm Adventures — 10+ players kept coming back for 7+ days straight." />
     <link rel="canonical" href="https://sean2x.github.io/projects/lexicon.html" />
     <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
 
@@ -12,7 +12,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sean Lirazan" />
     <meta property="og:title" content="Lexicon | Sean Lirazan" />
-    <meta property="og:description" content="A spelling game built with HTML, CSS, and JavaScript—an interactive way for players to test their spelling." />
+    <meta property="og:description" content="A browser spelling game inspired by Bookworm Adventures — 10+ players kept coming back for 7+ days straight." />
     <meta property="og:url" content="https://sean2x.github.io/projects/lexicon.html" />
     <meta property="og:image" content="https://sean2x.github.io/assets/img/projects/lexicon.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -91,18 +91,17 @@
         </ul>
         <h1 class="post-title">Lexicon</h1>
         <p class="post-lede">
-          A spelling game built with HTML, CSS, and JavaScript—an interactive way for players to test their spelling.
+          A browser spelling game inspired by Bookworm Adventures — and the project that taught me the user decides what's fun.
         </p>
 
-        <!-- Quick facts — replace the dashes -->
         <dl class="post-facts">
           <div>
             <dt>Timeline</dt>
-            <dd>—</dd>
+            <dd>January – March 2026</dd>
           </div>
           <div>
             <dt>Role</dt>
-            <dd>—</dd>
+            <dd>Developer, Game Designer</dd>
           </div>
           <div>
             <dt>Tools</dt>
@@ -110,9 +109,10 @@
           </div>
           <div>
             <dt>Status</dt>
-            <dd>Playable</dd>
+            <dd>Polished MVP complete</dd>
           </div>
         </dl>
+
         <div class="post-links">
           <a class="btn-terminal" href="../games/lexicon/">
             Play Lexicon <i class="bi bi-play-fill"></i>
@@ -120,7 +120,6 @@
         </div>
       </header>
 
-      <!-- Hero: the demo clip, with the thumbnail shown until it plays -->
       <figure class="post-hero">
         <video
           src="../assets/video/projects/lexicon.mp4"
@@ -132,76 +131,135 @@
       </figure>
 
       <article class="post-body">
-        <!--
-          Writing tips:
-          - Delete each <p class="todo"> as you replace it with your own words.
-          - Add photos anywhere with:
-              <figure>
-                <img src="../assets/img/projects/lexicon-step1.jpg" alt="..." />
-                <figcaption>What the reader is looking at</figcaption>
-              </figure>
-        -->
-
         <section>
           <h2>The spark</h2>
-          <!-- Where did the idea come from? What problem or curiosity started it? -->
-          <p class="todo">Coming soon: where the idea for this project came from.</p>
+          <p>When I was younger, my mom and I played a game called <strong>Bookworm Adventures</strong>. I loved the combination of:</p>
+          <ul>
+            <li>Words</li>
+            <li>Strategy</li>
+            <li>Competition</li>
+            <li>Brain training</li>
+            <li>Progression</li>
+          </ul>
+          <p>Years later, I wanted to recreate part of that experience myself. Specifically:</p>
+          <p><strong>What if spelling could actually feel like a game?</strong></p>
+          <figure>
+            <img src="../assets/img/projects/lexicon-bookworm-adventures.jpg" alt="Bookworm Adventures gameplay: Lex the bookworm spelling words against a boss" loading="lazy" />
+            <figcaption><strong>Bookworm Adventures</strong> by PopCap Games — the game that started it.</figcaption>
+          </figure>
         </section>
-
         <section>
-          <h2>Goals</h2>
-          <!-- What did "done" look like? Keep it to a short list. -->
-          <p class="todo">Coming soon: what I set out to build.</p>
+          <h2>The goal</h2>
+          <p>Build a usable spelling game where players are given a set of letters and have to create valid words. The game needed to be:</p>
+          <ul>
+            <li>Easy to understand</li>
+            <li>Fast to play</li>
+            <li>Actually challenging</li>
+            <li>Satisfying</li>
+            <li>Competitive</li>
+            <li>Playable directly in a browser</li>
+          </ul>
         </section>
-
+        <section>
+          <h2>Constraints</h2>
+          <p>I intentionally kept the technology simple: basic HTML, CSS, and JavaScript.</p>
+          <p>I also needed a dictionary dataset that was actually usable inside a game. That turned out to be more annoying than expected.</p>
+        </section>
         <section>
           <h2>The journey</h2>
-          <!-- The story, in order. Copy an <li> per milestone; add a figure to any of them. -->
           <ol class="timeline">
             <li class="timeline-entry">
               <span class="timeline-date">Step 1</span>
-              <h3>First prototype</h3>
-              <p class="todo">Coming soon.</p>
+              <h3>Getting the fundamentals working</h3>
+            <p>The first challenge wasn't making the game look good. It was getting the fundamentals working. I needed to:</p>
+            <ol>
+              <li>Load a dictionary</li>
+              <li>Clean the dataset</li>
+              <li>Determine whether words were valid</li>
+              <li>Build the game loop</li>
+              <li>Create scoring</li>
+              <li>Handle user input</li>
+              <li>Make the interface responsive</li>
+              <li>Tune the difficulty</li>
+            </ol>
+            <figure class="figure-pair">
+              <div>
+                <img src="../assets/img/projects/lexicon-bookworm-grid.jpg" alt="Bookworm Adventures letter grid" loading="lazy" />
+                <img src="../assets/img/projects/lexicon-grid.png" alt="Lexicon letter grid" loading="lazy" />
+              </div>
+              <figcaption>Bookworm Adventures' letter grid (left) and Lexicon's (right).</figcaption>
+            </figure>
             </li>
             <li class="timeline-entry">
               <span class="timeline-date">Step 2</span>
-              <h3>Iterating</h3>
-              <p class="todo">Coming soon.</p>
+              <h3>Is it actually fun?</h3>
+            <p>Then came the much harder question. I tested the game with real users and paid attention to:</p>
+            <ul>
+              <li>How long they played</li>
+              <li>Whether they understood the rules</li>
+              <li>Where they got frustrated</li>
+              <li>Whether scoring felt fair</li>
+              <li>How responsive the game felt</li>
+              <li>Whether players wanted to play again</li>
+              <li>Whether the difficulty was balanced</li>
+            </ul>
             </li>
             <li class="timeline-entry">
               <span class="timeline-date">Step 3</span>
-              <h3>Shipping it</h3>
-              <p class="todo">Coming soon.</p>
+              <h3>Players made it competitive</h3>
+            <p>I added new game modes and kept tuning the experience. Then something interesting happened.</p>
+            <p>People started competing with each other — challenging friends and coming back repeatedly.</p>
             </li>
           </ol>
         </section>
-
         <section>
-          <h2>Challenges</h2>
-          <!-- What broke, what was harder than expected, and how you got past it. -->
-          <p class="todo">Coming soon: the hardest problems and how I solved them.</p>
+          <h2>The result</h2>
+          <p>More than <strong>10 users</strong> became consistently engaged with the game, with players returning for <strong>7+ consecutive days</strong>.</p>
+          <p>The most interesting part wasn't the number. It was seeing players create their <strong>own competition and community</strong> around the game.</p>
+          <figure class="figure-tall">
+            <img src="../assets/img/projects/lexicon-high-score.jpg" alt="Lexicon game-over screen on a phone showing a score of 51 and the top five words" loading="lazy" />
+            <figcaption>A player's game-over screen: 51 points, led by MODULARITY and QUACKERIES.</figcaption>
+          </figure>
         </section>
-
-        <!-- One-sentence takeaway, highlighted -->
         <aside class="callout">
           <strong>Key lesson</strong>
-          <p class="todo">Coming soon.</p>
+          <p>The thing you're passionate about is ultimately experienced through the user.</p>
         </aside>
-
-        <section>
-          <h2>Results</h2>
-          <!-- What it does now. Numbers, screenshots, and clips work well here. -->
-          <p class="todo">Coming soon: how it turned out.</p>
-        </section>
-
         <section>
           <h2>What I learned</h2>
-          <p class="todo">Coming soon.</p>
+          <p>I might care about how clever the implementation is. The player cares about whether the game is fun. That distinction matters.</p>
+          <p>Lexicon taught me about:</p>
+          <ul>
+            <li>Game loops</li>
+            <li>User retention</li>
+            <li>Community behavior</li>
+            <li>Feedback-driven development</li>
+            <li>Dataset cleaning</li>
+            <li>Dictionary validation</li>
+            <li>Scoring systems</li>
+            <li>Game balance</li>
+            <li>Responsive interfaces</li>
+            <li>Designing around actual users rather than assumptions</li>
+          </ul>
+          <p>It also taught me that <strong>a technically interesting project isn't automatically an interesting product.</strong> The users decide.</p>
         </section>
-
         <section>
           <h2>What's next</h2>
-          <p class="todo">Coming soon.</p>
+          <p>The MVP is complete, but there's a lot more I could do:</p>
+          <ul>
+            <li>Enemies, jewels, and health</li>
+            <li>More progression</li>
+            <li>Direct player challenges and multiplayer competition</li>
+            <li>More game modes</li>
+            <li>Leaderboards</li>
+            <li>More mechanics inspired by Bookworm Adventures</li>
+          </ul>
+          <p>The goal would be to turn the simple spelling mechanic into a larger game rather than simply adding more words.</p>
+        </section>
+        <section>
+          <h2>Credits</h2>
+          <p>Inspired by <strong>Bookworm Adventures</strong> by PopCap Games.</p>
+          <p>Dictionary resources include the <strong>SCOWL / Aspell</strong> word lists.</p>
         </section>
       </article>
 

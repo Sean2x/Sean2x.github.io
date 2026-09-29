@@ -21,9 +21,9 @@
 const PROJECTS = [
   {
     slug: "fish-swarm",
-    title: "Fish Swarm",
+    title: "Fish Simulator",
     summary:
-      "Ever wondered what it would be like to be a fish? Chase a swarm of fish that try to dodge your cursor—be quick and strategic to catch them all.",
+      "A browser fish swarm where simple local rules add up to a school that feels alive—and reacts to your mouse.",
     tags: ["JavaScript", "Canvas", "Game"],
     light: "yellow",
     image: "assets/img/projects/fish-swarm.png",
@@ -35,7 +35,7 @@ const PROJECTS = [
     slug: "lexicon",
     title: "Lexicon",
     summary:
-      "A spelling game built with HTML, CSS, and JavaScript—an interactive way for players to test their spelling.",
+      "A browser spelling game inspired by Bookworm Adventures. 10+ players kept coming back for 7+ days straight—and started competing with each other.",
     tags: ["HTML", "CSS", "JavaScript", "Game"],
     light: "green",
     image: "assets/img/projects/lexicon.png",
@@ -45,10 +45,10 @@ const PROJECTS = [
   },
   {
     slug: "portfolio-website",
-    title: "Portfolio Website",
+    title: "Personal Website",
     summary:
-      "My first serious dive into the raw mechanics of the web—learning how HTML structures ideas, CSS shapes them visually, and JavaScript gives them motion and behavior.",
-    tags: ["HTML", "CSS", "JavaScript"],
+      "My home base—built from zero web experience and shaped by feedback from ~10 test users. Make it exist first, then make it good.",
+    tags: ["HTML", "CSS", "JavaScript", "Git"],
     light: "green",
     image: "assets/img/projects/portfolio-website.png",
     icon: "code-slash",

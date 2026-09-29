@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Fish Swarm | Sean Lirazan</title>
-    <meta name="description" content="Ever wondered what it would be like to be a fish? Chase a swarm of fish that try to dodge your cursor—be quick and strategic to catch them all." />
+    <title>Fish Simulator | Sean Lirazan</title>
+    <meta name="description" content="A browser fish swarm where simple local rules add up to a school that feels alive — and reacts to your mouse." />
     <link rel="canonical" href="https://sean2x.github.io/projects/fish-swarm.html" />
     <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
 
     <!-- Link previews (LinkedIn, iMessage, Discord, X, ...) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sean Lirazan" />
-    <meta property="og:title" content="Fish Swarm | Sean Lirazan" />
-    <meta property="og:description" content="Ever wondered what it would be like to be a fish? Chase a swarm of fish that try to dodge your cursor—be quick and strategic to catch them all." />
+    <meta property="og:title" content="Fish Simulator | Sean Lirazan" />
+    <meta property="og:description" content="A browser fish swarm where simple local rules add up to a school that feels alive — and reacts to your mouse." />
     <meta property="og:url" content="https://sean2x.github.io/projects/fish-swarm.html" />
     <meta property="og:image" content="https://sean2x.github.io/assets/img/projects/fish-swarm.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -88,20 +88,19 @@
           <li>Canvas</li>
           <li>Game</li>
         </ul>
-        <h1 class="post-title">Fish Swarm</h1>
+        <h1 class="post-title">Fish Simulator</h1>
         <p class="post-lede">
-          Ever wondered what it would be like to be a fish? Chase a swarm of fish that try to dodge your cursor—be quick and strategic to catch them all.
+          A browser fish swarm where simple local rules add up to a school that feels alive — and reacts to your mouse.
         </p>
 
-        <!-- Quick facts — replace the dashes -->
         <dl class="post-facts">
           <div>
             <dt>Timeline</dt>
-            <dd>—</dd>
+            <dd>April – May 2026</dd>
           </div>
           <div>
             <dt>Role</dt>
-            <dd>—</dd>
+            <dd>Developer, Designer</dd>
           </div>
           <div>
             <dt>Tools</dt>
@@ -109,17 +108,17 @@
           </div>
           <div>
             <dt>Status</dt>
-            <dd>Playable</dd>
+            <dd>MVP complete — expandable</dd>
           </div>
         </dl>
+
         <div class="post-links">
           <a class="btn-terminal" href="../games/fish-swarm/">
-            Play Fish Swarm <i class="bi bi-play-fill"></i>
+            Play Fish Simulator <i class="bi bi-play-fill"></i>
           </a>
         </div>
       </header>
 
-      <!-- Hero: the demo clip, with the thumbnail shown until it plays -->
       <figure class="post-hero">
         <video
           src="../assets/video/projects/fish-swarm.mp4"
@@ -131,76 +130,127 @@
       </figure>
 
       <article class="post-body">
-        <!--
-          Writing tips:
-          - Delete each <p class="todo"> as you replace it with your own words.
-          - Add photos anywhere with:
-              <figure>
-                <img src="../assets/img/projects/fish-swarm-step1.jpg" alt="..." />
-                <figcaption>What the reader is looking at</figcaption>
-              </figure>
-        -->
-
         <section>
           <h2>The spark</h2>
-          <!-- Where did the idea come from? What problem or curiosity started it? -->
-          <p class="todo">Coming soon: where the idea for this project came from.</p>
+          <p>I wanted to understand how a group of simple creatures could produce something that looks intelligent. Fish are a great example.</p>
+          <p>A single fish doesn't need to understand the entire school. Yet hundreds of fish can move together and produce incredibly cohesive patterns.</p>
+          <p>That raised a question: <strong>can I recreate that behavior myself?</strong></p>
+          <figure>
+            <img src="../assets/img/projects/fish-swarm-real-school.jpg" alt="A real school of silver fish swimming as one mass" loading="lazy" />
+            <figcaption>A real school: no single fish sees the whole shape.</figcaption>
+          </figure>
         </section>
-
         <section>
-          <h2>Goals</h2>
-          <!-- What did "done" look like? Keep it to a short list. -->
-          <p class="todo">Coming soon: what I set out to build.</p>
+          <h2>The goal</h2>
+          <p>Build a browser-based fish swarm that:</p>
+          <ul>
+            <li>Reacts to the mouse</li>
+            <li>Moves naturally</li>
+            <li>Looks like a real school of fish</li>
+            <li>Produces emergent group behavior</li>
+            <li>Runs smoothly with many fish</li>
+          </ul>
+          <p>The goal wasn't a perfect biological simulation. It was to make something that <strong>felt alive</strong>.</p>
         </section>
-
         <section>
           <h2>The journey</h2>
-          <!-- The story, in order. Copy an <li> per milestone; add a figure to any of them. -->
           <ol class="timeline">
             <li class="timeline-entry">
               <span class="timeline-date">Step 1</span>
-              <h3>First prototype</h3>
-              <p class="todo">Coming soon.</p>
+              <h3>One fish</h3>
+            <p>I started with the simplest possible problem: how do I make one fish move?</p>
+            <figure>
+              <img src="../assets/img/projects/fish-swarm-first-fish.png" alt="A single orange triangle on a dark blue background" loading="lazy" />
+              <figcaption>The very first fish: one triangle.</figcaption>
+            </figure>
             </li>
             <li class="timeline-entry">
               <span class="timeline-date">Step 2</span>
-              <h3>Iterating</h3>
-              <p class="todo">Coming soon.</p>
+              <h3>Many fish</h3>
+            <p>Then: how do I make <em>many</em> fish move?</p>
             </li>
             <li class="timeline-entry">
               <span class="timeline-date">Step 3</span>
-              <h3>Shipping it</h3>
-              <p class="todo">Coming soon.</p>
+              <h3>Making them interact</h3>
+            <p>Then: how do I make them interact? The system gradually evolved into a collection of behaviors controlling:</p>
+            <ul>
+              <li>Movement</li>
+              <li>Separation</li>
+              <li>Alignment</li>
+              <li>Cohesion</li>
+              <li>Mouse interaction</li>
+              <li>Direction changes</li>
+              <li>Group behavior</li>
+            </ul>
+            <p>The interesting part was that no fish needed to know what the entire swarm was doing. Simple local rules created surprisingly complex behavior.</p>
+            <figure>
+              <img src="../assets/img/projects/fish-swarm-school.png" alt="Five cartoon goldfish named Oscar, Memo, Fred, Demetrius, and Dora swimming together" loading="lazy" />
+              <figcaption>A small school moving together — Oscar, Memo, Fred, Demetrius, and Dora.</figcaption>
+            </figure>
+            </li>
+            <li class="timeline-entry">
+              <span class="timeline-date">Step 4</span>
+              <h3>The whimsy problem</h3>
+            <p>At some point, optimizing and tuning the simulation started becoming tedious.</p>
+            <p>Not every project needs to feel like serious engineering research. Sometimes you should just make the fish do something funny — and that made the project far more enjoyable to build and experiment with.</p>
+            <figure class="figure-pair">
+              <div>
+                <img src="../assets/img/projects/fish-swarm-bibbles.png" alt="Bibbles, a cartoon orange goldfish" loading="lazy" />
+                <img src="../assets/img/projects/fish-swarm-spritesheet.png" alt="Sprite sheet of goldfish body, tail, fins, and swappable eyes and mouths" loading="lazy" />
+              </div>
+              <figcaption>Meet Bibbles (left) and the sprite sheet behind the fish (right) — swappable eyes and mouths let them look calm, panicked, or happy.</figcaption>
+            </figure>
+            </li>
+            <li class="timeline-entry">
+              <span class="timeline-date">Step 5</span>
+              <h3>Optimization</h3>
+            <p>A few fish are easy. Hundreds of fish interacting every frame are a different problem.</p>
+            <p>I worked on reducing unnecessary calculations and keeping the simulation responsive.</p>
             </li>
           </ol>
         </section>
-
-        <section>
-          <h2>Challenges</h2>
-          <!-- What broke, what was harder than expected, and how you got past it. -->
-          <p class="todo">Coming soon: the hardest problems and how I solved them.</p>
-        </section>
-
-        <!-- One-sentence takeaway, highlighted -->
         <aside class="callout">
           <strong>Key lesson</strong>
-          <p class="todo">Coming soon.</p>
+          <p>If something is getting boring, add whimsy.</p>
         </aside>
-
-        <section>
-          <h2>Results</h2>
-          <!-- What it does now. Numbers, screenshots, and clips work well here. -->
-          <p class="todo">Coming soon: how it turned out.</p>
-        </section>
-
         <section>
           <h2>What I learned</h2>
-          <p class="todo">Coming soon.</p>
+          <p>The Fish Simulator taught me about:</p>
+          <ul>
+            <li>Emergent behavior</li>
+            <li>Agent-based systems</li>
+            <li>Simple behavioral rules</li>
+            <li>Animation</li>
+            <li>Interaction design</li>
+            <li>Performance optimization</li>
+            <li>Iterative tuning</li>
+            <li>Making technical projects visually engaging</li>
+          </ul>
+          <p>It also reinforced something I want to carry into future projects: <strong>technical depth and playfulness don't have to be opposites.</strong></p>
         </section>
-
+        <section>
+          <h2>What I'd change</h2>
+          <p>If I rebuilt the project, I would:</p>
+          <ul>
+            <li>Push the sprites further into the background</li>
+            <li>Dial in the gameplay/interaction loop earlier</li>
+            <li>Spend less time polishing behavior before establishing the core experience</li>
+            <li>Optimize for larger numbers of fish earlier</li>
+          </ul>
+        </section>
         <section>
           <h2>What's next</h2>
-          <p class="todo">Coming soon.</p>
+          <p>There are a lot of directions this could go:</p>
+          <ul>
+            <li>Sharks, fish food, and predator/prey behavior</li>
+            <li>Different species with different behaviors</li>
+            <li>More advanced swarm rules and larger schools</li>
+            <li>Environmental obstacles</li>
+            <li>Mobile compatibility and better performance</li>
+            <li>A technical visualization mode with interactive parameter tuning</li>
+          </ul>
+          <p>The technical version could become a sandbox for experimenting with emergent behavior. The playful version could become a little ecosystem.</p>
+          <p>Or, naturally, both.</p>
         </section>
       </article>
 
