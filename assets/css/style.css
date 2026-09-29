@@ -451,11 +451,26 @@ h3 {
   height: 10%;
 }
 
-/* Clip sideways only, so the enlarged center slide isn't cut off vertically */
+/* Clip sideways only, so the enlarged center slide isn't cut off vertically.
+   Horizontal swipes/drags are handled in JS; vertical swipes still scroll
+   the page (touch-action: pan-y). */
 .carousel-viewport {
   height: 90%;
   overflow-x: clip;
   overflow-y: visible;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.carousel-viewport.dragging {
+  cursor: grabbing;
+}
+
+.carousel-viewport img {
+  -webkit-user-drag: none;
+  pointer-events: none;
 }
 
 /* Moved by JS (translateX); slides are cloned so the loop is seamless */

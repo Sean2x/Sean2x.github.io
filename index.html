@@ -285,7 +285,8 @@
       })();
 
       // Internship carousel: endless auto-scroll; slides grow toward the
-      // center and fade in/out at the edges
+      // center and fade in/out at the edges. Swipe (or mouse-drag) to scroll
+      // it by hand; it coasts to a stop, then auto-scroll resumes.
       (function () {
         const viewport = document.querySelector(".carousel-viewport");
         const track = viewport.querySelector(".carousel-track");
@@ -295,11 +296,23 @@
         const MIN_SCALE = 0.75;
         const MAX_SCALE = 1.15;
         const FADE_ZONE = 0.35; // outer fraction of each half that fades
+        const FRICTION = 4; // how fast a flick coasts to a stop (per second)
+        const RESUME_MS = 1500; // pause after a swipe before auto-scroll resumes
+        const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         let slides = [];
         let setWidth = 0; // width of one full set of slides, including gap
         let offset = 0;
         let paused = false;
+
+        // Hand scrolling
+        let dragging = false;
+        let lastX = 0;
+        let lastMove = 0;
+        let velocity = 0; // px/s, in offset units
+        let resumeAt = 0;
+
+        const wrap = (x) => ((x % setWidth) + setWidth) % setWidth;
 
         // Clone the set until the track covers the viewport plus one set
         function build() {
@@ -319,7 +332,7 @@
             el,
             center: el.offsetLeft + el.offsetWidth / 2,
           }));
-          offset %= setWidth;
+          offset = wrap(offset);
         }
 
         function render() {
@@ -338,20 +351,66 @@
         function tick(now) {
           const dt = Math.min(now - last, 100) / 1000; // avoid jumps after tab switch
           last = now;
-          if (!paused) {
-            offset = (offset + SPEED * dt) % setWidth;
+          if (dragging) {
+            // offset follows the pointer (see pointermove)
+          } else if (Math.abs(velocity) > 5) {
+            offset = wrap(offset + velocity * dt); // coast after a flick
+            velocity *= Math.exp(-FRICTION * dt);
+          } else if (!paused && now >= resumeAt) {
+            velocity = 0;
+            offset = wrap(offset + SPEED * dt);
           }
           render();
           requestAnimationFrame(tick);
         }
 
-        viewport.addEventListener("mouseenter", () => (paused = true));
-        viewport.addEventListener("mouseleave", () => (paused = false));
+        viewport.addEventListener("pointerdown", (e) => {
+          if (e.pointerType === "mouse" && e.button !== 0) return;
+          if (e.pointerType === "mouse") e.preventDefault(); // no text/image drag
+          dragging = true;
+          lastX = e.clientX;
+          lastMove = performance.now();
+          velocity = 0;
+          viewport.setPointerCapture(e.pointerId);
+          viewport.classList.add("dragging");
+        });
+
+        viewport.addEventListener("pointermove", (e) => {
+          if (!dragging) return;
+          const now = performance.now();
+          const dx = e.clientX - lastX;
+          const dt = Math.max(now - lastMove, 1) / 1000;
+          lastX = e.clientX;
+          lastMove = now;
+          offset = wrap(offset - dx);
+          velocity = 0.8 * velocity + 0.2 * (-dx / dt); // smoothed flick speed
+          if (reducedMotion) render();
+        });
+
+        function endDrag() {
+          if (!dragging) return;
+          dragging = false;
+          viewport.classList.remove("dragging");
+          // A pause before the release means no flick
+          if (performance.now() - lastMove > 80 || reducedMotion) velocity = 0;
+          resumeAt = performance.now() + RESUME_MS;
+        }
+        viewport.addEventListener("pointerup", endDrag);
+        viewport.addEventListener("pointercancel", endDrag); // e.g. page scroll took over
+
+        // Hover-pause for real mice only: phones fire mouseenter on tap and
+        // no mouseleave, which would leave the carousel stuck after a swipe
+        viewport.addEventListener("pointerenter", (e) => {
+          if (e.pointerType === "mouse") paused = true;
+        });
+        viewport.addEventListener("pointerleave", (e) => {
+          if (e.pointerType === "mouse") paused = false;
+        });
         window.addEventListener("resize", build);
         window.addEventListener("load", build); // re-measure once images load
 
         build();
-        if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        if (reducedMotion) {
           render();
         } else {
           requestAnimationFrame(tick);
