@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /archive/
+
+Sitemap: https://sean2x.github.io/sitemap.xml
