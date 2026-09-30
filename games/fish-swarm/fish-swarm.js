@@ -34,19 +34,19 @@ const assets = {
   },
 };
 
-assets.body.src = "Images/BibblesAsset/GoldfishAssets_Body.png";
-assets.tail.src = "Images/BibblesAsset/GoldfishAssets_Tail.png";
-assets.fins.src = "Images/BibblesAsset/GoldfishAssets_Fins.png";
+assets.body.src = "sprites/GoldfishAssets_Body.png";
+assets.tail.src = "sprites/GoldfishAssets_Tail.png";
+assets.fins.src = "sprites/GoldfishAssets_Fins.png";
 
-assets.eyes.calm.src = "Images/BibblesAsset/GoldfishAssets_EyesCalm.png";
-assets.eyes.panic.src = "Images/BibblesAsset/GoldfishAssets_EyesPanic.png";
-assets.eyes.squeeze.src = "Images/BibblesAsset/GoldfishAssets_EyesSqueeze.png";
-assets.eyes.happy.src = "Images/BibblesAsset/GoldfishAssets_EyesHappy.png";
+assets.eyes.calm.src = "sprites/GoldfishAssets_EyesCalm.png";
+assets.eyes.panic.src = "sprites/GoldfishAssets_EyesPanic.png";
+assets.eyes.squeeze.src = "sprites/GoldfishAssets_EyesSqueeze.png";
+assets.eyes.happy.src = "sprites/GoldfishAssets_EyesHappy.png";
 
-assets.bubble.src = "Images/BibblesAsset/GoldfishAssets_BubbleEye.png";
+assets.bubble.src = "sprites/GoldfishAssets_BubbleEye.png";
 
-assets.mouth.open.src = "Images/BibblesAsset/GoldfishAssets_Mouth1.png";
-assets.mouth.closed.src = "Images/BibblesAsset/GoldfishAssets_Mouth2.png";
+assets.mouth.open.src = "sprites/GoldfishAssets_Mouth1.png";
+assets.mouth.closed.src = "sprites/GoldfishAssets_Mouth2.png";
 
 // =====================
 // CONFIG (ALL TUNING HERE)

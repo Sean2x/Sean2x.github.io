@@ -1,18 +1,37 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <base target="_self" />
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      content="width=device-width, initial-scale=1"
     />
     <title>Sean Lirazan | Portfolio</title>
     <meta
       name="description"
-      content="Professional portfolio with internship carousel and project showcase"
+      content="Sean Lirazan — mechanical engineer building robotics systems. Internships at NASA, Collins Aerospace, and John Deere, plus projects and write-ups."
     />
-    <script src=""></script>
+    <link rel="canonical" href="https://sean2x.github.io/" />
+    <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+
+    <!-- Link previews (LinkedIn, iMessage, Discord, X, ...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sean Lirazan" />
+    <meta property="og:title" content="Sean Lirazan | Mechanical Engineer" />
+    <meta
+      property="og:description"
+      content="Mechanical engineer building robotics systems. Internships at NASA, Collins Aerospace, and John Deere, plus projects and write-ups."
+    />
+    <meta property="og:url" content="https://sean2x.github.io/" />
+    <meta
+      property="og:image"
+      content="https://sean2x.github.io/assets/img/og-image.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -25,719 +44,378 @@
       href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" href="Images\favicon.ico" type="image/x-icon" />
-
-    <link rel="stylesheet" href="NewStyle.css" />
-
-    <style>
-      .image-box {
-        width: 90%;
-        aspect-ratio: 1 / 1;
-        flex: 0 1 auto;
-        overflow: hidden;
-        border-radius: 8px;
-        background: #111111bd;
-        border: 1px solid rgba(0, 255, 76, 0);
-      }
-
-      .image-box img {
-        height: 100%;
-        width: 100%;
-        object-fit: contain;
-      }
-
-      .slide {
-        height: 90%;
-        aspect-ratio: 4/5;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid rgba(4, 0, 255, 0);
-      }
-
-      .carousel-viewport {
-        display: flex;
-        gap: 20px;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        align-items: center;
-        justify-content: center;
-        box-sizing: content-box;
-      }
-
-      .logo {
-        transition: all 0.3s ease;
-      }
-
-      .logo:hover {
-        scale: 1.1;
-      }
-
-      .expand2 {
-        height: 40vh;
-      }
-
-      .desc {
-        width: 50vw;
-      }
-
-      .spacer {
-        flex: 0 0 calc((100vw - 300px) / 2);
-        /* 300px = slide width */
-      }
-
-      /* hamburger hidden on desktop */
-      .hamburger {
-        display: none;
-      }
-
-      .rocket {
-        display: inline;
-      }
-
-      section {
-        border: 1px solid rgba(255, 0, 0, 0);
-      }
-
-      .name {
-        font-size: 3em;
-      }
-
-      #about-me {
-        height: 50vh;
-      }
-
-      @media (max-width: 768px) {
-        #about-me {
-          height: auto;
-        }
-        .hamburger {
-          display: inline;
-        }
-
-        .rocket {
-          display: none;
-        }
-        .expand {
-          flex-direction: column;
-          height: auto;
-        }
-
-        .expand2 {
-          height: auto;
-        }
-
-        .terminal-window {
-          background: #00000086;
-          border: 2px solid var(--lightMain);
-          box-shadow: var(--glow);
-          position: relative;
-          overflow: auto;
-        }
-
-        .desc {
-          width: 78vw;
-        }
-
-        .desktop-only {
-          display: none !important;
-        }
-
-        #youtube {
-          height: auto !important;
-        }
-
-        .grid-container {
-          grid-template-columns: repeat(1, 1fr) !important;
-          /* single column on mobile */
-        }
-
-        .name {
-          font-size: 2.5em;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css" />
   </head>
 
-  <canvas id="matrixCanvas"></canvas>
+  <body class="crt">
+    <canvas id="matrixCanvas"></canvas>
 
-  <body class="crt" style="background-color: #000000">
-    <!-- Header with Gradient Background -->
-    <header
-      id="header"
-      class="header"
-      style="
-        margin: 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 2rem;
-        background: linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 1),
-          rgba(0, 0, 0, 0)
-        );
-      "
-    >
-      <div id="header1" style="display: flex; gap: 1.5rem">
+    <!-- Header -->
+    <header id="header" class="header">
+      <div id="header1">
         <div class="menu-toggle" onclick="toggleMenu()">
-          <i class="bi bi-list hamburger" style="font-size: 2rem"></i>
-          <i
-            class="logo bi bi-rocket-takeoff-fill rocket"
-            style="font-size: 2rem"
-          ></i>
+          <i class="bi bi-list hamburger"></i>
+          <i class="logo bi bi-rocket-takeoff-fill rocket"></i>
         </div>
 
-        <nav class="nav" style="gap: 2rem; display: flex; align-items: center">
-          <a href="#about">About</a>
-          <a href="#projects">Projects</a>
-          <a href="https://sean2x.github.io/ConnectCard.html" target="_blank"
-            >Contact</a
-          >
-          <a href="Images/Sean Lirazan Resume 2.2.pdf" download
-            >Resume <i class="bi bi-download"></i
-          ></a>
+        <nav class="nav">
+          <a href="#about-me">About</a>
+          <a href="projects/">Projects</a>
+          <a href="card/" target="_blank">Contact</a>
+          <a href="resume/">
+            Resume
+          </a>
         </nav>
       </div>
-      <div class="socials" style="gap: 2rem; display: flex">
+
+      <div class="socials">
         <a
           href="https://www.instagram.com/sean.applies.engineering/"
-          class="logo bi bi-instagram hover"
-          style="font-size: 2rem"
+          class="logo bi bi-instagram"
           target="_blank"
+          aria-label="Instagram"
         ></a>
         <a
           href="https://github.com/Sean2x"
-          class="c bi bi-github"
-          style="font-size: 2rem"
+          class="logo bi bi-github"
           target="_blank"
+          aria-label="GitHub"
         ></a>
-        <a href="#" class="logo bi bi-youtube" style="font-size: 2rem"></a>
+        <a
+          href="https://www.youtube.com/@SeanAppliesEngineering"
+          class="logo bi bi-youtube"
+          target="_blank"
+          aria-label="YouTube"
+        ></a>
       </div>
     </header>
-    <!-- Main Content -->
-    <main class="mx-auto px-0 py-8">
-      <!-- About Me Section -->
-      <section
-        id="about-me"
-        style="display: flex; gap: 1rem; justify-content: center"
-        class="expand2 apple-fade"
-      >
-        <div class="grid-item terminal-window expand" style="height: auto">
-          <div
-            class="terminal-window-top"
-            style="display: flex; align-items: center"
-          >
-            <div
-              class="terminal-btn"
-              style="border: 7px solid var(--lightMain)"
-            ></div>
-            <div
-              class="terminal-btn"
-              style="border: 1px solid var(--lightMain)"
-            ></div>
-            <div
-              class="terminal-btn"
-              style="border: 1px solid var(--lightMain)"
-            ></div>
-            <span style="opacity: 0.9">About Me</span>
-          </div>
-          <div style="display: flex; align-items: center">
-            <img
-              src="Images/Headshot.jpeg"
-              class="terminal-window"
-              alt=""
-              style="
-                margin-top: 30px;
-                height: 100%;
-                border-radius: 10%;
-                border-width: 5px;
-              "
-            />
-          </div>
-          <!-- Text About Me -->
 
-          <div
-            style="
-              border: 1px solid #e5292900;
-              height: 100%;
-              margin-top: 20px;
-              display: flex;
-              flex-direction: column;
-              font-size: clamp(8px, 20vh, 30px);
-            "
-          >
-            <h1 class="name">Sean Lirazan</h1>
-            <h2 style="font-size: 1.2em">
-              Mechanical Engineer | Robotics Systems | Building the Magic of
-              Creation
-            </h2>
-            <p class="desc" style="overflow: hidden; font-size: 0.7em">
-              I'm an engineer who mixes Mechanical, Electrical and Software to
-              build fantastical projects that will one day inspire others. I
-              believe science is genuinely magical, and just scraping the
-              surface can expose you to a world of fantasy
-            </p>
-          </div>
-        </div>
-      </section>
-      <!-- Internship Carousel Section - TOP -->
-      <section id="carosel" style="height: 50vh">
-        <h2 style="display: flex; justify-content: center; height: 10%">
-          Internships
-        </h2>
-        <div
-          class="carousel-viewport"
-          style="
-            overflow-x: auto; /* allows horizontal scroll */
-            display: flex; /* arrange slides in a row */
-            gap: 20px; /* spacing between slides */
-            justify-content: center; /* center slides horizontally */
-            scroll-snap-type: x mandatory; /* nice snap effect when scrolling */
-            border: 1px solid rgba(217, 238, 31, 0);
-            height: 90%;
-          "
-        >
-          <div class="slide apple-fade" style="--delay: 0.15s">
-            <div class="image-box">
-              <img
-                src="Images/Siaton_Farms.png"
-                alt="Internship 1"
-                style="width: 100%"
-              />
-            </div>
-            <h3>Siaton Farms</h3>
-            <p>Controls Engineer | Winter 2023</p>
-          </div>
+    <main>
+      <!-- About Me: full-screen intro -->
+      <section id="about-me" class="hero">
+        <!-- Semi-transparent panel keeps the text readable over the Matrix rain -->
+        <div class="hero-panel terminal-window">
+          <img
+            src="assets/img/headshot.jpeg"
+            class="hero-photo apple-fade"
+            alt="Headshot of Sean Lirazan"
+          />
 
-          <div class="slide apple-fade" style="--delay: 0.3s">
-            <div class="image-box">
-              <img
-                src="Images/MrDeere.png"
-                alt="Internship 2"
-                style="padding: 20px"
-              />
-            </div>
-            <h3>John Deere</h3>
-            <p>Robotics Engineer | Summer 2025</p>
-          </div>
-
-          <!-- slide 4 -->
-          <div class="slide apple-fade" style="--delay: 0.5s">
-            <div class="image-box">
-              <img
-                src="Images/RTX.png"
-                alt="Internship 4"
-                style="
-                  padding: 20px;
-                  filter: brightness(0) saturate(100%) invert(14%) sepia(100%)
-                    saturate(1000%) hue-rotate(250deg);
-                "
-              />
-            </div>
-            <h3>Collins Aerospace</h3>
-            <p>Systems Engineer | Spring 2026</p>
-          </div>
-          <div class="slide apple-fade" style="--delay: 0.75s">
-            <div class="image-box">
-              <img
-                src="Images/Nasa.png"
-                alt="Internship 3"
-                style="padding: 20px"
-              />
-            </div>
-            <h3>NASA</h3>
-            <p>Controls Engineer | Fall 2026</p>
-          </div>
-        </div>
-      </section>
-      <!-- Youtube -->
-      <section
-        id="youtube"
-        style="
-          height: 70vh;
-          background-color: rgb(1, 1, 1);
-          border-top: #b5179e 2px solid;
-          border-bottom: #b5179e 2px solid;
-          border-radius: 8px;
-          padding: 20px;
-        "
-      >
-        <!--BG-->
-        <div
-          style="
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            height: 100%;
-          "
-        >
-          <!--left-->
-          <div class="desktop-only" style="flex: 2; min-width: 0">
-            <h2 style="overflow: hidden">@SeanAppliesEngineering</h2>
-          </div>
-          <!--YT center-->
-          <div style="flex: 3; min-width: 0">
-            <div
-              class="video-container"
-              style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-                height: 100%;
-              "
+          <div class="hero-text">
+            <p class="hero-kicker apple-fade" style="--delay: 0.1s">Hi, I'm</p>
+            <h1 class="hero-name apple-fade" style="--delay: 0.2s">
+              Sean Lirazan
+            </h1>
+            <!-- Typed out once by the script at the bottom; full text without JS.
+                 data-text reserves the final size so nothing shifts while typing. -->
+            <p
+              class="hero-role apple-fade"
+              style="--delay: 0.3s"
+              data-text="Mechanical Engineer · Robotics Systems"
             >
-              <h1>My Latest Video</h1>
-              <div
-                style="
-                  margin-bottom: 70px;
-                  width: 100%;
-                  height: 100%;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                "
-              >
-                <iframe
-                  src="https://www.youtube.com/embed/_4-VY6mx6vI"
-                  style="
-                    width: 100%;
-                    aspect-ratio: 16/9;
-                    max-width: 800px;
-                    border-radius: 16px;
-                  "
-                  frameborder="0"
-                  allowfullscreen
-                >
-                </iframe>
-              </div>
+              <span class="hero-role-live"
+                ><span class="typed">Mechanical Engineer · Robotics Systems</span
+                ><span class="caret" aria-hidden="true"></span
+              ></span>
+            </p>
+            <p class="hero-bio apple-fade" style="--delay: 0.4s">
+              I'm an engineer who blends mechanical, electrical, and software
+              design to build fantastical projects — the kind I hope will one day
+              inspire others. I believe science is genuinely magical: scratch the
+              surface and you'll find a world of fantasy.
+            </p>
+
+            <ul class="hero-facts apple-fade" style="--delay: 0.5s">
+              <li>
+                <i class="bi bi-mortarboard"></i>
+                B.S. Mechanical Engineering · Iowa State University · 2027
+              </li>
+              <li><i class="bi bi-geo-alt"></i> Los Angeles, CA</li>
+              <li>
+                <i class="bi bi-briefcase"></i>
+                Open to robotics roles starting 2027
+              </li>
+            </ul>
+
+            <div class="hero-actions apple-fade" style="--delay: 0.6s">
+              <a class="btn-terminal primary" href="resume/">
+                Resume <i class="bi bi-file-earmark-text"></i>
+              </a>
+              <a class="btn-terminal" href="projects/">
+                Projects <i class="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
-          <!--right-->
-          <div
-            class="desktop-only"
-            style="flex: 2; min-width: 0; display: flex; justify-content: right"
-          >
+        </div>
+
+        <a class="scroll-cue" href="#carousel" aria-label="Scroll down">
+          <i class="bi bi-chevron-down"></i>
+        </a>
+      </section>
+
+      <!-- Internships -->
+      <section id="carousel">
+        <h2 class="section-title">Internships</h2>
+        <div class="carousel-viewport apple-fade">
+          <div class="carousel-track">
+            <div class="slide">
+              <div class="image-box">
+                <img src="assets/img/internships/siaton-farms.png" alt="Siaton Farms logo" />
+              </div>
+              <h3>Siaton Farms</h3>
+              <p>Controls Engineer | Winter 2023</p>
+            </div>
+
+            <div class="slide">
+              <div class="image-box padded">
+                <img src="assets/img/internships/john-deere.png" alt="John Deere logo" />
+              </div>
+              <h3>John Deere</h3>
+              <p>Robotics Engineer | Summer 2025</p>
+            </div>
+
+            <div class="slide">
+              <div class="image-box padded logo-tint">
+                <img src="assets/img/internships/collins-aerospace.png" alt="Collins Aerospace logo" />
+              </div>
+              <h3>Collins Aerospace</h3>
+              <p>Systems Engineer | Spring 2026</p>
+            </div>
+
+            <div class="slide">
+              <div class="image-box padded">
+                <img src="assets/img/internships/nasa.png" alt="NASA logo" />
+              </div>
+              <h3>NASA</h3>
+              <p>Controls Engineer | Fall 2026</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- YouTube -->
+      <section id="youtube">
+        <div class="youtube-row">
+          <div class="youtube-side desktop-only">
+            <h2>
+              <a
+                href="https://www.youtube.com/@SeanAppliesEngineering"
+                target="_blank"
+                >@SeanAppliesEngineering</a
+              >
+            </h2>
+          </div>
+
+          <div class="youtube-center">
+            <h1>My Latest Video</h1>
+            <div class="video-frame">
+              <iframe
+                src="https://www.youtube.com/embed/_4-VY6mx6vI"
+                title="Latest YouTube video"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+
+          <div class="youtube-side right desktop-only">
             <h3>Check out this super cool video!</h3>
           </div>
         </div>
       </section>
-      <!-- Projects Section -->
-      <section id="projects" style="overflow: hidden">
-        <h2 style="display: flex; justify-content: center">Projects</h2>
-        <div
-          class="grid-container"
-          style="
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-          "
-        >
-          <div class="grid-item terminal-window apple-fade">
-            <div
-              class="terminal-window-top"
-              style="display: flex; align-items: center"
-            >
-              <div
-                class="terminal-btn"
-                style="border: 6px solid var(--green)"
-              ></div>
-              <div
-                class="terminal-btn"
-                style="border: 1px solid var(--lightMain)"
-              ></div>
-              <div
-                class="terminal-btn"
-                style="border: 1px solid var(--lightMain)"
-              ></div>
-              <span style="opacity: 0.9">Portfolio Website</span>
-            </div>
-            <div style="display: flex; align-items: center">
-              <i
-                class="desktop-only"
-                style="font-size: 200px; margin: 20px"
-                class="bi bi-code-slash"
-              ></i>
-              <!-- <img
-                src=""
-                alt="Project 1"
-                style="height: 200px; width: 200px; margin: 20px"
-              /> -->
-            </div>
-            <!-- Text About Me -->
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: left;
-              "
-            >
-              <div
-                style="
-                  border: 1px solid #e5292900;
-                  height: 100%;
-                  padding-top: 10px;
-                "
-              >
-                <h1>Portfolio Website</h1>
-                <h2></h2>
-                <p>
-                  This was my first deep dive into HTML/CSS/JS and GitHub. This
-                  portfolio was my first serious dive into the raw mechanics of
-                  the web—learning how HTML structures ideas, CSS shapes them
-                  visually, and JavaScript gives them motion and behavior.
-                </p>
-              </div>
-            </div>
-          </div>
 
-          <div
-            class="grid-item terminal-window apple-fade"
-            style="--delay: 0.15s"
-          >
-            <div
-              class="terminal-window-top"
-              style="display: flex; align-items: center"
-            >
-              <div
-                class="terminal-btn"
-                style="border: 6px solid var(--green)"
-              ></div>
-              <div
-                class="terminal-btn"
-                style="border: 1px solid var(--lightMain)"
-              ></div>
-              <div
-                class="terminal-btn"
-                style="border: 1px solid var(--lightMain)"
-              ></div>
-              <span style="opacity: 0.9">Lexicon Game</span>
-            </div>
-            <div style="display: flex; align-items: center">
-              <i
-                class="desktop-only"
-                style="font-size: 200px; margin: 20px"
-                class="bi bi-code-slash"
-              ></i>
-              <!-- <img
-                src=""
-                alt="Project 1"
-                style="height: 200px; width: 200px; margin: 20px"
-              /> -->
-            </div>
-            <!-- Text About Me -->
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: left;
-              "
-            >
-              <div
-                style="
-                  border: 1px solid #e5292900;
-                  height: 100%;
-                  padding-top: 10px;
-                "
-              >
-                <h1>Spelling Website</h1>
-                <h2></h2>
-                <p>
-                  This website was a fun project where I built a simple spelling
-                  game using HTML, CSS, and JavaScript. It was a great way to
-                  practice my web development skills and create an interactive
-                  experience for users to test their spelling abilities.
-                </p>
-                <a href="Lexicon.html">Play Lexicon Game</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid-item terminal-window apple-fade">
-            <div
-              class="terminal-window-top"
-              style="display: flex; align-items: center"
-            >
-              <div
-                class="terminal-btn"
-                style="border: 6px solid var(--yellow)"
-              ></div>
-              <div
-                class="terminal-btn"
-                style="border: 1px solid var(--lightMain)"
-              ></div>
-              <div
-                class="terminal-btn"
-                style="border: 1px solid var(--lightMain)"
-              ></div>
-              <span style="opacity: 0.9">Fish Swarm</span>
-            </div>
-            <div style="display: flex; align-items: center">
-              <i
-                class="desktop-only"
-                style="font-size: 200px; margin: 20px"
-                class="bi bi-code-slash"
-              ></i>
-              <!-- <img
-                src=""
-                alt="Project 1"
-                style="height: 200px; width: 200px; margin: 20px"
-              /> -->
-            </div>
-            <!-- Text About Me -->
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: left;
-              "
-            >
-              <div
-                style="
-                  border: 1px solid #e5292900;
-                  height: 100%;
-                  padding-top: 10px;
-                "
-              >
-                <h1>Fish Swarm</h1>
-                <h2></h2>
-                <p>
-                  Ever Wondered What It Would Be Like To Be A Fish? In this
-                  simple game, you control a mouse trying to catch fish that are
-                  swimming around the screen. The fish will try to avoid you, so
-                  you have to be quick and strategic to catch them all. It's a
-                  fun way to pass the time and challenge your reflexes.
-                </p>
-                <a href="FishGame.html">Play Fish Swarm</a>
-              </div>
-            </div>
-          </div>
+      <!-- Projects (cards rendered by site.js from projects.js) -->
+      <section id="projects">
+        <h2 class="section-title">Projects</h2>
+        <div class="project-list" data-projects="3"></div>
+        <div class="see-all">
+          <a class="btn-terminal" href="projects/">
+            See all projects <i class="bi bi-arrow-right"></i>
+          </a>
         </div>
       </section>
-      <!-- Connect Information -->
-      <section
-        id="contact"
-        style="
-          display: flex;
-          height: 80vh;
-          align-items: center;
-          justify-content: space-between;
-        "
-      >
-        <div
-          class="contact-text"
-          style="
-            flex-direction: column;
-            gap: 1rem;
-            margin-left: 50px;
-            min-width: 0;
-          "
-        >
-          <h1 class="apple-fade" style="font-size: 8rem">Colaborate?</h1>
-          <h1 class="apple-fade" style="font-size: 8rem">Sponsor?</h1>
-          <h1 class="apple-fade" style="font-size: 6rem">
-            Or just ask questions
-          </h1>
-          <p class="apple-fade" style="font-size: 3rem">
-            My DMs are always open!
-          </p>
-        </div>
-        <div
-          class="contact-icons"
-          style="
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            margin-right: 50px;
-            height: 100%;
-            align-items: center;
-            border: 1px solid rgba(4, 0, 255, 0);
-          "
-        >
-          <div>
-            <a
-              href="https://www.instagram.com/sean.applies.engineering/"
-              class="logo bi bi-instagram"
-              style="
-                font-size: clamp(40px, 20vh, 150px);
-                border: 1px solid rgba(0, 255, 128, 0);
-              "
-              target="_blank"
-            ></a>
+
+      <!-- Contact -->
+      <section id="contact">
+        <div class="contact-panel terminal-window apple-fade">
+          <div class="contact-text">
+            <h2>Collaborate? Sponsor?</h2>
+            <p>Or just ask questions — my DMs are always open.</p>
           </div>
-          <div>
+
+          <div class="contact-links">
+            <a class="btn-terminal primary" href="mailto:seanlirazan@gmail.com">
+              <i class="bi bi-envelope"></i> Email
+            </a>
             <a
+              class="btn-terminal"
               href="https://www.linkedin.com/in/seanlirazan/"
-              class="logo bi bi-linkedin"
-              style="
-                font-size: clamp(40px, 20vh, 150px);
-                border: 1px solid rgba(0, 255, 128, 0);
-              "
               target="_blank"
-            ></a>
-          </div>
-          <div>
+            >
+              <i class="bi bi-linkedin"></i> LinkedIn
+            </a>
             <a
-              href="#"
-              class="logo bi bi-envelope"
-              style="
-                font-size: clamp(40px, 20vh, 150px);
-                border: 1px solid rgba(0, 255, 128, 0);
-              "
-            ></a>
+              class="btn-terminal"
+              href="https://www.instagram.com/sean.applies.engineering/"
+              target="_blank"
+            >
+              <i class="bi bi-instagram"></i> Instagram
+            </a>
           </div>
         </div>
       </section>
     </main>
 
-    <!-- Footer -->
-  </body>
+    <script src="assets/js/matrix.js"></script>
+    <script src="assets/js/projects.js"></script>
+    <script src="assets/js/site.js"></script>
+    <script>
+      // Hero tagline: type it out once, then leave the caret blinking
+      (function () {
+        const el = document.querySelector(".hero-role .typed");
+        if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          return;
+        }
+        const text = el.textContent;
+        el.textContent = "";
+        let i = 0;
+        setTimeout(function type() {
+          el.textContent = text.slice(0, ++i);
+          if (i < text.length) setTimeout(type, 55);
+        }, 700); // start once the fade-in has settled
+      })();
 
-  <style>
-    /* Hide text column on small screens */
-    @media (max-width: 1000px) {
-      .contact-text {
-        display: none;
-      }
+      // Internship carousel: endless auto-scroll; slides grow toward the
+      // center and fade in/out at the edges. Swipe (or mouse-drag) to scroll
+      // it by hand; it coasts to a stop, then auto-scroll resumes.
+      (function () {
+        const viewport = document.querySelector(".carousel-viewport");
+        const track = viewport.querySelector(".carousel-track");
+        const originals = [...track.children];
 
-      /* Center icons horizontally */
-      .contact-icons {
-        margin: 0 auto;
-        align-items: center;
-      }
-    }
-  </style>
+        const SPEED = 60; // px per second
+        const MIN_SCALE = 0.75;
+        const MAX_SCALE = 1.15;
+        const FADE_ZONE = 0.35; // outer fraction of each half that fades
+        const FRICTION = 4; // how fast a flick coasts to a stop (per second)
+        const RESUME_MS = 1500; // pause after a swipe before auto-scroll resumes
+        const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  <script src="Matrix.js"></script>
+        let slides = [];
+        let setWidth = 0; // width of one full set of slides, including gap
+        let offset = 0;
+        let paused = false;
 
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementsByClassName("nav")[0];
-      menu.classList.toggle("active");
-    }
-  </script>
-  <script>
-    const elements = document.querySelectorAll(".apple-fade");
+        // Hand scrolling
+        let dragging = false;
+        let lastX = 0;
+        let lastMove = 0;
+        let velocity = 0; // px/s, in offset units
+        let resumeAt = 0;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-            observer.unobserve(entry.target); // run once
+        const wrap = (x) => ((x % setWidth) + setWidth) % setWidth;
+
+        // Clone the set until the track covers the viewport plus one set
+        function build() {
+          track.querySelectorAll("[data-clone]").forEach((c) => c.remove());
+          const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+          setWidth = track.scrollWidth + gap;
+          const copies = Math.ceil(viewport.clientWidth / setWidth) + 1;
+          for (let i = 0; i < copies; i++) {
+            originals.forEach((s) => {
+              const c = s.cloneNode(true);
+              c.dataset.clone = "";
+              c.setAttribute("aria-hidden", "true");
+              track.appendChild(c);
+            });
           }
-        });
-      },
-      {
-        threshold: 0.2, // triggers when 20% visible
-      },
-    );
+          slides = [...track.children].map((el) => ({
+            el,
+            center: el.offsetLeft + el.offsetWidth / 2,
+          }));
+          offset = wrap(offset);
+        }
 
-    elements.forEach((el) => observer.observe(el));
-  </script>
+        function render() {
+          track.style.transform = `translateX(${-offset}px)`;
+          const half = viewport.clientWidth / 2;
+          for (const s of slides) {
+            const d = Math.min(Math.abs(s.center - offset - half) / half, 1);
+            const scale = MIN_SCALE + (MAX_SCALE - MIN_SCALE) * (1 - d) ** 2;
+            const opacity = Math.min((1 - d) / FADE_ZONE, 1);
+            s.el.style.transform = `scale(${scale})`;
+            s.el.style.opacity = opacity;
+          }
+        }
+
+        let last = performance.now();
+        function tick(now) {
+          const dt = Math.min(now - last, 100) / 1000; // avoid jumps after tab switch
+          last = now;
+          if (dragging) {
+            // offset follows the pointer (see pointermove)
+          } else if (Math.abs(velocity) > 5) {
+            offset = wrap(offset + velocity * dt); // coast after a flick
+            velocity *= Math.exp(-FRICTION * dt);
+          } else if (!paused && now >= resumeAt) {
+            velocity = 0;
+            offset = wrap(offset + SPEED * dt);
+          }
+          render();
+          requestAnimationFrame(tick);
+        }
+
+        viewport.addEventListener("pointerdown", (e) => {
+          if (e.pointerType === "mouse" && e.button !== 0) return;
+          if (e.pointerType === "mouse") e.preventDefault(); // no text/image drag
+          dragging = true;
+          lastX = e.clientX;
+          lastMove = performance.now();
+          velocity = 0;
+          viewport.setPointerCapture(e.pointerId);
+          viewport.classList.add("dragging");
+        });
+
+        viewport.addEventListener("pointermove", (e) => {
+          if (!dragging) return;
+          const now = performance.now();
+          const dx = e.clientX - lastX;
+          const dt = Math.max(now - lastMove, 1) / 1000;
+          lastX = e.clientX;
+          lastMove = now;
+          offset = wrap(offset - dx);
+          velocity = 0.8 * velocity + 0.2 * (-dx / dt); // smoothed flick speed
+          if (reducedMotion) render();
+        });
+
+        function endDrag() {
+          if (!dragging) return;
+          dragging = false;
+          viewport.classList.remove("dragging");
+          // A pause before the release means no flick
+          if (performance.now() - lastMove > 80 || reducedMotion) velocity = 0;
+          resumeAt = performance.now() + RESUME_MS;
+        }
+        viewport.addEventListener("pointerup", endDrag);
+        viewport.addEventListener("pointercancel", endDrag); // e.g. page scroll took over
+
+        // Hover-pause for real mice only: phones fire mouseenter on tap and
+        // no mouseleave, which would leave the carousel stuck after a swipe
+        viewport.addEventListener("pointerenter", (e) => {
+          if (e.pointerType === "mouse") paused = true;
+        });
+        viewport.addEventListener("pointerleave", (e) => {
+          if (e.pointerType === "mouse") paused = false;
+        });
+        window.addEventListener("resize", build);
+        window.addEventListener("load", build); // re-measure once images load
+
+        build();
+        if (reducedMotion) {
+          render();
+        } else {
+          requestAnimationFrame(tick);
+        }
+      })();
+    </script>
+  </body>
 </html>

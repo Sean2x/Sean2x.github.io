@@ -146,7 +146,7 @@ GameState.baseSeed = Number(
 let timerInterval = null;
 
 async function loadGameStatedictionary() {
-  const response = await fetch("Misc/wordlist-20210729.txt");
+  const response = await fetch("wordlist.txt");
   const text = await response.text();
 
   const words = text.split(/\r?\n/);

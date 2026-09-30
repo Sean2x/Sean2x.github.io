@@ -1,69 +1,16 @@
 <!doctype html>
+<!-- Old URL kept so existing links still work; safe to delete later -->
 <html lang="en">
   <head>
-    <base target="_self" />
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-    />
-    <title>Fish Avoiding Mouse</title>
-    <meta
-      name="description"
-      content="The fish that run away from the mouse. It's a simple game where you control a mouse and try to catch the fish. The fish will try to avoid you, so you have to be quick and strategic to catch them all. It's a fun way to pass the time and challenge your reflexes."
-    />
-    <link rel="stylesheet" href="NewStyle.css" />
-
-    <style>
-      :root {
-        --Ocean: #242057;
-        --Fish: #ff6347;
-        --Shark: #3b3a47;
-      }
-      body {
-        margin: 0;
-        overflow: hidden;
-      }
-
-      #bgVideo {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center center;
-        z-index: -1; /* sits behind everything */
-      }
-      canvas {
-        position: relative; /* THIS is what you meant */
-        z-index: 1;
-        width: 100%;
-        height: 100%;
-        touch-action: none;
-      }
-
-      #version {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        color: white;
-        font-family: monospace;
-        font-size: 20px;
-        opacity: 0.7;
-        z-index: 9999;
-      }
-    </style>
+    <title>Moved</title>
+    <link rel="canonical" href="https://sean2x.github.io/games/fish-swarm/" />
+    <meta http-equiv="refresh" content="0; url=games/fish-swarm/" />
+    <script>
+      location.replace("games/fish-swarm/" + location.search + location.hash);
+    </script>
   </head>
-
   <body>
-    <div id="version">v2.0.1</div>
-
-    <video id="bgVideo" autoplay muted loop playsinline>
-      <source src="Images/ocean.mp4" type="video/mp4" />
-    </video>
-    <canvas id="canvas"></canvas>
-
-    <script src="FishGame.js"></script>
+    <p>This page moved to <a href="games/fish-swarm/">games/fish-swarm/</a>.</p>
   </body>
 </html>

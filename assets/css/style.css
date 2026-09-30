@@ -1,0 +1,1293 @@
+/* Shared site theme — linked from every page (home, projects, games) */
+
+/* ==========================================================================
+   Theme tokens
+   ========================================================================== */
+:root {
+  --lightMain: #b5179e;
+  --darkMain: #7209b7;
+  --bg: #00000000;
+  --lightbg: #00000086;
+  --glow: 0 0 10px #b5179d7d, 0 0 20px #b5179d12, 0 0 30px #b5179e33;
+  --dimmed: #b5179d36;
+
+  --blue: #80f4ff;
+  --darkBlue: #1a2b46;
+
+  --green: #0eaa09;
+  --yellow: #ffd726;
+  --red: #e00d0d;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+body.crt {
+  background-color: #000;
+}
+
+/* Blocks double-tap zoom (it hijacked fast taps in Lexicon) while still
+   allowing pinch zoom */
+* {
+  touch-action: manipulation;
+}
+
+p,
+a,
+h1,
+h2,
+h3,
+span {
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  color: var(--lightMain);
+  font-weight: 1000;
+  text-shadow: var(--glow);
+}
+
+/* Transparent border keeps margins from collapsing (layout depends on it) */
+section,
+a,
+div,
+p,
+h1,
+h2,
+h3 {
+  border: 1px solid transparent;
+}
+
+/* ==========================================================================
+   Background effects
+   ========================================================================== */
+#matrixCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.7;
+}
+
+.crt::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 50;
+  pointer-events: none;
+  animation: scanline 8s linear infinite;
+}
+
+/* Media that should stay crisp: lifted above the CRT scanlines
+   (.crt::before, z-index 50). Cards themselves keep the CRT look. */
+.video-frame,
+.project-media,
+.post-hero,
+.post-body figure,
+.resume-viewer {
+  position: relative;
+  z-index: 60;
+}
+
+/* Clicks/hover on a card's media fall through to the card and its link */
+.project-media {
+  pointer-events: none;
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+  border-left: 1px solid var(--darkMain);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--darkMain);
+  box-shadow: var(--glow);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--lightMain);
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+.text-glow {
+  text-shadow: var(--glow);
+}
+
+.box-glow {
+  box-shadow:
+    0 0 10px #b5179e80,
+    inset 0 0 10px #b5179e1a;
+}
+
+.border-glow {
+  border: 1px solid var(--lightMain);
+  box-shadow:
+    0 0 10px #b5179e80,
+    inset 0 0 20px #b5179e1a;
+}
+
+.section-title {
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  transition: scale 0.3s ease;
+}
+
+.logo:hover {
+  scale: 1.1;
+}
+
+/* Scroll-in reveal (toggled by IntersectionObserver). Components that add
+   their own transitions must repeat the opacity/transform entries, or
+   they'll snap in instead of fading. */
+.apple-fade {
+  opacity: 0;
+  transform: translateY(70px);
+  transition:
+    opacity 1s cubic-bezier(0.25, 1, 0.35, 1) var(--delay, 0s),
+    transform 1s cubic-bezier(0.25, 1, 0.35, 1) var(--delay, 0s);
+}
+
+/* End on `none`, not translateY(0): a lingering transform would trap
+   children (e.g. .project-media) under the CRT scanlines */
+.apple-fade.show {
+  opacity: 1;
+  transform: none;
+}
+
+/* ==========================================================================
+   Header / nav
+   ========================================================================== */
+.header {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+#header1 {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.header .bi {
+  font-size: 2rem;
+}
+
+.header .nav .bi {
+  font-size: inherit;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav a {
+  color: var(--lightMain);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+.socials {
+  display: flex;
+  gap: 2rem;
+}
+
+.hamburger {
+  display: none;
+}
+
+.rocket {
+  display: inline;
+}
+
+/* ==========================================================================
+   Terminal window component
+   ========================================================================== */
+.grid-item {
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px;
+  height: 300px;
+  display: flex;
+  flex-direction: row;
+}
+
+.terminal-window {
+  background: var(--lightbg);
+  border: 2px solid var(--lightMain);
+  box-shadow: var(--glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-window-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(90deg, transparent, #b5179e1a, transparent);
+  border-bottom: 1px solid var(--lightMain);
+}
+
+.terminal-window-top span {
+  opacity: 0.9;
+}
+
+.terminal-header {
+  background: rgba(74, 29, 29, 0.91);
+  border-bottom: 1px solid var(--lightMain);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid var(--lightMain);
+}
+
+/* Filled "status light" variants */
+.terminal-btn.is-main {
+  border: 6px solid var(--lightMain);
+}
+
+.terminal-btn.is-green {
+  border: 6px solid var(--green);
+}
+
+.terminal-btn.is-yellow {
+  border: 6px solid var(--yellow);
+}
+
+.terminal-btn.is-red {
+  border: 6px solid var(--red);
+}
+
+/* ==========================================================================
+   Home page: About (full-screen intro)
+   ========================================================================== */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Fill the first screen below the header */
+  min-height: calc(100svh - 90px);
+  padding: 2rem clamp(1rem, 4vw, 3rem) 5rem;
+}
+
+/* Never scroll internally: before its pieces fade in they sit 70px low,
+   which would otherwise give the panel a scrollbar on phones (where
+   .terminal-window gets overflow: auto) */
+.terminal-window.hero-panel {
+  overflow: hidden;
+  overflow: clip;
+}
+
+/* Same semi-transparent terminal panel as the project cards */
+.hero-panel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 620px);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-radius: 20px;
+}
+
+.hero-photo {
+  width: clamp(220px, 28vw, 380px);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 24px;
+  border: 3px solid var(--lightMain);
+  box-shadow:
+    0 0 25px #b5179e88,
+    0 0 60px #b5179e33;
+}
+
+.hero-kicker {
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 0.75;
+  text-shadow: none;
+}
+
+.hero-name {
+  margin: 0 0 0.25rem;
+  font-size: clamp(2.75rem, 6.5vw, 5.25rem);
+  line-height: 1.05;
+}
+
+/* Typewriter line: ::before holds the full text invisibly so the layout
+   doesn't shift while the live text types over it */
+.hero-role {
+  position: relative;
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+}
+
+.hero-role::before {
+  content: attr(data-text) "\00a0";
+  visibility: hidden;
+}
+
+.hero-role-live {
+  position: absolute;
+  inset: 0;
+}
+
+.caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--lightMain);
+  box-shadow: var(--glow);
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.hero-bio {
+  max-width: 56ch;
+  margin: 0 0 1.25rem;
+  font-size: 1.05rem;
+  font-weight: normal;
+  line-height: 1.7;
+  color: #eadbe7;
+  text-shadow: none;
+}
+
+.hero-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0 0 1.75rem;
+  padding: 0;
+  list-style: none;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  font-size: 0.95rem;
+  color: var(--lightMain);
+}
+
+/* Icon column, so wrapped lines hang-indent under the text */
+.hero-facts li {
+  display: flex;
+  gap: 0.5em;
+}
+
+.hero-facts .bi {
+  flex-shrink: 0;
+  width: 1em;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  translate: -50% 0;
+  font-size: 2rem;
+  text-decoration: none;
+  opacity: 0.7;
+  animation: cue-bob 2s ease-in-out infinite;
+}
+
+@keyframes cue-bob {
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret,
+  .scroll-cue {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   Home page: Internship carousel
+   ========================================================================== */
+#carousel {
+  height: 50vh;
+}
+
+#carousel .section-title {
+  height: 10%;
+}
+
+/* Clip sideways only, so the enlarged center slide isn't cut off vertically.
+   Horizontal swipes/drags are handled in JS; vertical swipes still scroll
+   the page (touch-action: pan-y). */
+.carousel-viewport {
+  height: 90%;
+  overflow-x: clip;
+  overflow-y: visible;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.carousel-viewport.dragging {
+  cursor: grabbing;
+}
+
+.carousel-viewport img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* Moved by JS (translateX); slides are cloned so the loop is seamless */
+.carousel-track {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+  width: max-content;
+  align-items: center;
+  will-change: transform;
+}
+
+/* Scale and opacity are set per frame from distance to the viewport center */
+.slide {
+  height: 80%;
+  aspect-ratio: 4 / 5;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+
+.image-box {
+  width: 90%;
+  aspect-ratio: 1 / 1;
+  flex: 0 1 auto;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #111111bd;
+}
+
+.image-box img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.image-box.padded img {
+  padding: 20px;
+}
+
+/* Recolors the RTX logo to the theme purple */
+.logo-tint img {
+  filter: brightness(0) saturate(100%) invert(14%) sepia(100%) saturate(1000%)
+    hue-rotate(250deg);
+}
+
+/* ==========================================================================
+   Home page: YouTube
+   ========================================================================== */
+#youtube {
+  height: 70vh;
+  padding: 20px;
+  background-color: rgb(1, 1, 1);
+  border-top: 2px solid var(--lightMain);
+  border-bottom: 2px solid var(--lightMain);
+  border-radius: 8px;
+}
+
+.youtube-row {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.youtube-side {
+  flex: 2;
+  min-width: 0;
+}
+
+.youtube-side h2 {
+  overflow: hidden;
+}
+
+.youtube-side.right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.youtube-center {
+  flex: 3;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video-frame {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-frame iframe {
+  width: 100%;
+  max-width: 800px;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 16px;
+}
+
+/* ==========================================================================
+   Home page: Projects
+   ========================================================================== */
+#projects {
+  overflow: hidden;
+}
+
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 0 20px;
+}
+
+/* Full-width card: media on the left, text on the right */
+.project-card {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 30px;
+  align-items: center;
+  padding: 50px 30px 30px;
+  border-radius: 15px;
+  transition:
+    opacity 1s cubic-bezier(0.25, 1, 0.35, 1) var(--delay, 0s),
+    transform 1s cubic-bezier(0.25, 1, 0.35, 1) var(--delay, 0s),
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.project-card:hover {
+  background: #0d000bcc;
+  box-shadow:
+    0 0 20px #b5179eaa,
+    0 0 40px #b5179e44;
+}
+
+.project-media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--dimmed);
+  background: #111111bd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-media img,
+.project-media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Stills are shown whole (logos, sprites, odd-sized screenshots) */
+.project-media img {
+  object-fit: contain;
+  padding: 10px;
+}
+
+.project-media .bi {
+  font-size: clamp(60px, 10vw, 140px);
+  color: var(--lightMain);
+  text-shadow: var(--glow);
+}
+
+/* Preview clip sits over the still and fades in once it's playing */
+.project-media video {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.project-card.previewing .project-media video {
+  opacity: 1;
+}
+
+.project-info h3 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.project-link {
+  text-decoration: none;
+}
+
+/* Whole card is clickable via the title link */
+.project-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.project-tags {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.project-summary {
+  font-weight: normal;
+  line-height: 1.6;
+  color: #eadbe7;
+  text-shadow: none;
+}
+
+.project-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Sits above the card-wide link so it stays separately clickable */
+.project-actions .btn-terminal {
+  position: relative;
+  z-index: 2;
+}
+
+.read-more .bi {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.project-card:hover .read-more .bi {
+  transform: translateX(6px);
+}
+
+.see-all {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0 20px;
+}
+
+/* Outlined terminal-style button */
+.btn-terminal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border: 2px solid var(--lightMain);
+  border-radius: 8px;
+  background: var(--lightbg);
+  box-shadow: var(--glow);
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn-terminal:hover {
+  background: var(--lightMain);
+  color: #000;
+  text-shadow: none;
+}
+
+/* Filled variant for the main action */
+.btn-terminal.primary {
+  background: var(--lightMain);
+  color: #000;
+  text-shadow: none;
+}
+
+.btn-terminal.primary:hover {
+  background: #d63bbd;
+  color: #000;
+}
+
+/* ==========================================================================
+   Projects index page
+   ========================================================================== */
+.page-intro {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+
+.page-intro h1 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+}
+
+.page-intro p {
+  max-width: 60ch;
+  margin: 0 auto 0.5rem;
+  font-weight: normal;
+  color: #eadbe7;
+  text-shadow: none;
+}
+
+/* Closing "Project philosophy" panel on projects/index.html */
+.philosophy {
+  width: calc(100% - 32px);
+  max-width: 820px;
+  margin: 50px auto 60px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 15px;
+}
+
+.philosophy h2 {
+  margin-bottom: 1rem;
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+}
+
+.philosophy p {
+  font-weight: normal;
+  line-height: 1.7;
+  color: #eadbe7;
+  text-shadow: none;
+}
+
+.philosophy strong {
+  color: var(--lightMain);
+}
+
+.philosophy .philosophy-loop {
+  margin: 1.25rem 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--dimmed);
+  border-radius: 10px;
+  text-align: center;
+  font-size: clamp(0.85rem, 2.4vw, 1.1rem);
+  color: var(--lightMain);
+  text-shadow: var(--glow);
+}
+
+/* ==========================================================================
+   Resume page (resume/index.html)
+   ========================================================================== */
+.resume-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px 60px;
+}
+
+.resume-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.resume-viewer {
+  border-radius: 15px;
+  padding: clamp(10px, 2vw, 20px);
+}
+
+.resume-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 300px;
+}
+
+/* Each page renders as white paper */
+.resume-page-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+}
+
+.resume-status {
+  margin: auto;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-weight: normal;
+  color: #eadbe7;
+  text-shadow: none;
+}
+
+/* ==========================================================================
+   Project write-up pages (projects/*.html)
+   A calm reading column: mono + glow for headings, plain sans for prose.
+   ========================================================================== */
+.post {
+  --read: #eadbe7; /* soft body-text color */
+  --read-dim: #b9a3b5;
+  max-width: 820px;
+  margin: 0 auto 60px;
+  padding: 32px 48px 48px;
+  background: rgba(3, 0, 4, 0.88);
+  border: 1px solid var(--dimmed);
+  border-radius: 16px;
+  box-shadow: 0 0 40px #b5179e22;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 24px;
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.back-link:hover {
+  opacity: 1;
+}
+
+/* Header block */
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.post-tags li {
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--dimmed);
+  border-radius: 999px;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  font-size: 0.8rem;
+  color: var(--lightMain);
+}
+
+.post-title {
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  margin-bottom: 0.5rem;
+}
+
+.post .post-lede {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--read);
+  text-shadow: none;
+  margin-bottom: 1.5rem;
+}
+
+/* Quick facts: timeline / role / tools / status */
+.post-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--dimmed);
+  border-bottom: 1px solid var(--dimmed);
+}
+
+.post-facts dt {
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  font-size: 0.75rem;
+  font-weight: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lightMain);
+  opacity: 0.75;
+}
+
+.post-facts dd {
+  margin: 0.2rem 0 0;
+  font-family: "Inter", system-ui, sans-serif;
+  color: var(--read);
+}
+
+.post-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Hero media */
+.post-hero {
+  margin: 2rem 0 2.5rem;
+}
+
+.post-hero video,
+.post-hero img {
+  display: block;
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  background: #000;
+  border: 1px solid var(--dimmed);
+  border-radius: 10px;
+}
+
+/* Body copy */
+.post-body section {
+  margin-bottom: 2.5rem;
+}
+
+.post-body h2 {
+  font-size: 1.6rem;
+  margin: 0 0 0.75rem;
+}
+
+.post-body h2::before {
+  content: "## ";
+  opacity: 0.45;
+}
+
+.post-body h3 {
+  font-size: 1.2rem;
+  margin: 0 0 0.4rem;
+}
+
+.post .post-body p,
+.post-body li {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--read);
+  text-shadow: none;
+}
+
+.post-body ul,
+.post-body ol {
+  padding-left: 1.25rem;
+}
+
+.post-body li + li {
+  margin-top: 0.35rem;
+}
+
+.post-body li::marker {
+  color: var(--lightMain);
+}
+
+.post-body a {
+  text-shadow: none;
+  font-weight: 600;
+}
+
+.post-body figure {
+  margin: 1.5rem 0;
+}
+
+/* Shown at natural size up to the column width (small screenshots stay sharp) */
+.post-body figure img,
+.post-body figure video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 8px;
+  border: 1px solid var(--dimmed);
+}
+
+/* Two images side by side, e.g. a before/after or inspiration vs. result */
+.figure-pair > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.figure-pair img {
+  width: 100%;
+}
+
+/* Portrait phone screenshots */
+.figure-tall img {
+  max-height: 560px;
+  width: auto;
+}
+
+.post-body figcaption,
+.post-hero figcaption {
+  margin-top: 0.5rem;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.9rem;
+  color: var(--read-dim);
+  text-align: center;
+}
+
+/* Placeholder paragraphs — delete as you write each section */
+.post .post-body p.todo {
+  font-style: italic;
+  color: var(--read-dim);
+  border-left: 2px dashed var(--dimmed);
+  padding-left: 1rem;
+}
+
+/* The journey: a vertical timeline of milestones */
+.timeline {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0 0 0 1.75rem;
+  border-left: 2px solid var(--dimmed);
+}
+
+.post-body .timeline-entry {
+  position: relative;
+  margin: 0 0 2rem;
+}
+
+.timeline-entry::before {
+  content: "";
+  position: absolute;
+  left: calc(-1.75rem - 7px);
+  top: 0.35rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #000;
+  border: 2px solid var(--lightMain);
+  box-shadow: var(--glow);
+}
+
+.timeline-date {
+  display: block;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  text-shadow: none;
+}
+
+/* Highlighted takeaway */
+.callout {
+  margin: 0 0 2.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--lightMain);
+  border-radius: 10px;
+  background: #b5179e14;
+}
+
+.callout strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  color: var(--lightMain);
+}
+
+.post .callout p {
+  margin: 0;
+}
+
+/* Previous / next project */
+.post-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--dimmed);
+}
+
+.post-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--dimmed);
+  border-radius: 10px;
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.post-nav-link:hover {
+  border-color: var(--lightMain);
+  background: #b5179e14;
+}
+
+.post-nav-link span {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  text-shadow: none;
+}
+
+.post-nav-link.next {
+  grid-column: 2;
+  text-align: right;
+}
+
+/* ==========================================================================
+   Home page: Contact
+   ========================================================================== */
+#contact {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px 80px;
+}
+
+.contact-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem 2.5rem;
+  width: min(900px, 100%);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 15px;
+}
+
+.contact-text h2 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+}
+
+.contact-text p {
+  margin: 0;
+  font-weight: normal;
+  color: #eadbe7;
+  text-shadow: none;
+}
+
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 768px) {
+  section {
+    overflow: hidden;
+  }
+
+  .hamburger {
+    display: inline;
+  }
+
+  .rocket {
+    display: none;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  /* Header collapses into a toggleable column */
+  #header {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  #header1 {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav {
+    display: none !important;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav.active {
+    display: flex !important;
+  }
+
+  .socials {
+    align-self: flex-start;
+  }
+
+  .terminal-window {
+    overflow: auto;
+  }
+
+  #youtube {
+    height: auto;
+  }
+
+  /* Intro stacks: photo on top, text below */
+  .hero {
+    padding-top: 1rem;
+  }
+
+  .hero-panel {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .hero-photo {
+    width: min(200px, 55vw);
+  }
+
+  .project-list {
+    padding: 0;
+  }
+
+  .project-card {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 45px 16px 20px;
+  }
+
+  .post {
+    margin: 0 12px 40px;
+    padding: 24px 18px 32px;
+  }
+
+  .post-facts {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .post-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .post-nav-link.next {
+    grid-column: 1;
+  }
+}

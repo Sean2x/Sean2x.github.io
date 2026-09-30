@@ -1,0 +1,224 @@
+<!doctype html>
+<!--
+  Template for a new project write-up.
+  1. Copy this file to projects/<slug>.html (slug = the name in assets/js/projects.js).
+  2. Find/replace "your-slug", "Project Title", and the summary text.
+  3. Remove the <meta name="robots" content="noindex"> line below.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project Title | Sean Lirazan</title>
+    <meta name="description" content="One or two sentences on what this is and why it's interesting." />
+    <link rel="canonical" href="https://sean2x.github.io/projects/your-slug.html" />
+    <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
+    <meta name="robots" content="noindex" />
+
+    <!-- Link previews (LinkedIn, iMessage, Discord, X, ...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sean Lirazan" />
+    <meta property="og:title" content="Project Title | Sean Lirazan" />
+    <meta property="og:description" content="One or two sentences on what this is and why it's interesting." />
+    <meta property="og:url" content="https://sean2x.github.io/projects/your-slug.html" />
+    <meta property="og:image" content="https://sean2x.github.io/assets/img/projects/your-slug.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+
+  <body class="crt">
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- Header -->
+    <header id="header" class="header">
+      <div id="header1">
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <i class="bi bi-list hamburger"></i>
+          <a href="../index.html" aria-label="Home"
+            ><i class="logo bi bi-rocket-takeoff-fill rocket"></i
+          ></a>
+        </div>
+
+        <nav class="nav">
+          <a href="../index.html#about-me">About</a>
+          <a href="../projects/">Projects</a>
+          <a href="../card/" target="_blank">Contact</a>
+          <a href="../resume/">
+            Resume
+          </a>
+        </nav>
+      </div>
+
+      <div class="socials">
+        <a
+          href="https://www.instagram.com/sean.applies.engineering/"
+          class="logo bi bi-instagram"
+          target="_blank"
+          aria-label="Instagram"
+        ></a>
+        <a
+          href="https://github.com/Sean2x"
+          class="logo bi bi-github"
+          target="_blank"
+          aria-label="GitHub"
+        ></a>
+        <a
+          href="https://www.youtube.com/@SeanAppliesEngineering"
+          class="logo bi bi-youtube"
+          target="_blank"
+          aria-label="YouTube"
+        ></a>
+      </div>
+    </header>
+
+    <main class="post">
+      <a class="back-link" href="./">
+        <i class="bi bi-arrow-left"></i> All projects
+      </a>
+
+      <header class="post-header">
+        <ul class="post-tags">
+          <li>Tool</li>
+          <li>Tool</li>
+        </ul>
+        <h1 class="post-title">Project Title</h1>
+        <p class="post-lede">
+          One or two sentences on what this is and why it's interesting.
+        </p>
+
+        <!-- Quick facts — replace the dashes -->
+        <dl class="post-facts">
+          <div>
+            <dt>Timeline</dt>
+            <dd>—</dd>
+          </div>
+          <div>
+            <dt>Role</dt>
+            <dd>—</dd>
+          </div>
+          <div>
+            <dt>Tools</dt>
+            <dd>Tool, Tool</dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd>—</dd>
+          </div>
+        </dl>
+        <div class="post-links">
+          <a class="btn-terminal" href="#">
+            Live demo <i class="bi bi-play-fill"></i>
+          </a>
+          <a class="btn-terminal" href="#">
+            Source <i class="bi bi-github"></i>
+          </a>
+        </div>
+      </header>
+
+      <!-- Hero: the demo clip, with the thumbnail shown until it plays -->
+      <figure class="post-hero">
+        <video
+          src="../assets/video/projects/your-slug.mp4"
+          poster="../assets/img/projects/your-slug.png"
+          controls
+          playsinline
+          preload="none"
+        ></video>
+      </figure>
+
+      <article class="post-body">
+        <!--
+          Writing tips:
+          - Delete each <p class="todo"> as you replace it with your own words.
+          - Add photos anywhere with:
+              <figure>
+                <img src="../assets/img/projects/your-slug-step1.jpg" alt="..." />
+                <figcaption>What the reader is looking at</figcaption>
+              </figure>
+        -->
+
+        <section>
+          <h2>The spark</h2>
+          <!-- Where did the idea come from? What problem or curiosity started it? -->
+          <p class="todo">Coming soon: where the idea for this project came from.</p>
+        </section>
+
+        <section>
+          <h2>Goals</h2>
+          <!-- What did "done" look like? Keep it to a short list. -->
+          <p class="todo">Coming soon: what I set out to build.</p>
+        </section>
+
+        <section>
+          <h2>The journey</h2>
+          <!-- The story, in order. Copy an <li> per milestone; add a figure to any of them. -->
+          <ol class="timeline">
+            <li class="timeline-entry">
+              <span class="timeline-date">Step 1</span>
+              <h3>First prototype</h3>
+              <p class="todo">Coming soon.</p>
+            </li>
+            <li class="timeline-entry">
+              <span class="timeline-date">Step 2</span>
+              <h3>Iterating</h3>
+              <p class="todo">Coming soon.</p>
+            </li>
+            <li class="timeline-entry">
+              <span class="timeline-date">Step 3</span>
+              <h3>Shipping it</h3>
+              <p class="todo">Coming soon.</p>
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Challenges</h2>
+          <!-- What broke, what was harder than expected, and how you got past it. -->
+          <p class="todo">Coming soon: the hardest problems and how I solved them.</p>
+        </section>
+
+        <!-- One-sentence takeaway, highlighted -->
+        <aside class="callout">
+          <strong>Key lesson</strong>
+          <p class="todo">Coming soon.</p>
+        </aside>
+
+        <section>
+          <h2>Results</h2>
+          <!-- What it does now. Numbers, screenshots, and clips work well here. -->
+          <p class="todo">Coming soon: how it turned out.</p>
+        </section>
+
+        <section>
+          <h2>What I learned</h2>
+          <p class="todo">Coming soon.</p>
+        </section>
+
+        <section>
+          <h2>What's next</h2>
+          <p class="todo">Coming soon.</p>
+        </section>
+      </article>
+
+      <!-- Previous / next project links, filled in from projects.js -->
+      <nav class="post-nav" data-post-nav="your-slug"></nav>
+    </main>
+
+    <script src="../assets/js/matrix.js"></script>
+    <script src="../assets/js/projects.js"></script>
+    <script src="../assets/js/site.js"></script>
+  </body>
+</html>
