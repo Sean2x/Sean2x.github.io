@@ -19,8 +19,9 @@
   let gradient;
 
   function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // Canvas is 200% x 130% of the viewport in CSS (perspective tilt)
+    canvas.width = window.innerWidth * 2;
+    canvas.height = window.innerHeight * 1.3;
     // Keep existing columns, add/remove at the right edge
     const columns = Math.floor(canvas.width / fontSize);
     drops = Array.from({ length: columns }, (_, i) => drops[i] ?? 1);
