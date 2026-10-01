@@ -13,20 +13,21 @@
   const dark = css.getPropertyValue("--darkMain").trim();
 
   const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const fontSize = 19;
+  const fontSize = 40;
   const frameMs = 33;
   let drops = [];
   let gradient;
 
   function resize() {
-    // Canvas is 200% x 130% of the viewport in CSS (perspective tilt)
-    canvas.width = window.innerWidth * 2;
-    canvas.height = window.innerHeight * 1.3;
+    // Canvas is 160% x 115% of the viewport in CSS (perspective tilt)
+    canvas.width = window.innerWidth * 1.6;
+    canvas.height = window.innerHeight * 1.15;
     // Keep existing columns, add/remove at the right edge
     const columns = Math.floor(canvas.width / fontSize);
     drops = Array.from({ length: columns }, (_, i) => drops[i] ?? 1);
     gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
     gradient.addColorStop(0, light);
+    gradient.addColorStop(0.6, light);
     gradient.addColorStop(1, dark);
   }
 

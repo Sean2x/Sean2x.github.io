@@ -62,13 +62,13 @@ h3 {
   position: fixed;
   /* Oversized (matches matrix.js) and tilted so the bottom looms closer */
   bottom: 0;
-  left: -50%;
-  width: 200%;
-  height: 130%;
+  left: -30%;
+  width: 160%;
+  height: 115%;
   z-index: -1;
-  opacity: 0.7;
+  opacity: 1;
   transform-origin: 50% 100%;
-  transform: perspective(900px) rotateX(38deg);
+  transform: perspective(1200px) rotateX(22deg);
 }
 
 .crt::before {
@@ -426,7 +426,7 @@ h3 {
   translate: -50% 0;
   font-size: 2rem;
   text-decoration: none;
-  opacity: 0.7;
+  opacity: 1;
   animation: cue-bob 2s ease-in-out infinite;
 }
 
@@ -678,7 +678,7 @@ h3 {
 
 .project-tags {
   font-size: 0.9rem;
-  opacity: 0.7;
+  opacity: 1;
 }
 
 .project-summary {
@@ -1148,7 +1148,7 @@ h3 {
 
 .post-nav-link span {
   font-size: 0.8rem;
-  opacity: 0.7;
+  opacity: 1;
   text-shadow: none;
 }
 
