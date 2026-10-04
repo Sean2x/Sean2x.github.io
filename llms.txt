@@ -1,0 +1,35 @@
+# Sean Lirazan
+
+> Sean Lirazan is a robotics and controls engineer and creator based in Los Angeles, and a mechanical engineering student at Iowa State University (B.S. Mechanical Engineering, Minor in Cyber-Physical Systems, expected May 2028) focused on robotics, controls, and embedded systems. He has interned at NASA Armstrong Flight Research Center, Collins Aerospace (RTX), and John Deere, and builds software and hardware projects that he documents on this site.
+
+## About
+
+- [Home and about](https://sean2x.github.io/): intro, internships, latest video, and featured projects
+- [Resume](https://sean2x.github.io/resume/): full resume (PDF viewer, download, and a text version)
+- [Contact card](https://sean2x.github.io/card/): links to LinkedIn, Instagram, YouTube, and GitHub
+
+## Experience
+
+- NASA Armstrong Flight Research Center — Controls Engineering Intern (Pathways), Aug 2026–present: flight controllers integrated into JPL's F´ (F Prime) flight software, X-59 sensor software, X-56 flutter-suppression test models, flight-dynamics simulation
+- Collins Aerospace (RTX) — Systems Engineering Co-op, Spring–Aug 2026: requirements-based verification and hardware-in-the-loop testing of military helicopter avionics, DOORS/DXL test automation
+- John Deere — Robotics & Design Intern, Summer 2025: autonomous precision-agriculture UAV, GPS and computer-vision target following
+- ISU Student Innovation Lab — Embedded Systems & Controls Specialist, Fall 2024–present
+- 3D Printing & Design Club, Iowa State — President, Fall 2024–present
+
+## Projects
+
+- [Fish Simulator](https://sean2x.github.io/projects/fish-swarm.html): browser fish swarm where simple local rules (separation, alignment, cohesion) create emergent schooling that reacts to the mouse. [Play](https://sean2x.github.io/games/fish-swarm/)
+- [Lexicon](https://sean2x.github.io/projects/lexicon.html): browser spelling game inspired by Bookworm Adventures; 10+ players returned for 7+ consecutive days. [Play](https://sean2x.github.io/games/lexicon/)
+- [Personal Website](https://sean2x.github.io/projects/portfolio-website.html): this site, built from zero web experience and refined with feedback from about 10 test users
+- [All projects](https://sean2x.github.io/projects/)
+
+## Skills
+
+Robotics and GNC (PID, LQR, state-space control, Kalman filtering, sensor fusion, inverse kinematics, ROS 2); flight and embedded software (F´, C/C++, Python, FreeRTOS, STM32, ESP32, Arduino, Raspberry Pi); simulation and test (MATLAB/Simulink, hardware-in-the-loop, V&V); mechanical design (SolidWorks Certified, Onshape, FEA, CFD, 3D printing).
+
+## Profiles
+
+- LinkedIn: https://www.linkedin.com/in/seanlirazan/
+- GitHub: https://github.com/Sean2x
+- YouTube: https://www.youtube.com/@SeanAppliesEngineering
+- Instagram: https://www.instagram.com/sean.applies.engineering/

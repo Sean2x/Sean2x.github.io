@@ -560,6 +560,17 @@ h3 {
   align-items: center;
 }
 
+/* Section heading styled at the old h1 size (the page's only h1 is the name) */
+.youtube-title {
+  font-size: calc(1.375rem + 1.5vw);
+}
+
+@media (min-width: 1200px) {
+  .youtube-title {
+    font-size: 2.5rem;
+  }
+}
+
 .video-frame {
   width: 100%;
   height: 100%;
@@ -848,6 +859,47 @@ h3 {
   font-weight: normal;
   color: #eadbe7;
   text-shadow: none;
+}
+
+/* Collapsible text version under the resume preview */
+.resume-text {
+  margin-top: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 15px;
+}
+
+.resume-text summary {
+  cursor: pointer;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  color: var(--lightMain);
+  text-shadow: var(--glow);
+}
+
+.resume-text h2 {
+  margin-top: 1.25rem;
+  font-size: 1.5rem;
+}
+
+.resume-text h3 {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.resume-text p,
+.resume-text li {
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: normal;
+  line-height: 1.65;
+  color: #eadbe7;
+  text-shadow: none;
+}
+
+.resume-text li + li {
+  margin-top: 0.5rem;
+}
+
+.resume-text strong {
+  color: #fff;
 }
 
 /* ==========================================================================

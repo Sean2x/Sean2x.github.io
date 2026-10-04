@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Projects | Sean Lirazan</title>
-    <meta name="description" content="Every project Sean Lirazan has built, with write-ups on how each one came together." />
+    <meta name="description" content="Engineering portfolio of Sean Lirazan, robotics and controls engineer: projects with full write-ups, from simulations and games to the website itself." />
     <link rel="canonical" href="https://sean2x.github.io/projects/" />
     <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
 
@@ -12,7 +12,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sean Lirazan" />
     <meta property="og:title" content="Projects | Sean Lirazan" />
-    <meta property="og:description" content="Every project Sean Lirazan has built, with write-ups on how each one came together." />
+    <meta property="og:description" content="Engineering portfolio of Sean Lirazan, robotics and controls engineer: projects with full write-ups, from simulations and games to the website itself." />
     <meta property="og:url" content="https://sean2x.github.io/projects/" />
     <meta property="og:image" content="https://sean2x.github.io/assets/img/og-image.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -30,6 +30,45 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../assets/css/style.css" />
+
+    <!-- Structured data: tells search engines and AI tools who this is -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "url": "https://sean2x.github.io/projects/",
+        "name": "Projects by Sean Lirazan",
+        "author": {
+          "@type": "Person",
+          "@id": "https://sean2x.github.io/#person",
+          "name": "Sean Lirazan",
+          "url": "https://sean2x.github.io/"
+        },
+        "mainEntity": {
+          "@type": "ItemList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "url": "https://sean2x.github.io/projects/fish-swarm.html",
+              "name": "Fish Simulator"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "url": "https://sean2x.github.io/projects/lexicon.html",
+              "name": "Lexicon"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "url": "https://sean2x.github.io/projects/portfolio-website.html",
+              "name": "Personal Website"
+            }
+          ]
+        }
+      }
+    </script>
   </head>
 
   <body class="crt">
@@ -89,7 +128,64 @@
 
       <!-- Cards rendered by site.js from assets/js/projects.js -->
       <section id="projects">
-        <div class="project-list" data-projects></div>
+        <div class="project-list" data-projects>
+          <!-- prerender:start (built by tools/prerender.js from assets/js/projects.js; don't edit by hand) -->
+          <article class="project-card terminal-window apple-fade">
+            <div class="terminal-window-top">
+              <div class="terminal-btn is-yellow"></div>
+              <div class="terminal-btn"></div>
+              <div class="terminal-btn"></div>
+              <span>fish-swarm</span>
+            </div>
+            <div class="project-media"><img src="../assets/img/projects/fish-swarm.png" alt="" loading="lazy" /><video src="../assets/video/projects/fish-swarm.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="project-info">
+              <h3><a class="project-link" href="../projects/fish-swarm.html">Fish Simulator</a></h3>
+              <p class="project-tags">JavaScript · Canvas · Game</p>
+              <p class="project-summary">A browser fish swarm where simple local rules add up to a school that feels alive—and reacts to your mouse.</p>
+              <div class="project-actions">
+                <span class="read-more">Read more <i class="bi bi-arrow-right"></i></span>
+                <a class="btn-terminal" href="../games/fish-swarm/">Play <i class="bi bi-play-fill"></i></a>
+              </div>
+            </div>
+          </article>
+          <article class="project-card terminal-window apple-fade">
+            <div class="terminal-window-top">
+              <div class="terminal-btn is-green"></div>
+              <div class="terminal-btn"></div>
+              <div class="terminal-btn"></div>
+              <span>lexicon</span>
+            </div>
+            <div class="project-media"><img src="../assets/img/projects/lexicon.png" alt="" loading="lazy" /><video src="../assets/video/projects/lexicon.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="project-info">
+              <h3><a class="project-link" href="../projects/lexicon.html">Lexicon</a></h3>
+              <p class="project-tags">HTML · CSS · JavaScript · Game</p>
+              <p class="project-summary">A browser spelling game inspired by Bookworm Adventures. 10+ players kept coming back for 7+ days straight—and started competing with each other.</p>
+              <div class="project-actions">
+                <span class="read-more">Read more <i class="bi bi-arrow-right"></i></span>
+                <a class="btn-terminal" href="../games/lexicon/">Play <i class="bi bi-play-fill"></i></a>
+              </div>
+            </div>
+          </article>
+          <article class="project-card terminal-window apple-fade">
+            <div class="terminal-window-top">
+              <div class="terminal-btn is-green"></div>
+              <div class="terminal-btn"></div>
+              <div class="terminal-btn"></div>
+              <span>portfolio-website</span>
+            </div>
+            <div class="project-media"><img src="../assets/img/projects/portfolio-website.png" alt="" loading="lazy" /><video src="../assets/video/projects/portfolio-website.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="project-info">
+              <h3><a class="project-link" href="../projects/portfolio-website.html">Personal Website</a></h3>
+              <p class="project-tags">HTML · CSS · JavaScript · Git</p>
+              <p class="project-summary">My home base—built from zero web experience and shaped by feedback from ~10 test users. Make it exist first, then make it good.</p>
+              <div class="project-actions">
+                <span class="read-more">Read more <i class="bi bi-arrow-right"></i></span>
+                
+              </div>
+            </div>
+          </article>
+          <!-- prerender:end -->
+        </div>
       </section>
 
       <section class="philosophy terminal-window apple-fade">

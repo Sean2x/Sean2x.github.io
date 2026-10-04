@@ -9,7 +9,7 @@
     <title>Sean Lirazan – NASA Robotics Engineer</title>
     <meta
       name="description"
-      content="Sean Lirazan — mechanical engineer building robotics systems. Internships at NASA, Collins Aerospace, and John Deere, plus projects and write-ups."
+      content="Portfolio of Sean Lirazan, a Los Angeles robotics and controls engineer and creator. Controls and flight software at NASA Armstrong, internships at Collins Aerospace and John Deere, plus robotics projects, write-ups, and videos."
     />
     <link rel="canonical" href="https://sean2x.github.io/" />
     <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon" />
@@ -21,7 +21,7 @@
     <meta property="og:title" content="Sean Lirazan – NASA Pathways Mechanical Engineer" />
     <meta
       property="og:description"
-      content="Mechanical engineer building robotics systems. Internships at NASA, Collins Aerospace, and John Deere, plus projects and write-ups."
+      content="Robotics and controls engineer and creator based in Los Angeles. NASA Armstrong, Collins Aerospace, and John Deere, plus projects, write-ups, and videos."
     />
     <meta property="og:url" content="https://sean2x.github.io/" />
     <meta
@@ -45,6 +45,99 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/css/style.css" />
+
+    <!-- Structured data: tells search engines and AI tools who this is -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "ProfilePage",
+            "@id": "https://sean2x.github.io/#profile",
+            "url": "https://sean2x.github.io/",
+            "name": "Sean Lirazan",
+            "mainEntity": {
+              "@id": "https://sean2x.github.io/#person"
+            }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://sean2x.github.io/#person",
+            "name": "Sean Lirazan",
+            "alternateName": "Sean D. Lirazan",
+            "url": "https://sean2x.github.io/",
+            "image": "https://sean2x.github.io/assets/img/headshot.jpeg",
+            "description": "Robotics and controls engineer and creator based in Los Angeles; mechanical engineering student at Iowa State University working on robotics, controls, embedded systems, and flight software.",
+            "jobTitle": "Controls Engineering Intern (Pathways)",
+            "worksFor": {
+              "@type": "Organization",
+              "name": "NASA Armstrong Flight Research Center"
+            },
+            "alumniOf": {
+              "@type": "CollegeOrUniversity",
+              "name": "Iowa State University",
+              "sameAs": "https://www.iastate.edu/"
+            },
+            "knowsAbout": [
+              "Mechanical engineering",
+              "Controls engineering",
+              "Robotics engineering",
+              "Robotics",
+              "Control systems",
+              "LQR control",
+              "PID control",
+              "Kalman filtering",
+              "State estimation",
+              "Sensor fusion",
+              "Embedded systems",
+              "Flight software",
+              "F Prime (F´)",
+              "FreeRTOS",
+              "ROS 2",
+              "MATLAB",
+              "Simulink",
+              "C++",
+              "Python",
+              "SolidWorks",
+              "3D printing",
+              "Web development"
+            ],
+            "sameAs": [
+              "https://www.linkedin.com/in/seanlirazan/",
+              "https://github.com/Sean2x",
+              "https://www.youtube.com/@SeanAppliesEngineering",
+              "https://www.instagram.com/sean.applies.engineering/"
+            ],
+            "hasOccupation": {
+              "@type": "Occupation",
+              "name": "Robotics and Controls Engineer",
+              "occupationLocation": {
+                "@type": "City",
+                "name": "Los Angeles, California"
+              }
+            },
+            "homeLocation": {
+              "@type": "Place",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Los Angeles",
+                "addressRegion": "CA",
+                "addressCountry": "US"
+              }
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://sean2x.github.io/#website",
+            "url": "https://sean2x.github.io/",
+            "name": "Sean Lirazan",
+            "publisher": {
+              "@id": "https://sean2x.github.io/#person"
+            }
+          }
+        ]
+      }
+    </script>
   </head>
 
   <body class="crt">
@@ -98,7 +191,7 @@
           <img
             src="assets/img/headshot.jpeg"
             class="hero-photo apple-fade"
-            alt="Headshot of Sean Lirazan"
+            alt="Sean Lirazan, robotics and controls engineer"
           />
 
           <div class="hero-text">
@@ -128,7 +221,7 @@
             <ul class="hero-facts apple-fade" style="--delay: 0.5s">
               <li>
                 <i class="bi bi-mortarboard"></i>
-                B.S. Mechanical Engineering · Iowa State University · 2027
+                B.S. Mechanical Engineering · Iowa State University · 2028
               </li>
               <li><i class="bi bi-geo-alt"></i> Los Angeles, CA</li>
               <li>
@@ -207,7 +300,7 @@
           </div>
 
           <div class="youtube-center">
-            <h1>My Latest Video</h1>
+            <h2 class="youtube-title">My Latest Video</h2>
             <div class="video-frame">
               <iframe
                 src="https://www.youtube.com/embed/_4-VY6mx6vI"
@@ -226,7 +319,64 @@
       <!-- Projects (cards rendered by site.js from projects.js) -->
       <section id="projects">
         <h2 class="section-title">Projects</h2>
-        <div class="project-list" data-projects="3"></div>
+        <div class="project-list" data-projects="3">
+          <!-- prerender:start (built by tools/prerender.js from assets/js/projects.js; don't edit by hand) -->
+          <article class="project-card terminal-window apple-fade">
+            <div class="terminal-window-top">
+              <div class="terminal-btn is-yellow"></div>
+              <div class="terminal-btn"></div>
+              <div class="terminal-btn"></div>
+              <span>fish-swarm</span>
+            </div>
+            <div class="project-media"><img src="assets/img/projects/fish-swarm.png" alt="" loading="lazy" /><video src="assets/video/projects/fish-swarm.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="project-info">
+              <h3><a class="project-link" href="projects/fish-swarm.html">Fish Simulator</a></h3>
+              <p class="project-tags">JavaScript · Canvas · Game</p>
+              <p class="project-summary">A browser fish swarm where simple local rules add up to a school that feels alive—and reacts to your mouse.</p>
+              <div class="project-actions">
+                <span class="read-more">Read more <i class="bi bi-arrow-right"></i></span>
+                <a class="btn-terminal" href="games/fish-swarm/">Play <i class="bi bi-play-fill"></i></a>
+              </div>
+            </div>
+          </article>
+          <article class="project-card terminal-window apple-fade">
+            <div class="terminal-window-top">
+              <div class="terminal-btn is-green"></div>
+              <div class="terminal-btn"></div>
+              <div class="terminal-btn"></div>
+              <span>lexicon</span>
+            </div>
+            <div class="project-media"><img src="assets/img/projects/lexicon.png" alt="" loading="lazy" /><video src="assets/video/projects/lexicon.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="project-info">
+              <h3><a class="project-link" href="projects/lexicon.html">Lexicon</a></h3>
+              <p class="project-tags">HTML · CSS · JavaScript · Game</p>
+              <p class="project-summary">A browser spelling game inspired by Bookworm Adventures. 10+ players kept coming back for 7+ days straight—and started competing with each other.</p>
+              <div class="project-actions">
+                <span class="read-more">Read more <i class="bi bi-arrow-right"></i></span>
+                <a class="btn-terminal" href="games/lexicon/">Play <i class="bi bi-play-fill"></i></a>
+              </div>
+            </div>
+          </article>
+          <article class="project-card terminal-window apple-fade">
+            <div class="terminal-window-top">
+              <div class="terminal-btn is-green"></div>
+              <div class="terminal-btn"></div>
+              <div class="terminal-btn"></div>
+              <span>portfolio-website</span>
+            </div>
+            <div class="project-media"><img src="assets/img/projects/portfolio-website.png" alt="" loading="lazy" /><video src="assets/video/projects/portfolio-website.mp4" muted loop playsinline preload="none"></video></div>
+            <div class="project-info">
+              <h3><a class="project-link" href="projects/portfolio-website.html">Personal Website</a></h3>
+              <p class="project-tags">HTML · CSS · JavaScript · Git</p>
+              <p class="project-summary">My home base—built from zero web experience and shaped by feedback from ~10 test users. Make it exist first, then make it good.</p>
+              <div class="project-actions">
+                <span class="read-more">Read more <i class="bi bi-arrow-right"></i></span>
+                
+              </div>
+            </div>
+          </article>
+          <!-- prerender:end -->
+        </div>
         <div class="see-all">
           <a class="btn-terminal" href="projects/">
             See all projects <i class="bi bi-arrow-right"></i>

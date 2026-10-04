@@ -35,6 +35,10 @@ assets/
   video/projects/       Hover/preview clips (<slug>.mp4)
   docs/                 Resume
 
+robots.txt, sitemap.xml  Search engine crawling rules + page list (update lastmod when pages change)
+llms.txt                Plain-text summary of Sean and key pages for AI assistants
+tools/prerender.js      Writes project cards into the HTML for crawlers; runs on every deploy
+
 archive/                Old experiments and unused files (still publicly reachable)
 ```
 
