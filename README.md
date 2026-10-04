@@ -11,6 +11,9 @@ Lexicon.html,
 FishGame.html           Redirects from the old game URLs — safe to delete eventually
 
 resume/                 Resume viewer (renders assets/docs/Sean-Lirazan-Resume.pdf) + download
+                        The PDF syncs daily from the resume Google Doc
+                        (.github/workflows/sync-resume.yml); update the page's
+                        "Text version" and llms.txt by hand when it changes
 
 card/                   Contact card — the NFC tag points to sean2x.github.io/card
   sean-lirazan.vcf      "Save contact" file
