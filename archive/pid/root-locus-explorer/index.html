@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PID Root Locus Explorer</title>
+  <meta name="description" content="Move a PID gain and watch the root locus, the closed-loop poles and the step response change together." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230e1116'/%3E%3Cpath d='M6 26 L16 16 L26 6 M6 6 L16 16 L26 26' stroke='%234aa3ff' stroke-width='3' fill='none'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <header class="top">
+    <h1>PID Root Locus Explorer</h1>
+    <nav class="tools">
+      <button id="btn-link" title="Copy a link that contains the current state">Copy link</button>
+      <button id="btn-save">Save JSON</button>
+      <button id="btn-load">Load JSON</button>
+      <button id="btn-matlab">MATLAB code</button>
+      <button id="btn-embed" title="Chrome-free view with large fonts for recording">Embed view</button>
+      <input id="file" type="file" accept="application/json,.json" hidden />
+    </nav>
+  </header>
+  <main class="layout">
+    <aside id="controls"></aside>
+    <section class="plots">
+      <div class="card plot">
+        <canvas id="locus"></canvas>
+        <div id="readout" class="readout"></div>
+      </div>
+      <div class="card plot short">
+        <div class="tabs">
+          <button data-tab="y" class="on">Step response y(t)</button>
+          <button data-tab="u">Control effort u(t)</button>
+          <span class="spacer"></span>
+          <button id="btn-ghost">Freeze ghost</button>
+          <button id="btn-clear" hidden>Clear ghost</button>
+        </div>
+        <canvas id="step"></canvas>
+      </div>
+    </section>
+    <section class="insights">
+      <div class="card" id="stats"></div>
+      <div class="card" id="charpoly"></div>
+      <div class="card" id="sumprod"></div>
+      <div class="card" id="routh"></div>
+    </section>
+  </main>
+  <dialog id="dlg"><form method="dialog"><h2 id="dlg-title"></h2><textarea id="dlg-text" readonly spellcheck="false"></textarea><div class="dlg-btns"><button id="dlg-copy" type="button">Copy</button><button>Close</button></div></form></dialog>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

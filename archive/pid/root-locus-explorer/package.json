@@ -1,0 +1,19 @@
+{
+  "name": "pid-root-locus-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser tool: move a PID slider, see the root locus, closed-loop poles and step response change together.",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build && node scripts/rename.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21",
+    "vite-plugin-singlefile": "^2.0.3",
+    "vitest": "^2.1.9"
+  }
+}
