@@ -21,7 +21,7 @@ card/                   Contact card — the NFC tag points to sean2x.github.io/
 projects/
   index.html            All projects (cards are generated from assets/js/projects.js)
   <slug>.html           One write-up per project
-  pid.html              PID Tools page: vertical tabs for each tool (assets/js/tabs.js)
+  pid.html              Controls Tooling page: vertical tabs for each tool (assets/js/tabs.js)
   pid/                  PID tool sources: root-locus-explorer (Vite/TS; dist/explorer.html is the
                         committed offline build), pid-demo, zero-g
 

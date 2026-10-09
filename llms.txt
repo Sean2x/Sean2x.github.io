@@ -18,7 +18,7 @@
 
 ## Projects
 
-- [PID Tools](https://sean2x.github.io/projects/pid.html): control-systems tools: an in-browser PID root locus explorer (locus, closed-loop poles, step response, Routh–Hurwitz), a PID tuning demo, and a Zero-G flight simulator
+- [Controls Tooling](https://sean2x.github.io/projects/pid.html): control-systems tools: an in-browser PID root locus explorer (locus, closed-loop poles, step response, Routh–Hurwitz), a PID tuning demo, and a Zero-G flight simulator
 - [Fish Simulator](https://sean2x.github.io/projects/fish-swarm.html): browser fish swarm where simple local rules (separation, alignment, cohesion) create emergent schooling that reacts to the mouse. [Play](https://sean2x.github.io/games/fish-swarm/)
 - [Lexicon](https://sean2x.github.io/projects/lexicon.html): browser spelling game inspired by Bookworm Adventures; 10+ players returned for 7+ consecutive days. [Play](https://sean2x.github.io/games/lexicon/)
 - [Personal Website](https://sean2x.github.io/projects/portfolio-website.html): this site, built from zero web experience and refined with feedback from about 10 test users

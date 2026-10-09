@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zero-G Flight Simulator</title>
+<style>
+  :root { --bg:#0e1116; --text:#d7dee9; --dim:#8592a6; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:12px; background:var(--bg); color:var(--text); font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif; }
+  .wrap { max-width: 900px; margin: 0 auto; display: grid; gap: 12px; justify-items: center; }
+  canvas { display:block; width:100%; height:auto; background:#000; border:1px solid #232b38; border-radius:8px; }
+  pre { margin:0; padding:12px 18px; background:#000; color:#fff; border-radius:8px; font:14px/1.6 Consolas,ui-monospace,Menlo,monospace; width:100%; max-width:420px; }
+  .hint { color:var(--dim); font-size:13px; margin:0; max-width:70ch; text-align:center; }
+  button { background:#1b2230; color:var(--text); border:1px solid #2c3647; border-radius:6px; padding:6px 14px; font:inherit; cursor:pointer; }
+  button:hover { border-color:#4aa3ff; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <canvas id="c" width="800" height="500" aria-label="Airplane flying a curved trajectory"></canvas>
+  <pre id="info"></pre>
+  <button id="pause">Pause</button>
+  <p class="hint">The plane follows the curve at constant path speed. Vertical acceleration comes from how the vertical speed changes along the curve, and G-force = vertical acceleration + 1 (units as in the original Python: mph, ft, ft/s²).</p>
+</div>
+
+<script>
+// Port of Zero_G.py (Tkinter). Same trajectory, speed and flight-data math; fixed 16 ms steps like window.after(16).
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const DT = 0.016, SPEED = 1, STEP_MS = 16;
+
+const trajectory = (x) => 100 * Math.exp(-((x - 400) ** 2) / (2 * 100 ** 2)) + 100;
+const points = [];
+for (let x = 50; x <= 750; x += 2) points.push([x, 400 - trajectory(x)]); // flip y: canvas y points down
+
+const plane = new Image();
+plane.src = 'airplane.png';
+
+let bx, by, idx, xSpeed, ySpeed, velocity, angle, elevation, prevYSpeed, vAccel, g, running = true;
+
+function reset() {
+  idx = 0; [bx, by] = points[0];
+  xSpeed = ySpeed = velocity = angle = 0;
+  elevation = 400 - by;
+  prevYSpeed = 0; vAccel = 0; g = 1;
+}
+
+function step() {
+  if (idx >= points.length - 1) { reset(); return; }
+  const [tx, ty] = points[idx + 1];
+  let dx = tx - bx, dy = ty - by;
+  const dist = Math.hypot(dx, dy);
+  if (dist <= SPEED) { bx = tx; by = ty; idx++; }
+  else { bx += (dx / dist) * SPEED; by += (dy / dist) * SPEED; }
+
+  if (idx < points.length - 2) {
+    const [nx, ny] = points[idx + 1], [fx, fy] = points[idx + 2];
+    dx = fx - nx; dy = fy - ny;
+    const d = Math.hypot(dx, dy);
+    const ux = dx / d, uy = dy / d;
+    xSpeed = ux * SPEED;
+    ySpeed = -uy * SPEED; // negative: canvas y increases downward
+    velocity = Math.hypot(xSpeed, ySpeed);
+    angle = (Math.atan2(ySpeed, xSpeed) * 180) / Math.PI;
+    if (ySpeed !== prevYSpeed) {
+      vAccel = (ySpeed - prevYSpeed) / DT;
+      prevYSpeed = ySpeed;
+      g = vAccel + 1; // only updated when the acceleration changes, as in the original
+    }
+  }
+  elevation = 400 - by;
+}
+
+const pad = (v, w, d) => v.toFixed(d).padStart(w);
+function draw() {
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 800, 500);
+  ctx.strokeStyle = 'brown'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(50, 400); ctx.lineTo(750, 400); ctx.stroke();
+  ctx.strokeStyle = '#b5179e'; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+  ctx.beginPath();
+  points.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+  ctx.stroke();
+  if (plane.complete && plane.naturalWidth) {
+    const w = plane.naturalWidth / 2, h = plane.naturalHeight / 2; // subsample(2, 2)
+    ctx.drawImage(plane, bx - w / 2, by - h / 2, w, h);
+  } else {
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(bx, by, 10, 0, 7); ctx.fill();
+  }
+  document.getElementById('info').textContent =
+    'FLIGHT DATA\n\n' +
+    `Elevation:       ${pad(elevation, 6, 1)} ft\n` +
+    `X Speed:         ${pad(xSpeed, 6, 2)} mph\n` +
+    `Y Speed:         ${pad(ySpeed, 6, 2)} mph\n` +
+    `Speed:           ${pad(velocity, 6, 2)} mph\n` +
+    `Angle:           ${pad(angle, 6, 1)}°\n` +
+    `Vertical Accel:  ${pad(vAccel, 6, 2)} ft/s²\n` +
+    `G-Force:         ${pad(g, 6, 2)} G`;
+}
+
+let last = performance.now(), acc = 0;
+function frame(now) {
+  acc += Math.min(now - last, 100); last = now;
+  while (acc >= STEP_MS) { if (running) step(); acc -= STEP_MS; }
+  draw();
+  requestAnimationFrame(frame);
+}
+document.getElementById('pause').addEventListener('click', (e) => {
+  running = !running;
+  e.target.textContent = running ? 'Pause' : 'Resume';
+});
+reset();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

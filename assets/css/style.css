@@ -524,7 +524,7 @@ h3 {
    Home page: YouTube
    ========================================================================== */
 #youtube {
-  padding: 30px 20px;
+  padding: 30px clamp(12px, 2vw, 28px);
   background-color: rgb(1, 1, 1);
   border-top: 2px solid var(--lightMain);
   border-bottom: 2px solid var(--lightMain);
@@ -537,7 +537,7 @@ h3 {
   grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   gap: 56px;
   align-items: start;
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
 }
 
@@ -1444,11 +1444,17 @@ h3 {
   opacity: 1;
 }
 
-/* Home box: the newest post is a big feature card (photo on top);
-   older ones sit below as compact rows with a smaller photo. */
+/* Home box: no box-in-a-box. The newest post is a feature (photo on top, text
+   below, no frame); older ones are plain rows divided by a thin line. */
 .post-card.compact {
   grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
   align-items: center;
+  gap: 20px;
+  padding: 18px 0 0;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--dimmed);
+  border-radius: 0;
 }
 
 .post-card.compact p {
@@ -1456,14 +1462,13 @@ h3 {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .post-card.compact:first-child {
   grid-template-columns: minmax(0, 1fr);
-  padding: 24px;
-  border-color: var(--lightMain);
-  box-shadow: var(--glow);
+  padding: 0;
+  border-top: 0;
 }
 
 .post-card.compact:first-child h3 {
@@ -1472,8 +1477,12 @@ h3 {
 
 .post-card.compact:first-child p {
   display: block;
-  -webkit-line-clamp: unset;
-  font-size: 1rem;
+  font-size: 1.02rem;
+}
+
+.post-card.compact:first-child .post-card-media img {
+  border: 1px solid var(--lightMain);
+  box-shadow: var(--glow);
 }
 
 /* posts/ page: one wide column, photo on top */
@@ -1638,6 +1647,10 @@ h3 {
   border: 1px solid var(--dimmed);
   border-radius: 10px;
   background: #0e1116;
+}
+
+.tools-embed.tall iframe {
+  height: min(78vh, 760px);
 }
 
 .tools-figure {

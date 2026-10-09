@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PID Demo</title>
+<style>
+  :root { --bg:#0e1116; --panel:#141922; --line:#232b38; --text:#d7dee9; --dim:#8592a6; --kp:#4aa3ff; --ki:#5ee6a8; --kd:#ffb454; --damp:#c792ea; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:12px; background:var(--bg); color:var(--text); font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; display: grid; gap: 12px; }
+  canvas { display:block; width:100%; height:auto; background:#fff; border-radius:8px; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .controls { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:10px 18px; }
+  .ctl label { display:flex; justify-content:space-between; font-weight:600; margin-bottom:2px; }
+  .ctl output { font-family:ui-monospace,Menlo,monospace; color:var(--text); }
+  input[type=range] { width:100%; }
+  input[type=number] { width:100%; background:#1b2230; color:var(--text); border:1px solid #2c3647; border-radius:6px; padding:5px 8px; font:inherit; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  button { background:#1b2230; color:var(--text); border:1px solid #2c3647; border-radius:6px; padding:6px 14px; font:inherit; cursor:pointer; }
+  button:hover { border-color:var(--kp); }
+  button:focus-visible, input:focus-visible { outline:2px solid var(--kp); outline-offset:2px; }
+  pre { margin:0; font:14px/1.6 ui-monospace,Menlo,monospace; }
+  .hint { color:var(--dim); font-size:13px; margin:0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <canvas id="c" width="1600" height="400" aria-label="Dot chasing a target line under PID control"></canvas>
+
+  <div class="panel controls">
+    <div class="ctl"><label for="kp" style="color:var(--kp)">Kp <output id="kpv"></output></label><input id="kp" type="range" min="0" max="1" step="0.01" value="0.2" /></div>
+    <div class="ctl"><label for="ki" style="color:var(--ki)">Ki <output id="kiv"></output></label><input id="ki" type="range" min="0" max="1" step="0.01" value="0.03" /></div>
+    <div class="ctl"><label for="kd" style="color:var(--kd)">Kd <output id="kdv"></output></label><input id="kd" type="range" min="0" max="1" step="0.01" value="0.04" /></div>
+    <div class="ctl"><label for="damp" style="color:var(--damp)">Dampening coeff <output id="dampv"></output></label><input id="damp" type="range" min="0.5" max="1" step="0.01" value="0.99" /></div>
+    <div class="ctl"><label for="target">Target height (0–400)</label><input id="target" type="number" min="0" max="400" step="50" value="200" /></div>
+    <div class="ctl row" style="align-items:flex-end"><button id="reset">Reset</button><button id="pause">Pause</button></div>
+  </div>
+
+  <div class="panel"><pre id="info"></pre></div>
+  <p class="hint">Each tick: error = target − position; acceleration = Kp·error + Ki·∫error + Kd·d(error)/dt; velocity += acceleration·dt, then × dampening. The dot also drifts right so the trail shows overshoot and ringing. Change a gain while it runs.</p>
+</div>
+
+<script>
+// Port of pid_demo.py (Tkinter). Same constants and update order; 100 ticks per second like window.after(10).
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const W = 1600, H = 400, START = { x: 50, y: 400 }, R = 10, DT = 0.05, TICK = 10;
+const $ = (id) => document.getElementById(id);
+
+let kp = 0.2, ki = 0.03, kd = 0.04, damp = 0.99, targetHeight = 200;
+let running = true;
+let x, y, vel, acc, integral, prevErr, integralOut, trail;
+
+function reset() {
+  x = START.x; y = START.y;
+  vel = 0; acc = 0; integral = 0; prevErr = 0; integralOut = 0;
+  trail = [];
+}
+
+function step() {
+  const targetY = 400 - targetHeight;
+  const error = targetY - y;
+  const p = kp * error;
+  integral += error * DT;
+  integralOut = ki * integral;
+  const deriv = (error - prevErr) / DT;
+  acc = p + integralOut + kd * deriv;
+  prevErr = error;
+  vel += acc * DT;
+  vel *= damp;
+  const nx = x + 1, ny = y + vel;
+  trail.push([x, y, nx, ny]);
+  x = nx; y = ny;
+  if (x > W + R) reset(); // ran off the right edge: start another pass with the same gains
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const ty = 400 - targetHeight;
+  ctx.strokeStyle = '#000'; ctx.lineWidth = 1; ctx.setLineDash([2, 8]);
+  ctx.beginPath(); ctx.moveTo(0, ty); ctx.lineTo(W, ty); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.strokeStyle = 'red'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+  ctx.beginPath();
+  for (const [a, b, c, d] of trail) { ctx.moveTo(a, b); ctx.lineTo(c, d); }
+  ctx.stroke();
+  ctx.fillStyle = 'blue'; ctx.beginPath(); ctx.arc(x, y, R, 0, 7); ctx.fill();
+  $('info').textContent =
+    `INFO\n\nPosition:     ${y.toFixed(2)}\nVelocity:     ${vel.toFixed(2)}\nAcceleration: ${acc.toFixed(2)}\nIntegral:     ${integral.toFixed(2)}\nKi·integral:  ${integralOut.toFixed(2)}`;
+}
+
+let last = performance.now(), acc_t = 0;
+function frame(now) {
+  acc_t += Math.min(now - last, 100); last = now;
+  while (acc_t >= TICK) { if (running) step(); acc_t -= TICK; }
+  draw();
+  requestAnimationFrame(frame);
+}
+
+function bind(id, out, set) {
+  const el = $(id), o = $(out);
+  const upd = () => { const v = parseFloat(el.value); set(v); o.textContent = v.toFixed(2); };
+  el.addEventListener('input', upd); upd();
+}
+bind('kp', 'kpv', (v) => (kp = v));
+bind('ki', 'kiv', (v) => (ki = v));
+bind('kd', 'kdv', (v) => (kd = v));
+bind('damp', 'dampv', (v) => (damp = v));
+$('target').addEventListener('input', (e) => {
+  const v = parseFloat(e.target.value);
+  if (isFinite(v)) targetHeight = Math.max(0, Math.min(400, v));
+});
+$('reset').addEventListener('click', reset);
+$('pause').addEventListener('click', () => {
+  running = !running;
+  $('pause').textContent = running ? 'Pause' : 'Resume';
+});
+
+reset();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

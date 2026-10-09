@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PID Tools | Sean Lirazan</title>
-    <meta name="description" content="Control-systems tools by Sean Lirazan: a browser root locus explorer, a PID tuning demo, and a Zero-G flight simulator." />
+    <title>Controls Tooling | Sean Lirazan</title>
+    <meta name="description" content="Control-systems tools by Sean Lirazan that run in the browser: a root locus explorer, a PID tuning demo, and a Zero-G flight simulator." />
     <link rel="canonical" href="https://sean2x.github.io/projects/pid.html" />
     <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
 
     <!-- Link previews (LinkedIn, iMessage, Discord, X, ...) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sean Lirazan" />
-    <meta property="og:title" content="PID Tools | Sean Lirazan" />
-    <meta property="og:description" content="Control-systems tools by Sean Lirazan: a browser root locus explorer, a PID tuning demo, and a Zero-G flight simulator." />
+    <meta property="og:title" content="Controls Tooling | Sean Lirazan" />
+    <meta property="og:description" content="Control-systems tools by Sean Lirazan that run in the browser: a root locus explorer, a PID tuning demo, and a Zero-G flight simulator." />
     <meta property="og:url" content="https://sean2x.github.io/projects/pid.html" />
     <meta property="og:image" content="https://sean2x.github.io/assets/img/projects/pid.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -84,7 +84,7 @@
       </a>
 
       <header class="tools-header">
-        <h1 class="post-title">PID Tools</h1>
+        <h1 class="post-title">Controls Tooling</h1>
         <p class="tools-lede">
           Everything I've built to understand PID control and what it does to a
           system. Pick a tool on the left.
@@ -92,18 +92,18 @@
       </header>
 
       <div class="tools-layout" data-tabs>
-        <div class="tools-tabs" role="tablist" aria-orientation="vertical" aria-label="PID tools">
+        <div class="tools-tabs" role="tablist" aria-orientation="vertical" aria-label="Controls tools">
           <button class="tools-tab" role="tab" id="tab-root-locus" aria-controls="root-locus" data-hash="root-locus">
             <i class="bi bi-bezier2"></i>
-            <span><strong>Root Locus Explorer</strong><small>Interactive · runs in your browser</small></span>
+            <span><strong>Root Locus Explorer</strong><small>Interactive · plays in your browser</small></span>
           </button>
           <button class="tools-tab" role="tab" id="tab-zero-g" aria-controls="zero-g" data-hash="zero-g">
             <i class="bi bi-airplane"></i>
-            <span><strong>Zero-G Flight Simulator</strong><small>Python · Tkinter</small></span>
+            <span><strong>Zero-G Flight Simulator</strong><small>Interactive · plays in your browser</small></span>
           </button>
           <button class="tools-tab" role="tab" id="tab-pid-demo" aria-controls="pid-demo" data-hash="pid-demo">
             <i class="bi bi-sliders"></i>
-            <span><strong>PID Demo</strong><small>Python · Tkinter</small></span>
+            <span><strong>PID Demo</strong><small>Interactive · plays in your browser</small></span>
           </button>
         </div>
 
@@ -148,20 +148,24 @@
             <p>
               A plane flies a curved trajectory and the simulator reports what
               the pilot would feel: elevation, horizontal and vertical speed,
-              angle, vertical acceleration, and G-force.
-            </p>
-            <figure class="tools-figure">
-              <img src="pid/zero-g/airplane.png" alt="The airplane sprite used in the Zero-G simulator" loading="lazy" />
-            </figure>
-            <p class="tools-run">
-              Runs on your computer (Python 3, no extra packages):
-              <code>python Zero_G.py</code>
+              angle, vertical acceleration, and G-force. Watch the G-force
+              drop toward zero over the top of the arc.
             </p>
             <div class="tools-actions">
+              <a class="btn-terminal primary" href="pid/zero-g/zero-g.html" target="_blank">
+                Open full screen <i class="bi bi-box-arrow-up-right"></i>
+              </a>
               <a class="btn-terminal" href="https://github.com/Sean2x/Sean2x.github.io/tree/main/projects/pid/zero-g" target="_blank">
                 Source <i class="bi bi-github"></i>
               </a>
             </div>
+            <div class="tools-embed tall">
+              <iframe data-src="pid/zero-g/zero-g.html" title="Zero-G Flight Simulator" loading="lazy"></iframe>
+            </div>
+            <p class="tools-run">
+              The original was a Python/Tkinter program (<code>Zero_G.py</code>
+              in the source folder); this page is a direct port of it.
+            </p>
           </section>
 
           <!-- PID demo -->
@@ -170,19 +174,25 @@
             <p>
               My first simulator: a dot chases a target while sliders for Kp,
               Ki, Kd, and damping change how it gets there. A live readout shows
-              position, velocity, acceleration, the integral term, and the
-              controller output, and the dot leaves a trail so overshoot and
-              oscillation are easy to see.
-            </p>
-            <p class="tools-run">
-              Runs on your computer (Python 3, no extra packages):
-              <code>python pid_demo.py</code>
+              position, velocity, acceleration, and the integral term, and the
+              dot leaves a trail so overshoot and oscillation are easy to see.
+              Try Kp alone, then add Kd, then add Ki.
             </p>
             <div class="tools-actions">
+              <a class="btn-terminal primary" href="pid/pid-demo/pid-demo.html" target="_blank">
+                Open full screen <i class="bi bi-box-arrow-up-right"></i>
+              </a>
               <a class="btn-terminal" href="https://github.com/Sean2x/Sean2x.github.io/tree/main/projects/pid/pid-demo" target="_blank">
                 Source <i class="bi bi-github"></i>
               </a>
             </div>
+            <div class="tools-embed tall">
+              <iframe data-src="pid/pid-demo/pid-demo.html" title="PID Demo" loading="lazy"></iframe>
+            </div>
+            <p class="tools-run">
+              The original was a Python/Tkinter program (<code>pid_demo.py</code>
+              in the source folder); this page is a direct port of it.
+            </p>
           </section>
         </div>
       </div>
