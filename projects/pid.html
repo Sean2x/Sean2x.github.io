@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PID Tools | Sean Lirazan</title>
+    <meta name="description" content="Control-systems tools by Sean Lirazan: a browser root locus explorer, a PID tuning demo, and a Zero-G flight simulator." />
+    <link rel="canonical" href="https://sean2x.github.io/projects/pid.html" />
+    <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
+
+    <!-- Link previews (LinkedIn, iMessage, Discord, X, ...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sean Lirazan" />
+    <meta property="og:title" content="PID Tools | Sean Lirazan" />
+    <meta property="og:description" content="Control-systems tools by Sean Lirazan: a browser root locus explorer, a PID tuning demo, and a Zero-G flight simulator." />
+    <meta property="og:url" content="https://sean2x.github.io/projects/pid.html" />
+    <meta property="og:image" content="https://sean2x.github.io/assets/img/projects/pid.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+
+  <body class="crt">
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- Header -->
+    <header id="header" class="header">
+      <div id="header1">
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <i class="bi bi-list hamburger"></i>
+          <a href="../index.html" aria-label="Home"
+            ><i class="logo bi bi-rocket-takeoff-fill rocket"></i
+          ></a>
+        </div>
+
+        <nav class="nav">
+          <a href="../index.html#about-me">About</a>
+          <a href="../projects/">Projects</a>
+          <a href="../posts/">Posts</a>
+          <a href="../card/" target="_blank">Contact</a>
+          <a href="../resume/">
+            Resume
+          </a>
+        </nav>
+      </div>
+
+      <div class="socials">
+        <a
+          href="https://www.instagram.com/sean.applies.engineering/"
+          class="logo bi bi-instagram"
+          target="_blank"
+          aria-label="Instagram"
+        ></a>
+        <a
+          href="https://github.com/Sean2x"
+          class="logo bi bi-github"
+          target="_blank"
+          aria-label="GitHub"
+        ></a>
+        <a
+          href="https://www.youtube.com/@SeanAppliesEngineering"
+          class="logo bi bi-youtube"
+          target="_blank"
+          aria-label="YouTube"
+        ></a>
+      </div>
+    </header>
+
+    <main class="tools-page">
+      <a class="back-link" href="./">
+        <i class="bi bi-arrow-left"></i> All projects
+      </a>
+
+      <header class="tools-header">
+        <h1 class="post-title">PID Tools</h1>
+        <p class="tools-lede">
+          Everything I've built to understand PID control and what it does to a
+          system. Pick a tool on the left.
+        </p>
+      </header>
+
+      <div class="tools-layout" data-tabs>
+        <div class="tools-tabs" role="tablist" aria-orientation="vertical" aria-label="PID tools">
+          <button class="tools-tab" role="tab" id="tab-root-locus" aria-controls="root-locus" data-hash="root-locus">
+            <i class="bi bi-bezier2"></i>
+            <span><strong>Root Locus Explorer</strong><small>Interactive · runs in your browser</small></span>
+          </button>
+          <button class="tools-tab" role="tab" id="tab-zero-g" aria-controls="zero-g" data-hash="zero-g">
+            <i class="bi bi-airplane"></i>
+            <span><strong>Zero-G Flight Simulator</strong><small>Python · Tkinter</small></span>
+          </button>
+          <button class="tools-tab" role="tab" id="tab-pid-demo" aria-controls="pid-demo" data-hash="pid-demo">
+            <i class="bi bi-sliders"></i>
+            <span><strong>PID Demo</strong><small>Python · Tkinter</small></span>
+          </button>
+        </div>
+
+        <div class="tools-panels">
+          <!-- Root Locus Explorer -->
+          <section class="tools-panel" role="tabpanel" id="root-locus" aria-labelledby="tab-root-locus" hidden>
+            <h2>Root Locus Explorer</h2>
+            <p>
+              Move a PID gain and watch the root locus, the closed-loop poles,
+              and the step response change together. MATLAB's Control System
+              Designer shows the locus but hides <em>why</em> it moves; this
+              puts the pole location and the behavior on one screen.
+            </p>
+            <ul class="tools-features">
+              <li>Kp, Ki, Kd and overall gain K, positive or negative, with exact numeric entry</li>
+              <li>Connected locus branches, breakaway points, imaginary-axis crossings and asymptotes</li>
+              <li>Drag a closed-loop pole along its branch and K follows</li>
+              <li>Characteristic polynomial, live pole sum and product, and a Routh–Hurwitz table that flags systems with all-positive coefficients that are still unstable</li>
+              <li>Step response and control effort, with a ghost trace to compare changes</li>
+              <li>Paste a MATLAB <code>tf</code>, or export MATLAB code, JSON, or a shareable link</li>
+            </ul>
+            <div class="tools-actions">
+              <a class="btn-terminal primary" href="pid/root-locus-explorer/dist/explorer.html" target="_blank">
+                Open full screen <i class="bi bi-box-arrow-up-right"></i>
+              </a>
+              <a class="btn-terminal" href="https://github.com/Sean2x/Sean2x.github.io/tree/main/projects/pid/root-locus-explorer" target="_blank">
+                Source <i class="bi bi-github"></i>
+              </a>
+            </div>
+            <div class="tools-embed">
+              <iframe
+                data-src="pid/root-locus-explorer/dist/explorer.html"
+                title="PID Root Locus Explorer"
+                loading="lazy"
+              ></iframe>
+            </div>
+          </section>
+
+          <!-- Zero-G -->
+          <section class="tools-panel" role="tabpanel" id="zero-g" aria-labelledby="tab-zero-g" hidden>
+            <h2>Zero-G Flight Simulator</h2>
+            <p>
+              A plane flies a curved trajectory and the simulator reports what
+              the pilot would feel: elevation, horizontal and vertical speed,
+              angle, vertical acceleration, and G-force.
+            </p>
+            <figure class="tools-figure">
+              <img src="pid/zero-g/airplane.png" alt="The airplane sprite used in the Zero-G simulator" loading="lazy" />
+            </figure>
+            <p class="tools-run">
+              Runs on your computer (Python 3, no extra packages):
+              <code>python Zero_G.py</code>
+            </p>
+            <div class="tools-actions">
+              <a class="btn-terminal" href="https://github.com/Sean2x/Sean2x.github.io/tree/main/projects/pid/zero-g" target="_blank">
+                Source <i class="bi bi-github"></i>
+              </a>
+            </div>
+          </section>
+
+          <!-- PID demo -->
+          <section class="tools-panel" role="tabpanel" id="pid-demo" aria-labelledby="tab-pid-demo" hidden>
+            <h2>PID Demo</h2>
+            <p>
+              My first simulator: a dot chases a target while sliders for Kp,
+              Ki, Kd, and damping change how it gets there. A live readout shows
+              position, velocity, acceleration, the integral term, and the
+              controller output, and the dot leaves a trail so overshoot and
+              oscillation are easy to see.
+            </p>
+            <p class="tools-run">
+              Runs on your computer (Python 3, no extra packages):
+              <code>python pid_demo.py</code>
+            </p>
+            <div class="tools-actions">
+              <a class="btn-terminal" href="https://github.com/Sean2x/Sean2x.github.io/tree/main/projects/pid/pid-demo" target="_blank">
+                Source <i class="bi bi-github"></i>
+              </a>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <nav class="post-nav" data-post-nav="pid"></nav>
+    </main>
+
+    <script src="../assets/js/matrix.js"></script>
+    <script src="../assets/js/projects.js"></script>
+    <script src="../assets/js/tabs.js"></script>
+    <script src="../assets/js/site.js"></script>
+  </body>
+</html>

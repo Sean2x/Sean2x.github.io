@@ -32,11 +32,13 @@ const sandbox = {
   URL,
 };
 vm.createContext(sandbox);
-const { PROJECTS, projectCard } = vm.runInContext(
+const { PROJECTS, projectCard, POSTS, postCard } = vm.runInContext(
   read("assets/js/projects.js") +
     "\n" +
+    read("assets/js/posts.js") +
+    "\n" +
     read("assets/js/site.js") +
-    "\n;({ PROJECTS, projectCard });",
+    "\n;({ PROJECTS, projectCard, POSTS, postCard });",
   sandbox,
 );
 
@@ -64,4 +66,29 @@ for (const [file, rootPrefix] of PAGES) {
   html = html.replace(START, (_, start, end) => `${start}\n${cards}${end}`);
   fs.writeFileSync(path.join(ROOT, file), html);
   console.log(`${file}: ${Math.min(limit, PROJECTS.length)} cards`);
+}
+
+// Post lists: same idea, with their own marker pair so they sit next to the
+// project markers without clashing.
+const POST_START = /(<!-- prerender-posts:start[^>]*-->)[\s\S]*?(\s*<!-- prerender-posts:end -->)/;
+const POST_PAGES = [
+  ["index.html", "", true],
+  ["posts/index.html", "../", false],
+];
+
+for (const [file, rootPrefix, compact] of POST_PAGES) {
+  let html = read(file);
+  const limitMatch = html.match(/data-posts(?:="(\d+)")?[^>]*>\s*<!-- prerender-posts:start/);
+  if (!limitMatch || !POST_START.test(html)) {
+    throw new Error(`${file}: prerender-posts markers not found`);
+  }
+  const limit = parseInt(limitMatch[1], 10) || POSTS.length;
+  const cards = POSTS.slice(0, limit)
+    .map((p) => postCard(p, compact).split(FAKE_ORIGIN).join(rootPrefix))
+    .join("")
+    .replace(/^\n/, "")
+    .replace(/^/gm, "        ");
+  html = html.replace(POST_START, (_, start, end) => `${start}\n${cards}${end}`);
+  fs.writeFileSync(path.join(ROOT, file), html);
+  console.log(`${file}: ${Math.min(limit, POSTS.length)} posts`);
 }

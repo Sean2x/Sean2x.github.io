@@ -21,6 +21,13 @@ card/                   Contact card — the NFC tag points to sean2x.github.io/
 projects/
   index.html            All projects (cards are generated from assets/js/projects.js)
   <slug>.html           One write-up per project
+  pid.html              PID Tools page: vertical tabs for each tool (assets/js/tabs.js)
+  pid/                  PID tool sources: root-locus-explorer (Vite/TS; dist/explorer.html is the
+                        committed offline build), pid-demo, zero-g
+
+posts/
+  index.html            All posts (rendered from assets/js/posts.js — add new posts at the TOP
+                        of that list; the home page shows the latest 3)
   _template.html        Copy this to start a new write-up
 
 games/
@@ -34,6 +41,7 @@ assets/
   js/matrix.js          Matrix rain background
   img/                  Headshot, favicon, link-preview image
   img/internships/      Company logos for the carousel
+  img/posts/            Post photos
   img/projects/         Project thumbnails (<slug>.png)
   video/projects/       Hover/preview clips (<slug>.mp4)
   docs/                 Resume

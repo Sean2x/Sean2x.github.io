@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 import math
 import time
@@ -117,7 +118,9 @@ canvas.create_line(
 # Ball position
 ball_x, ball_y = points[0]
 
-airplane_image = tk.PhotoImage(file="Sean2x.github.io\\PID\\airplane.png")
+airplane_image = tk.PhotoImage(
+    file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "airplane.png")
+)
 
 airplane_image = airplane_image.subsample(2, 2)
 

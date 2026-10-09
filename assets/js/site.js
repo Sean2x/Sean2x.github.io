@@ -1,6 +1,6 @@
-// Shared page behavior: mobile menu, project cards, hover previews,
+// Shared page behavior: mobile menu, project cards, post cards, hover previews,
 // write-up prev/next links, scroll reveal.
-// Load after projects.js (on pages that list projects).
+// Load after projects.js / posts.js (on pages that list them).
 
 // Site root, derived from this script's own URL (assets/js/site.js), so
 // project paths resolve the same from any folder depth
@@ -30,7 +30,7 @@ function projectCard(p) {
     ? `<video src="${fromRoot(p.video)}" muted loop playsinline preload="none"></video>`
     : "";
   const play = p.play
-    ? `<a class="btn-terminal" href="${fromRoot(p.play)}">Play <i class="bi bi-play-fill"></i></a>`
+    ? `<a class="btn-terminal" href="${fromRoot(p.play)}">${escapeHtml(p.playLabel || "Play")} <i class="bi bi-play-fill"></i></a>`
     : "";
 
   return `
@@ -52,6 +52,55 @@ function projectCard(p) {
         </div>
       </div>
     </article>`;
+}
+
+const formatDate = (iso) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+
+// One post: photo, date, title, text. `compact` is the small version used in
+// the home page box (links to the full post on posts/).
+function postCard(p, compact) {
+  const href = compact ? fromRoot(`posts/#${p.id}`) : "";
+  const photo = p.image
+    ? `<img src="${fromRoot(p.image)}" alt="${escapeHtml(p.alt || "")}" loading="lazy" />`
+    : `<i class="bi bi-journal-text"></i>`;
+  const more =
+    !compact && p.link
+      ? `<a class="read-more-link" href="${fromRoot(p.link)}">Read more <i class="bi bi-arrow-right"></i></a>`
+      : "";
+  const title = compact
+    ? `<a class="post-card-link" href="${href}">${escapeHtml(p.title)}</a>`
+    : escapeHtml(p.title);
+  return `
+    <article class="post-card${compact ? " compact" : ""}" id="${compact ? "" : escapeHtml(p.id)}">
+      <div class="post-card-media">${photo}</div>
+      <div class="post-card-body">
+        <time datetime="${escapeHtml(p.date)}">${formatDate(p.date)}</time>
+        <h3>${title}</h3>
+        <p>${escapeHtml(p.text)}</p>
+        ${more}
+      </div>
+    </article>`.replace(' id=""', "");
+}
+
+// Fill every [data-posts] container; the attribute value is an optional limit
+function renderPosts() {
+  if (typeof POSTS === "undefined") return;
+  const lists = document.querySelectorAll("[data-posts]");
+  lists.forEach((list) => {
+    const limit = parseInt(list.dataset.posts, 10) || POSTS.length;
+    const compact = list.hasAttribute("data-compact");
+    list.innerHTML = POSTS.slice(0, limit)
+      .map((p) => postCard(p, compact))
+      .join("");
+  });
+  // Posts are rendered after load, so honor a #id in the URL by hand
+  if (lists.length && location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
 }
 
 // Fill every [data-projects] container; the attribute value is an optional limit
@@ -152,6 +201,7 @@ function setupReveal() {
 }
 
 renderProjects();
+renderPosts();
 renderPostNav();
 setupHoverPreviews();
 setupReveal();

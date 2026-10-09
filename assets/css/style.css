@@ -524,45 +524,41 @@ h3 {
    Home page: YouTube
    ========================================================================== */
 #youtube {
-  height: 70vh;
-  padding: 20px;
+  padding: 30px 20px;
   background-color: rgb(1, 1, 1);
   border-top: 2px solid var(--lightMain);
   border-bottom: 2px solid var(--lightMain);
   border-radius: 8px;
 }
 
+/* Video on the left, recent posts on the right */
 .youtube-row {
-  display: flex;
-  justify-content: space-between;
-  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 40px;
+  align-items: start;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.youtube-side {
-  flex: 2;
-  min-width: 0;
-}
-
-.youtube-side h2 {
-  overflow: hidden;
-}
-
-.youtube-side.right {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.youtube-center {
-  flex: 3;
-  min-width: 0;
+.youtube-main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
+  min-width: 0;
 }
 
 /* Section heading styled at the old h1 size (the page's only h1 is the name) */
 .youtube-title {
   font-size: calc(1.375rem + 1.5vw);
+}
+
+.youtube-handle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
 }
 
 @media (min-width: 1200px) {
@@ -573,8 +569,6 @@ h3 {
 
 .video-frame {
   width: 100%;
-  height: 100%;
-  margin-bottom: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1296,8 +1290,9 @@ h3 {
     overflow: auto;
   }
 
-  #youtube {
-    height: auto;
+  .youtube-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
   }
 
   /* Intro stacks: photo on top, text below */
@@ -1341,5 +1336,326 @@ h3 {
 
   .post-nav-link.next {
     grid-column: 1;
+  }
+}
+
+/* ==========================================================================
+   Posts: home "Recent Posts" box and posts/ page
+   ========================================================================== */
+.recent-posts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.recent-title {
+  font-size: calc(1.375rem + 1.5vw);
+}
+
+@media (min-width: 1200px) {
+  .recent-title {
+    font-size: 2.5rem;
+  }
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.post-card {
+  display: grid;
+  gap: 16px;
+  padding: 14px;
+  background: var(--lightbg);
+  border: 1px solid var(--dimmed);
+  border-radius: 12px;
+  scroll-margin-top: 90px;
+}
+
+.post-card:target {
+  border-color: var(--lightMain);
+  box-shadow: var(--glow);
+}
+
+.post-card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  aspect-ratio: 16 / 9;
+}
+
+.post-card-media .bi {
+  font-size: 2.5rem;
+}
+
+.post-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.post-card time {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.post-card h3 {
+  display: block;
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.post-card p {
+  display: block;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-weight: normal;
+  line-height: 1.6;
+  color: #eadbe7;
+  text-shadow: none;
+}
+
+.post-card-link {
+  text-decoration: none;
+}
+
+.post-card-link:hover {
+  text-decoration: underline;
+}
+
+.read-more-link {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: 0.4rem;
+}
+
+/* Home box: small photo beside the text, text clipped to a few lines */
+.post-card.compact {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  align-items: center;
+}
+
+.post-card.compact p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+/* posts/ page: one wide column, photo on top */
+.post-list.full {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 16px 60px;
+  gap: 30px;
+}
+
+.post-list.full .post-card {
+  padding: 18px;
+}
+
+.post-list.full .post-card h3 {
+  font-size: 1.5rem;
+}
+
+@media (max-width: 520px) {
+  .post-card.compact {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ==========================================================================
+   Tools page (projects/pid.html): vertical tabs + panel
+   ========================================================================== */
+.tools-page {
+  max-width: 1200px;
+  margin: 0 auto 60px;
+  padding: 24px 16px;
+}
+
+.tools-header {
+  margin-bottom: 24px;
+}
+
+.tools-lede {
+  display: block;
+  max-width: 60ch;
+  font-weight: normal;
+  color: #eadbe7;
+  text-shadow: none;
+}
+
+.tools-layout {
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.tools-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: sticky;
+  top: 16px;
+}
+
+.tools-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  background: var(--lightbg);
+  border: 1px solid var(--dimmed);
+  border-left: 4px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.tools-tab:hover {
+  border-color: var(--lightMain);
+}
+
+.tools-tab[aria-selected="true"] {
+  background: rgba(181, 23, 158, 0.18);
+  border-color: var(--lightMain);
+  border-left-color: var(--lightMain);
+  box-shadow: var(--glow);
+}
+
+.tools-tab:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.tools-tab .bi {
+  font-size: 1.4rem;
+}
+
+.tools-tab span {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.tools-tab small {
+  font-family: "Inter", sans-serif;
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+
+.tools-panel {
+  padding: clamp(1rem, 3vw, 1.75rem);
+  background: rgba(3, 0, 4, 0.88);
+  border: 1px solid var(--dimmed);
+  border-radius: 14px;
+  box-shadow: 0 0 40px #b5179e22;
+}
+
+.tools-panel[hidden] {
+  display: none;
+}
+
+.tools-panel h2 {
+  margin-bottom: 0.75rem;
+}
+
+.tools-panel p {
+  display: block;
+  font-family: "Inter", sans-serif;
+  font-weight: normal;
+  line-height: 1.7;
+  color: #eadbe7;
+  text-shadow: none;
+}
+
+.tools-features {
+  margin: 0 0 1.25rem;
+  padding-left: 1.25rem;
+  font-family: "Inter", sans-serif;
+  line-height: 1.6;
+  color: #eadbe7;
+}
+
+.tools-features li {
+  margin-bottom: 0.3rem;
+}
+
+.tools-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 1rem 0;
+}
+
+.tools-embed iframe {
+  display: block;
+  width: 100%;
+  height: min(80vh, 900px);
+  min-height: 520px;
+  border: 1px solid var(--dimmed);
+  border-radius: 10px;
+  background: #0e1116;
+}
+
+.tools-figure {
+  margin: 1rem 0;
+}
+
+.tools-figure img {
+  display: block;
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--dimmed);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.tools-run code,
+.tools-panel code {
+  padding: 0.1em 0.45em;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: var(--blue);
+}
+
+@media (max-width: 860px) {
+  .tools-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Tabs become a horizontal strip on narrow screens */
+  .tools-tabs {
+    flex-direction: row;
+    position: static;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .tools-tab {
+    flex: 0 0 auto;
+    width: auto;
+    border-left-width: 1px;
+  }
+
+  .tools-tab small {
+    display: none;
   }
 }

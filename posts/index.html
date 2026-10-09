@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Posts | Sean Lirazan</title>
+    <meta name="description" content="What Sean Lirazan has been working on: build updates, experiments, and photos from the bench." />
+    <link rel="canonical" href="https://sean2x.github.io/posts/" />
+    <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
+
+    <!-- Link previews (LinkedIn, iMessage, Discord, X, ...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sean Lirazan" />
+    <meta property="og:title" content="Posts | Sean Lirazan" />
+    <meta property="og:description" content="What Sean Lirazan has been working on: build updates, experiments, and photos from the bench." />
+    <meta property="og:url" content="https://sean2x.github.io/posts/" />
+    <meta property="og:image" content="https://sean2x.github.io/assets/img/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+
+  </head>
+
+  <body class="crt">
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- Header -->
+    <header id="header" class="header">
+      <div id="header1">
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <i class="bi bi-list hamburger"></i>
+          <a href="../index.html" aria-label="Home"
+            ><i class="logo bi bi-rocket-takeoff-fill rocket"></i
+          ></a>
+        </div>
+
+        <nav class="nav">
+          <a href="../index.html#about-me">About</a>
+          <a href="../projects/">Projects</a>
+          <a href="../posts/">Posts</a>
+          <a href="../card/" target="_blank">Contact</a>
+          <a href="../resume/">
+            Resume
+          </a>
+        </nav>
+      </div>
+
+      <div class="socials">
+        <a
+          href="https://www.instagram.com/sean.applies.engineering/"
+          class="logo bi bi-instagram"
+          target="_blank"
+          aria-label="Instagram"
+        ></a>
+        <a
+          href="https://github.com/Sean2x"
+          class="logo bi bi-github"
+          target="_blank"
+          aria-label="GitHub"
+        ></a>
+        <a
+          href="https://www.youtube.com/@SeanAppliesEngineering"
+          class="logo bi bi-youtube"
+          target="_blank"
+          aria-label="YouTube"
+        ></a>
+      </div>
+    </header>
+
+    <main>
+      <div class="page-intro">
+        <h1>Posts</h1>
+        <p>What I've been working on lately, with photos from the bench.</p>
+      </div>
+
+      <section id="posts">
+        <div class="post-list full" data-posts>
+          <!-- prerender-posts:start (built by tools/prerender.js from assets/js/posts.js; don't edit by hand) -->
+            <article class="post-card" id="root-locus-explorer">
+              <div class="post-card-media"><img src="../assets/img/posts/root-locus-explorer.png" alt="The PID Root Locus Explorer showing a root locus plot, step response, and Routh array" loading="lazy" /></div>
+              <div class="post-card-body">
+                <time datetime="2026-10-09">Oct 9, 2026</time>
+                <h3>Built a PID root locus explorer</h3>
+                <p>Move a PID gain and watch the root locus, the closed-loop poles, and the step response change together. MATLAB shows the locus but hides why it moves, so I made a tool that shows the link between pole location and behavior. It also runs a Routh–Hurwitz check, which catches systems where every coefficient is positive but poles are still in the right half-plane.</p>
+                <a class="read-more-link" href="../projects/pid.html#root-locus">Read more <i class="bi bi-arrow-right"></i></a>
+              </div>
+            </article>
+          <!-- prerender-posts:end -->
+        </div>
+      </section>
+    </main>
+
+    <script src="../assets/js/matrix.js"></script>
+    <script src="../assets/js/posts.js"></script>
+    <script src="../assets/js/site.js"></script>
+  </body>
+</html>

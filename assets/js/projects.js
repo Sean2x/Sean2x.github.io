@@ -18,7 +18,21 @@
 //   video    optional short muted clip that plays on hover — it only
 //            downloads on first hover, but smaller is better
 //   play     optional link to a live demo, shown as a button on the card
+//   playLabel optional button text (default "Play")
 const PROJECTS = [
+  {
+    slug: "pid",
+    title: "PID Tools",
+    summary:
+      "A set of control-systems tools: a browser root locus explorer that shows why poles move when you turn a PID gain, plus a PID tuning demo and a Zero-G flight simulator.",
+    tags: ["TypeScript", "Controls", "Canvas", "Python"],
+    light: "green",
+    image: "assets/img/projects/pid.png",
+    icon: "sliders",
+    video: "",
+    play: "projects/pid.html#root-locus",
+    playLabel: "Try it",
+  },
   {
     slug: "fish-swarm",
     title: "Fish Simulator",

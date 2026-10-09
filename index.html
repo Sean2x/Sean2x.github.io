@@ -154,6 +154,7 @@
         <nav class="nav">
           <a href="#about-me">About</a>
           <a href="projects/">Projects</a>
+          <a href="posts/">Posts</a>
           <a href="card/" target="_blank">Contact</a>
           <a href="resume/">
             Resume
@@ -286,20 +287,10 @@
         </div>
       </section>
 
-      <!-- YouTube -->
+      <!-- YouTube video on the left, recent posts on the right -->
       <section id="youtube">
         <div class="youtube-row">
-          <div class="youtube-side desktop-only">
-            <h2>
-              <a
-                href="https://www.youtube.com/@SeanAppliesEngineering"
-                target="_blank"
-                >@SeanAppliesEngineering</a
-              >
-            </h2>
-          </div>
-
-          <div class="youtube-center">
+          <div class="youtube-main">
             <h2 class="youtube-title">My Latest Video</h2>
             <div class="video-frame">
               <iframe
@@ -308,11 +299,33 @@
                 allowfullscreen
               ></iframe>
             </div>
+            <a
+              class="youtube-handle"
+              href="https://www.youtube.com/@SeanAppliesEngineering"
+              target="_blank"
+              >@SeanAppliesEngineering <i class="bi bi-box-arrow-up-right"></i
+            ></a>
           </div>
 
-          <div class="youtube-side right desktop-only">
-            <h3>Check out this super cool video!</h3>
-          </div>
+          <aside class="recent-posts" aria-labelledby="recent-posts-title">
+            <h2 id="recent-posts-title" class="recent-title">Recent Posts</h2>
+            <div class="post-list" data-posts="3" data-compact>
+              <!-- prerender-posts:start (built by tools/prerender.js from assets/js/posts.js; don't edit by hand) -->
+            <article class="post-card compact">
+              <div class="post-card-media"><img src="assets/img/posts/root-locus-explorer.png" alt="The PID Root Locus Explorer showing a root locus plot, step response, and Routh array" loading="lazy" /></div>
+              <div class="post-card-body">
+                <time datetime="2026-10-09">Oct 9, 2026</time>
+                <h3><a class="post-card-link" href="posts/#root-locus-explorer">Built a PID root locus explorer</a></h3>
+                <p>Move a PID gain and watch the root locus, the closed-loop poles, and the step response change together. MATLAB shows the locus but hides why it moves, so I made a tool that shows the link between pole location and behavior. It also runs a Routh–Hurwitz check, which catches systems where every coefficient is positive but poles are still in the right half-plane.</p>
+                
+              </div>
+            </article>
+              <!-- prerender-posts:end -->
+            </div>
+            <a class="btn-terminal" href="posts/">
+              See all posts <i class="bi bi-arrow-right"></i>
+            </a>
+          </aside>
         </div>
       </section>
 
@@ -321,6 +334,24 @@
         <h2 class="section-title">Projects</h2>
         <div class="project-list" data-projects="3">
           <!-- prerender:start (built by tools/prerender.js from assets/js/projects.js; don't edit by hand) -->
+          <article class="project-card terminal-window apple-fade">
+            <div class="terminal-window-top">
+              <div class="terminal-btn is-green"></div>
+              <div class="terminal-btn"></div>
+              <div class="terminal-btn"></div>
+              <span>pid</span>
+            </div>
+            <div class="project-media"><img src="assets/img/projects/pid.png" alt="" loading="lazy" /></div>
+            <div class="project-info">
+              <h3><a class="project-link" href="projects/pid.html">PID Tools</a></h3>
+              <p class="project-tags">TypeScript · Controls · Canvas · Python</p>
+              <p class="project-summary">A set of control-systems tools: a browser root locus explorer that shows why poles move when you turn a PID gain, plus a PID tuning demo and a Zero-G flight simulator.</p>
+              <div class="project-actions">
+                <span class="read-more">Read more <i class="bi bi-arrow-right"></i></span>
+                <a class="btn-terminal" href="projects/pid.html#root-locus">Try it <i class="bi bi-play-fill"></i></a>
+              </div>
+            </div>
+          </article>
           <article class="project-card terminal-window apple-fade">
             <div class="terminal-window-top">
               <div class="terminal-btn is-yellow"></div>
@@ -354,24 +385,6 @@
               <div class="project-actions">
                 <span class="read-more">Read more <i class="bi bi-arrow-right"></i></span>
                 <a class="btn-terminal" href="games/lexicon/">Play <i class="bi bi-play-fill"></i></a>
-              </div>
-            </div>
-          </article>
-          <article class="project-card terminal-window apple-fade">
-            <div class="terminal-window-top">
-              <div class="terminal-btn is-green"></div>
-              <div class="terminal-btn"></div>
-              <div class="terminal-btn"></div>
-              <span>portfolio-website</span>
-            </div>
-            <div class="project-media"><img src="assets/img/projects/portfolio-website.png" alt="" loading="lazy" /><video src="assets/video/projects/portfolio-website.mp4" muted loop playsinline preload="none"></video></div>
-            <div class="project-info">
-              <h3><a class="project-link" href="projects/portfolio-website.html">Personal Website</a></h3>
-              <p class="project-tags">HTML · CSS · JavaScript · Git</p>
-              <p class="project-summary">My home base—built from zero web experience and shaped by feedback from ~10 test users. Make it exist first, then make it good.</p>
-              <div class="project-actions">
-                <span class="read-more">Read more <i class="bi bi-arrow-right"></i></span>
-                
               </div>
             </div>
           </article>
@@ -417,6 +430,7 @@
 
     <script src="assets/js/matrix.js"></script>
     <script src="assets/js/projects.js"></script>
+    <script src="assets/js/posts.js"></script>
     <script src="assets/js/site.js"></script>
     <script>
       // Hero tagline: type it out once, then leave the caret blinking
