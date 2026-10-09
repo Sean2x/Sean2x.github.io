@@ -19,7 +19,6 @@ export interface State {
   K: number;
   showNeg: boolean;
   showAsym: boolean;
-  zoom: number;
   /** Which signal the step plot shows: output y(t) or control effort u(t). */
   tab: 'y' | 'u';
 }
@@ -41,7 +40,6 @@ export function defaultState(): State {
     K: 1,
     showNeg: true,
     showAsym: true,
-    zoom: 1,
     tab: 'y',
   };
 }

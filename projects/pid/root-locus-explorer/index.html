@@ -23,7 +23,14 @@
     <aside id="controls"></aside>
     <section class="plots">
       <div class="card plot">
-        <canvas id="locus"></canvas>
+        <div class="plot-wrap">
+          <canvas id="locus"></canvas>
+          <div class="zoom-btns" aria-label="Plot zoom">
+            <button id="zoom-in" title="Zoom in" aria-label="Zoom in">+</button>
+            <button id="zoom-out" title="Zoom out" aria-label="Zoom out">−</button>
+            <button id="zoom-fit" title="Fit to poles and zeros" aria-label="Fit view">Fit</button>
+          </div>
+        </div>
         <div id="readout" class="readout"></div>
         <div class="legend-row" aria-label="Plot legend">
           <span><b class="sym pole">×</b> open-loop pole</span>

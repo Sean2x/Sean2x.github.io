@@ -105,3 +105,8 @@ table.zeta th, table.zeta td { text-align: left; padding: 4px 8px 4px 0; border-
 table.zeta th { color: var(--dim); font-weight: 500; }
 .live { margin-top: 10px; padding: 10px 12px; background: rgba(74,163,255,.08); border-left: 3px solid var(--blue); border-radius: 4px; font-size: 13px; }
 @media (max-width: 760px) { .gloss { grid-template-columns: 1fr; } .gloss dd { margin-bottom: 6px; } .guide { padding: 0 16px 24px; grid-template-columns: 1fr; } }
+
+/* Locus plot zoom buttons */
+.plot-wrap { position: relative; }
+.zoom-btns { position: absolute; top: 8px; right: 8px; display: flex; flex-direction: column; gap: 4px; }
+.zoom-btns button { min-width: 34px; padding: 4px 8px; background: rgba(20,25,34,.85); }

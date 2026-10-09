@@ -29,6 +29,10 @@ const locusPlot = new LocusPlot(locusCanvas, $('readout'), (K) => {
 
 $('guide').innerHTML = guideStatic();
 
+$('zoom-in').addEventListener('click', () => locusPlot.zoomBy(1.4));
+$('zoom-out').addEventListener('click', () => locusPlot.zoomBy(1 / 1.4));
+$('zoom-fit').addEventListener('click', () => locusPlot.fit());
+
 function render() {
   raf = 0;
   d = derive(state);

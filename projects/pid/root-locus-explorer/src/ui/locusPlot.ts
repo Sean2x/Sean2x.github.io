@@ -4,12 +4,22 @@ import { Derived, State } from '../model';
 import { COLORS, fitCanvas, niceStep } from './canvas';
 import { fmt, fmtC } from './format';
 
-interface View { cx: number; ppu: number; w: number; h: number }
+interface View { cx: number; cy: number; ppu: number; w: number; h: number }
 
-/** Canvas root-locus plot with hover readout and pole dragging. */
+/**
+ * Canvas root-locus plot with hover readout and pole dragging.
+ * The view never moves on its own: it is fitted once (first draw, new plant, Fit button, double-click)
+ * and after that only the user pans (drag the background) and zooms (wheel / pinch / +/- buttons).
+ */
 export class LocusPlot {
   private ctx: CanvasRenderingContext2D;
-  private view: View = { cx: 0, ppu: 40, w: 600, h: 400 };
+  private view: View = { cx: 0, cy: 0, ppu: 40, w: 600, h: 400 };
+  private needFit = true;
+  private plantKey = '';
+  private panning = false;
+  private panLast: [number, number] = [0, 0];
+  private pointers = new Map<number, [number, number]>();
+  private pinch = 0;
   private s!: State;
   private d!: Derived;
   private hover: { x: number; y: number } | null = null;
@@ -22,9 +32,36 @@ export class LocusPlot {
   ) {
     this.ctx = canvas.getContext('2d')!;
     canvas.addEventListener('pointermove', (e) => this.move(e));
-    canvas.addEventListener('pointerleave', () => { if (!this.dragging) { this.hover = null; this.draw(); } });
+    canvas.addEventListener('pointerleave', () => { if (!this.dragging && !this.panning) { this.hover = null; this.draw(); } });
     canvas.addEventListener('pointerdown', (e) => this.down(e));
-    canvas.addEventListener('pointerup', (e) => { this.dragging = false; canvas.releasePointerCapture?.(e.pointerId); });
+    const up = (e: PointerEvent) => {
+      this.dragging = false; this.panning = false;
+      this.pointers.delete(e.pointerId); this.pinch = 0;
+      canvas.releasePointerCapture?.(e.pointerId);
+      canvas.style.cursor = 'crosshair';
+    };
+    canvas.addEventListener('pointerup', up);
+    canvas.addEventListener('pointercancel', up);
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const [x, y] = this.pt(e);
+      this.zoomAt(x, y, Math.exp(-e.deltaY * (e.deltaMode === 1 ? 0.05 : 0.0015)));
+    }, { passive: false });
+    canvas.addEventListener('dblclick', () => this.fit());
+    canvas.style.touchAction = 'none'; // we handle pan/pinch ourselves
+  }
+
+  /** Re-frame the plot on the plant's poles/zeros (the only time the view moves by itself). */
+  fit() { this.needFit = true; this.draw(); }
+  zoomBy(factor: number) { this.zoomAt(this.view.w / 2, this.view.h / 2, factor); }
+
+  private zoomAt(x: number, y: number, factor: number) {
+    const v = this.view;
+    const at = this.toS(x, y);
+    v.ppu = Math.min(20000, Math.max(1.5, v.ppu * factor));
+    v.cx = at.re - (x - v.w / 2) / v.ppu;
+    v.cy = at.im - (v.h / 2 - y) / v.ppu;
+    this.draw();
   }
 
   update(s: State, d: Derived) { this.s = s; this.d = d; this.draw(); }
@@ -32,11 +69,11 @@ export class LocusPlot {
   // ----- coordinates -----
   private toPx(z: Complex): [number, number] {
     const v = this.view;
-    return [v.w / 2 + (z.re - v.cx) * v.ppu, v.h / 2 - z.im * v.ppu];
+    return [v.w / 2 + (z.re - v.cx) * v.ppu, v.h / 2 - (z.im - v.cy) * v.ppu];
   }
   private toS(x: number, y: number): Complex {
     const v = this.view;
-    return { re: v.cx + (x - v.w / 2) / v.ppu, im: (v.h / 2 - y) / v.ppu };
+    return { re: v.cx + (x - v.w / 2) / v.ppu, im: v.cy + (v.h / 2 - y) / v.ppu };
   }
   private fitView(w: number, h: number) {
     const d = this.d;
@@ -55,14 +92,13 @@ export class LocusPlot {
     }
     const reSpan = Math.max(reMax - reMin, 1);
     let halfH = Math.max(imMax * 1.3, (reSpan * 0.5 * h) / w * 1.7, 1);
-    // Quantise so the frame only changes at a few thresholds while K is dragged.
     const mag = 10 ** Math.floor(Math.log10(halfH));
-    halfH = ([1, 1.5, 2, 3, 5, 7.5, 10].find((m) => m * mag >= halfH) ?? 10) * mag / this.s.zoom;
-    this.view = { cx: (reMin + reMax) / 2 - (reSpan * 0.08) / this.s.zoom, ppu: h / (2 * halfH), w, h };
+    halfH = ([1, 1.5, 2, 3, 5, 7.5, 10].find((m) => m * mag >= halfH) ?? 10) * mag;
+    this.view = { cx: (reMin + reMax) / 2 - reSpan * 0.08, cy: 0, ppu: h / (2 * halfH), w, h };
   }
 
   // ----- interaction -----
-  private pt(e: PointerEvent): [number, number] {
+  private pt(e: MouseEvent): [number, number] {
     const r = this.canvas.getBoundingClientRect();
     return [e.clientX - r.left, e.clientY - r.top];
   }
@@ -71,15 +107,29 @@ export class LocusPlot {
   }
   private down(e: PointerEvent) {
     const [x, y] = this.pt(e);
+    this.pointers.set(e.pointerId, [x, y]);
+    this.canvas.setPointerCapture(e.pointerId);
+    if (this.pointers.size === 2) { // second finger: switch to pinch
+      this.dragging = false; this.panning = false;
+      this.pinch = this.pinchDist();
+      return;
+    }
     const near = this.d.poles.some((p) => {
       const [px, py] = this.toPx(p);
       return Math.hypot(px - x, py - y) < 14;
     });
     if (near) {
       this.dragging = true;
-      this.canvas.setPointerCapture(e.pointerId);
       this.drag(x, y);
+    } else {
+      this.panning = true;
+      this.panLast = [x, y];
+      this.canvas.style.cursor = 'grabbing';
     }
+  }
+  private pinchDist() {
+    const [a, b] = [...this.pointers.values()];
+    return Math.hypot(a[0] - b[0], a[1] - b[1]);
   }
   private drag(x: number, y: number) {
     const hit = nearestOnLocus(this.locusSets(), this.toS(x, y));
@@ -87,7 +137,22 @@ export class LocusPlot {
   }
   private move(e: PointerEvent) {
     const [x, y] = this.pt(e);
+    if (this.pointers.has(e.pointerId)) this.pointers.set(e.pointerId, [x, y]);
+    if (this.pointers.size === 2 && this.pinch > 0) {
+      const d = this.pinchDist();
+      const [a, b] = [...this.pointers.values()];
+      this.zoomAt((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, d / this.pinch);
+      this.pinch = d;
+      return;
+    }
     if (this.dragging) { this.drag(x, y); return; }
+    if (this.panning) {
+      this.view.cx -= (x - this.panLast[0]) / this.view.ppu;
+      this.view.cy += (y - this.panLast[1]) / this.view.ppu;
+      this.panLast = [x, y];
+      this.draw();
+      return;
+    }
     this.hover = { x, y };
     const nearPole = this.d.poles.some((p) => { const [px, py] = this.toPx(p); return Math.hypot(px - x, py - y) < 14; });
     this.canvas.style.cursor = nearPole ? 'grab' : 'crosshair';
@@ -99,7 +164,9 @@ export class LocusPlot {
     if (!this.s) return;
     const { ctx, w, h } = fitCanvas(this.canvas);
     this.ctx = ctx;
-    this.fitView(w, h);
+    const key = JSON.stringify(this.s.plant);
+    if (this.needFit || key !== this.plantKey) { this.fitView(w, h); this.needFit = false; this.plantKey = key; }
+    else { this.view.w = w; this.view.h = h; }
     ctx.fillStyle = COLORS.bg;
     ctx.fillRect(0, 0, w, h);
     ctx.save();
@@ -139,14 +206,14 @@ export class LocusPlot {
       const [x] = this.toPx({ re: r, im: 0 });
       ctx.strokeStyle = Math.abs(r) < step / 1e3 ? COLORS.axis : COLORS.grid;
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-      if (Math.abs(r) > step / 1e3) ctx.fillText(fmt(r, 2), x + 2, h / 2 + 11);
+      if (Math.abs(r) > step / 1e3) ctx.fillText(fmt(r, 2), x + 2, Math.min(h - 4, Math.max(12, this.toPx({ re: 0, im: 0 })[1] + 11)));
     }
-    const imHi = h / 2 / v.ppu;
-    for (let r = Math.ceil(-imHi / step) * step; r <= imHi; r += step) {
+    const imLo = v.cy - h / 2 / v.ppu, imHi = v.cy + h / 2 / v.ppu;
+    for (let r = Math.ceil(imLo / step) * step; r <= imHi; r += step) {
       const [, y] = this.toPx({ re: 0, im: r });
       ctx.strokeStyle = Math.abs(r) < step / 1e3 ? COLORS.axis : COLORS.grid;
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-      if (Math.abs(r) > step / 1e3) ctx.fillText(fmt(r, 2) + 'j', 4, y - 2);
+      if (Math.abs(r) > step / 1e3) ctx.fillText(fmt(r, 2) + 'j', Math.min(w - 34, Math.max(4, this.toPx({ re: 0, im: 0 })[0] + 4)), y - 2);
     }
   }
 
@@ -214,12 +281,17 @@ export class LocusPlot {
     ctx.lineJoin = 'round';
     for (let b = 0; b < L.branches; b++) {
       ctx.beginPath();
+      // Smooth through midpoints so a zoomed-in locus doesn't show the sample spacing as kinks.
+      let px = 0, py = 0;
       for (let k = 0; k < L.K.length; k++) {
         const [x, y] = this.toPx(L.roots[k][b]);
         // Cap runaway coordinates so far-off segments stay finite for the rasteriser.
         const cxp = Math.max(-1e5, Math.min(1e5, x)), cyp = Math.max(-1e5, Math.min(1e5, y));
-        if (k === 0) ctx.moveTo(cxp, cyp); else ctx.lineTo(cxp, cyp);
+        if (k === 0) ctx.moveTo(cxp, cyp);
+        else ctx.quadraticCurveTo(px, py, (px + cxp) / 2, (py + cyp) / 2);
+        px = cxp; py = cyp;
       }
+      ctx.lineTo(px, py);
       ctx.stroke();
     }
   }
@@ -272,7 +344,7 @@ export class LocusPlot {
 
   private drawHover() {
     const { ctx } = this;
-    if (!this.hover) { this.readout.textContent = 'Hover the plot · drag a ■ pole along its branch to set K'; return; }
+    if (!this.hover) { this.readout.textContent = 'Scroll to zoom · drag the background to pan · double-click to fit · drag a ■ pole along its branch to set K'; return; }
     let s = this.toS(this.hover.x, this.hover.y);
     const hit = nearestOnLocus(this.locusSets(), s);
     let K: Complex;

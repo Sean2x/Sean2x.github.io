@@ -128,8 +128,6 @@ export function mountControls(root: El, s: State, onChange: () => void): Control
   neg.addEventListener('change', () => { s.showNeg = neg.checked; onChange(); });
   const asy = h('input', { type: 'checkbox' });
   asy.addEventListener('change', () => { s.showAsym = asy.checked; onChange(); });
-  const zoom = h('input', { type: 'range', min: '0.3', max: '6', step: '0.05' });
-  zoom.addEventListener('input', () => { s.zoom = parseFloat(zoom.value); onChange(); });
 
   function syncAll() {
     kp.sync(); ki.sync(); kd.sync(); kk.sync();
@@ -142,7 +140,7 @@ export function mountControls(root: El, s: State, onChange: () => void): Control
     if (document.activeElement !== nIn) nIn.value = String(s.ctrl.N);
     if (document.activeElement !== zIn2) zIn2.value = String(s.ctrl.z);
     if (document.activeElement !== pIn2) pIn2.value = String(s.ctrl.p);
-    neg.checked = s.showNeg; asy.checked = s.showAsym; zoom.value = String(s.zoom);
+    neg.checked = s.showNeg; asy.checked = s.showAsym;
   }
 
   const sec = (title: string, ...kids: El[]) => h('section', { class: 'card' }, h('h2', {}, title), ...kids);
@@ -151,8 +149,7 @@ export function mountControls(root: El, s: State, onChange: () => void): Control
     sec('Controller C(s)', h('div', { class: 'row2' }, form), kp.row, ki.row, kd.row, filt, leadRow),
     sec('Loop gain', kk.row,
       h('label', { class: 'check' }, neg, ' Show K < 0 locus (amber)'),
-      h('label', { class: 'check' }, asy, ' Show asymptotes'),
-      h('div', { class: 'row' }, h('label', {}, 'Zoom'), zoom)),
+      h('label', { class: 'check' }, asy, ' Show asymptotes')),
   );
   showMode(); fillPlantInputs(); syncAll();
   return { sync() { fillPlantInputs(); syncAll(); }, syncGains: syncAll };

@@ -28,7 +28,6 @@ export function fromJSON(text: string): State {
     K: num(raw.K, base.K),
     showNeg: raw.showNeg !== false,
     showAsym: raw.showAsym !== false,
-    zoom: Math.min(8, Math.max(0.2, num(raw.zoom, 1))),
     tab: raw.tab === 'u' ? 'u' : 'y',
   };
 }
