@@ -12,11 +12,12 @@ export function guideStatic(): string {
   return `
   <article class="card guide-card">
     <h2>Reading the plot</h2>
+    <p><b>Open-loop</b> means the loop with the feedback wire <em>cut</em>: controller × plant, L(s) = K·N(s)/D(s). Both ${X} poles and ${O} zeros are open-loop features. They are the fixed landmarks; the ${SQ} closed-loop poles are what moves. The arrows on each branch point the way |K| increases.</p>
     <dl class="gloss">
-      <dt>${X} pole</dt><dd>A root of the <b>open-loop</b> denominator D(s). Every branch <em>starts</em> on one (K = 0). An integrator (Ki ≠ 0) adds one at the origin.</dd>
-      <dt>${O} zero</dt><dd>A root of the numerator N(s). Branches <em>end</em> on zeros as K → ∞. Branches with no zero left to land on run off to infinity along the dashed asymptotes.</dd>
+      <dt>${X} open-loop pole</dt><dd>A root of the <b>open-loop</b> denominator D(s). Every branch <em>starts</em> on one (K = 0). An integrator (Ki ≠ 0) adds one at the origin.</dd>
+      <dt>${O} open-loop zero</dt><dd>A root of the numerator N(s). Branches <em>end</em> on zeros as K → ∞. Branches with no zero left to land on run off to infinity along the dashed asymptotes.</dd>
       <dt>${SQ} closed-loop pole</dt><dd>Where the poles <em>actually are</em> at your current K. These are the roots of D(s) + K·N(s) = 0. Drag one along its branch to change K.</dd>
-      <dt><b class="sym" style="color:var(--blue)">━</b> / <b class="sym" style="color:var(--amber)">━</b></dt><dd>Blue = locus for K &gt; 0, amber = K &lt; 0 (negative feedback gain).</dd>
+      <dt><b class="sym" style="color:var(--blue)">━</b> / <b class="sym" style="color:var(--amber)">━</b></dt><dd>Blue = locus for K &gt; 0, amber = K &lt; 0. For K &gt; 0, branches typically <em>diverge</em> from the poles toward their zeros or off to infinity; for K &lt; 0 they take the other parts of the real axis and the opposite asymptotes, so they often <em>converge</em> toward the axis instead. Each curve is the same set of poles traced as K moves in one direction from 0.</dd>
       <dt><b class="sym mk">◇</b> breakaway</dt><dd>Two poles meet on the real axis and leave it as a complex pair: the first place the response starts to ring.</dd>
       <dt><b class="sym mk">◯</b> crossing</dt><dd>A branch touches the imaginary axis at the labelled K: the edge of stability. Past it, poles are in the shaded right half-plane.</dd>
       <dt>Dotted rays / arcs</dt><dd>Rays are constant ζ (damping); arcs are constant ωₙ (natural frequency).</dd>

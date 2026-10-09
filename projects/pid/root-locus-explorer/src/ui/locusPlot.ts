@@ -293,6 +293,32 @@ export class LocusPlot {
       }
       ctx.lineTo(px, py);
       ctx.stroke();
+      this.drawArrows(L, b, color);
+    }
+  }
+
+  /** Small arrowheads along a branch pointing the way |K| increases (from the pole toward its zero or infinity). */
+  private drawArrows(L: LocusData, b: number, color: string) {
+    const { ctx } = this;
+    const { w, h } = this.view;
+    const every = 190;
+    let acc = every / 2;
+    ctx.fillStyle = color;
+    for (let k = 1; k < L.K.length; k++) {
+      const [x0, y0] = this.toPx(L.roots[k - 1][b]);
+      const [x1, y1] = this.toPx(L.roots[k][b]);
+      const len = Math.hypot(x1 - x0, y1 - y0);
+      if (!isFinite(len) || len > 1e4) continue;
+      acc += len;
+      if (acc < every || len < 1e-6) continue;
+      acc = 0;
+      if (x1 < 8 || x1 > w - 8 || y1 < 8 || y1 > h - 8) continue;
+      const a = Math.atan2(y1 - y0, x1 - x0);
+      ctx.save();
+      ctx.translate(x1, y1);
+      ctx.rotate(a);
+      ctx.beginPath(); ctx.moveTo(6, 0); ctx.lineTo(-5, -4.5); ctx.lineTo(-5, 4.5); ctx.closePath(); ctx.fill();
+      ctx.restore();
     }
   }
 
