@@ -25,6 +25,15 @@
       <div class="card plot">
         <canvas id="locus"></canvas>
         <div id="readout" class="readout"></div>
+        <div class="legend-row" aria-label="Plot legend">
+          <span><b class="sym pole">×</b> open-loop pole</span>
+          <span><b class="sym zero">○</b> zero</span>
+          <span><b class="sym closed">■</b> closed-loop pole (drag me)</span>
+          <span><b class="sym" style="color:var(--blue)">━</b> K &gt; 0</span>
+          <span><b class="sym" style="color:var(--amber)">━</b> K &lt; 0</span>
+          <span><b class="sym mk">◇</b> breakaway</span>
+          <span><b class="sym mk">◯</b> axis crossing</span>
+        </div>
       </div>
       <div class="card plot short">
         <div class="tabs">
@@ -43,6 +52,7 @@
       <div class="card" id="sumprod"></div>
       <div class="card" id="routh"></div>
     </section>
+    <section class="guide" id="guide" aria-label="How to read the plot"></section>
   </main>
   <dialog id="dlg"><form method="dialog"><h2 id="dlg-title"></h2><textarea id="dlg-text" readonly spellcheck="false"></textarea><div class="dlg-btns"><button id="dlg-copy" type="button">Copy</button><button>Close</button></div></form></dialog>
   <script type="module" src="/src/main.ts"></script>

@@ -534,7 +534,7 @@ h3 {
 /* Video on the left, recent posts on the right */
 .youtube-row {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 40px;
   align-items: start;
   max-width: 1400px;
@@ -1402,11 +1402,6 @@ h3 {
   min-width: 0;
 }
 
-.post-card time {
-  font-size: 0.85rem;
-  opacity: 0.7;
-}
-
 .post-card h3 {
   display: block;
   margin: 0;
@@ -1437,7 +1432,21 @@ h3 {
   margin-top: 0.4rem;
 }
 
-/* Home box: small photo beside the text, text clipped to a few lines */
+/* Date as a pill so it reads at a glance */
+.post-card time {
+  align-self: flex-start;
+  padding: 0.15rem 0.7rem;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--lightMain);
+  border: 1px solid var(--lightMain);
+  border-radius: 99px;
+  opacity: 1;
+}
+
+/* Home box: the newest post is a big feature card (photo on top);
+   older ones sit below as compact rows with a smaller photo. */
 .post-card.compact {
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   align-items: center;
@@ -1449,6 +1458,22 @@ h3 {
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 0.9rem;
+}
+
+.post-card.compact:first-child {
+  grid-template-columns: minmax(0, 1fr);
+  padding: 18px;
+  border-color: var(--lightMain);
+  box-shadow: var(--glow);
+}
+
+.post-card.compact:first-child h3 {
+  font-size: 1.6rem;
+}
+
+.post-card.compact:first-child p {
+  -webkit-line-clamp: 5;
+  font-size: 1.02rem;
 }
 
 /* posts/ page: one wide column, photo on top */

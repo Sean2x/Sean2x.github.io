@@ -3,6 +3,7 @@ import { Derived, State, defaultState, derive } from './model';
 import { LocusPlot } from './ui/locusPlot';
 import { StepPlot } from './ui/stepPlot';
 import { charPolyHTML, routhHTML, statsHTML, sumProductHTML } from './ui/panels';
+import { guideStatic, updateGuide } from './ui/guide';
 import { mountControls } from './ui/controls';
 import { fromHash, fromJSON, toHash, toJSON, toMatlab } from './io/share';
 
@@ -26,6 +27,8 @@ const locusPlot = new LocusPlot(locusCanvas, $('readout'), (K) => {
   schedule();
 });
 
+$('guide').innerHTML = guideStatic();
+
 function render() {
   raf = 0;
   d = derive(state);
@@ -35,6 +38,7 @@ function render() {
   $('charpoly').innerHTML = charPolyHTML(state, d);
   $('sumprod').innerHTML = sumProductHTML(state, d);
   $('routh').innerHTML = routhHTML(state, d);
+  updateGuide($('guide'), state, d);
   clearTimeout(hashTimer);
   hashTimer = window.setTimeout(() => {
     const embed = document.body.classList.contains('embed') ? '&embed' : '';
