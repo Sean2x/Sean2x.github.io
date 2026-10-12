@@ -86,6 +86,7 @@ h3 {
 .project-media,
 .post-hero,
 .post-body figure,
+.tools-demo,
 .resume-viewer {
   position: relative;
   z-index: 60;
@@ -1593,6 +1594,28 @@ h3 {
   font-family: "Inter", sans-serif;
   font-size: 0.78rem;
   opacity: 0.7;
+}
+
+/* Demo clip inside a tool panel (e.g. Root Locus Explorer) */
+.tools-demo {
+  margin: 1.25rem 0;
+}
+
+.tools-demo video {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--dimmed);
+  border-radius: 10px;
+  background: #000;
+}
+
+.tools-demo figcaption {
+  margin-top: 0.5rem;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.9rem;
+  color: #b9a3b5;
+  text-align: center;
+  text-shadow: none;
 }
 
 .tools-panel {
