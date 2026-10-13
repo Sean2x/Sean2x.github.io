@@ -150,10 +150,11 @@
           <section class="tools-panel" role="tabpanel" id="zero-g" aria-labelledby="tab-zero-g" hidden>
             <h2>Zero-G Flight Simulator</h2>
             <p>
-              A plane flies a curved trajectory and the simulator reports what
-              the pilot would feel: elevation, horizontal and vertical speed,
-              angle, vertical acceleration, and G-force. Watch the G-force
-              drop toward zero over the top of the arc.
+              A plane flies a real parabolic zero-gravity maneuver: pull up at
+              about 1.8 g, unload the wings so only gravity acts on the plane,
+              then pull out. A strip chart shows the felt gravity, and you can
+              change the entry speed, the pull-up g, and the entry angle to see
+              how long the zero-g window lasts.
             </p>
             <div class="tools-actions">
               <a class="btn-terminal primary" href="pid/zero-g/zero-g.html" target="_blank">
@@ -167,8 +168,8 @@
               <iframe data-src="pid/zero-g/zero-g.html" title="Zero-G Flight Simulator" loading="lazy"></iframe>
             </div>
             <p class="tools-run">
-              The original was a Python/Tkinter program (<code>Zero_G.py</code>
-              in the source folder); this page is a direct port of it.
+              This is a remake of my first Python/Tkinter version (<code>Zero_G.py</code>
+              in the source folder), now built on a point-mass flight model.
             </p>
           </section>
 

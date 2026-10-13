@@ -25,8 +25,8 @@ const POSTS = [
   {
     id: "controls-tooling",
     date: "2026-10-09",
-    title: "Controls Tooling: my old Python sims now play in the browser",
-    text: "I gathered my controls projects into one page, Controls Tooling, with a tab for each tool. My first PID demo and the Zero-G flight simulator started as Python and Tkinter programs, so I ported both to the browser with the same constants and update order. Now anyone can drag Kp, Ki, and Kd and watch the dot overshoot and settle without installing anything.",
+    title: "Controls Tooling: my Python sims now play in the browser",
+    text: "I gathered my controls projects into one page, Controls Tooling, with a tab for each tool. My first PID demo started as a Python and Tkinter program, so I ported it to the browser with the same constants and update order, and I remade the Zero-G flight simulator as a real parabolic flight: pull up, free fall at 0 g, pull out. Now anyone can drag Kp, Ki, and Kd and watch the dot overshoot and settle, or tune a zero-g parabola, without installing anything.",
     image: "assets/img/posts/pid-demo-browser.jpg",
     alt: "The PID demo in the browser: a red trail from a blue dot settling onto a target line, with Kp, Ki, and Kd sliders below",
     link: "projects/pid.html#pid-demo",

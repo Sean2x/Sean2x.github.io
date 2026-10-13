@@ -3,111 +3,209 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Zero-G Flight Simulator</title>
+<title>Zero-G Parabolic Flight</title>
 <style>
-  :root { --bg:#0e1116; --text:#d7dee9; --dim:#8592a6; color-scheme: dark; }
+  :root { --bg:#0e1116; --panel:#141922; --line:#232b38; --text:#d7dee9; --dim:#8592a6; --zero:#5ee6a8; --pull:#ffb454; --blue:#4aa3ff; color-scheme: dark; }
   * { box-sizing: border-box; }
   body { margin:0; padding:12px; background:var(--bg); color:var(--text); font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif; }
-  .wrap { max-width: 900px; margin: 0 auto; display: grid; gap: 12px; justify-items: center; }
-  canvas { display:block; width:100%; height:auto; background:#000; border:1px solid #232b38; border-radius:8px; }
-  pre { margin:0; padding:12px 18px; background:#000; color:#fff; border-radius:8px; font:14px/1.6 Consolas,ui-monospace,Menlo,monospace; width:100%; max-width:420px; }
-  .hint { color:var(--dim); font-size:13px; margin:0; max-width:70ch; text-align:center; }
-  button { background:#1b2230; color:var(--text); border:1px solid #2c3647; border-radius:6px; padding:6px 14px; font:inherit; cursor:pointer; }
-  button:hover { border-color:#4aa3ff; }
+  .wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 12px; }
+  canvas { display:block; width:100%; height:auto; border-radius:10px; border:1px solid var(--line); }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .read { display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:10px 16px; }
+  .read div { display:flex; flex-direction:column; }
+  .read small { color:var(--dim); font-size:12px; }
+  .read b { font: 600 20px/1.2 ui-monospace,Menlo,Consolas,monospace; font-variant-numeric: tabular-nums; }
+  .read b.zero { color: var(--zero); }
+  .controls { display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:10px 18px; align-items:end; }
+  .ctl label { display:flex; justify-content:space-between; font-weight:600; margin-bottom:2px; }
+  .ctl output { font-family: ui-monospace,Menlo,monospace; }
+  input[type=range] { width:100%; }
+  select, button { background:#1b2230; color:var(--text); border:1px solid #2c3647; border-radius:6px; padding:6px 12px; font:inherit; cursor:pointer; }
+  select { width:100%; }
+  button:hover, select:hover { border-color:var(--blue); }
+  .row { display:flex; gap:8px; }
+  .hint { color:var(--dim); font-size:13px; margin:0; max-width: 85ch; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <canvas id="c" width="800" height="500" aria-label="Airplane flying a curved trajectory"></canvas>
-  <pre id="info"></pre>
-  <button id="pause">Pause</button>
-  <p class="hint">The plane follows the curve at constant path speed. Vertical acceleration comes from how the vertical speed changes along the curve, and G-force = vertical acceleration + 1 (units as in the original Python: mph, ft, ft/s²).</p>
+  <canvas id="sky" width="900" height="480" aria-label="Side view of a plane flying a parabolic zero-gravity maneuver"></canvas>
+  <canvas id="chart" width="900" height="150" aria-label="Felt g-force over the last 60 seconds"></canvas>
+
+  <div class="panel read">
+    <div><small>Phase</small><b id="r-phase">—</b></div>
+    <div><small>Felt gravity</small><b id="r-g">—</b></div>
+    <div><small>Altitude</small><b id="r-alt">—</b></div>
+    <div><small>Airspeed</small><b id="r-speed">—</b></div>
+    <div><small>Flight path angle</small><b id="r-gam">—</b></div>
+    <div><small>Zero-g this arc</small><b id="r-zt">—</b></div>
+    <div><small>Parabolas flown</small><b id="r-n">—</b></div>
+  </div>
+
+  <div class="panel controls">
+    <div class="ctl"><label for="v0">Entry speed <output id="v0v"></output></label><input id="v0" type="range" min="120" max="260" step="5" value="200" /></div>
+    <div class="ctl"><label for="npull">Pull-up / pull-out <output id="npullv"></output></label><input id="npull" type="range" min="1.3" max="2.5" step="0.1" value="1.8" /></div>
+    <div class="ctl"><label for="ang">Entry / exit angle <output id="angv"></output></label><input id="ang" type="range" min="25" max="60" step="1" value="45" /></div>
+    <div class="ctl"><label for="ts">Time speed</label><select id="ts"><option value="1">1×</option><option value="2" selected>2×</option><option value="4">4×</option></select></div>
+    <div class="ctl row"><button id="reset">Reset</button><button id="pause">Pause</button></div>
+  </div>
+  <p class="hint">A real zero-g flight is a parabola: the plane pulls up at about 1.8 g, then the pilot unloads the wings so nothing pushes on the plane but gravity (the plane and everyone inside fall together: 0 g), then pulls out. Felt gravity here is the load factor n, the lift pushing on the plane as a multiple of its weight. Thrust is assumed to cancel drag, so speed only trades with altitude.</p>
 </div>
 
 <script>
-// Port of Zero_G.py (Tkinter). Same trajectory, speed and flight-data math; fixed 16 ms steps like window.after(16).
-const cv = document.getElementById('c'), ctx = cv.getContext('2d');
-const DT = 0.016, SPEED = 1, STEP_MS = 16;
+// Point-mass flight model in the vertical plane. State: speed V, flight path angle gamma, altitude h, distance x.
+//   dgamma/dt = g (n - cos gamma) / V      n = load factor (1 level, 1.8 pull, 0 in the parabola)
+//   dV/dt     = -g sin gamma               thrust cancels drag, so only gravity changes speed
+const G = 9.81, H0 = 7000, DEG = Math.PI / 180;
+const $ = (id) => document.getElementById(id);
+const sky = $('sky'), sctx = sky.getContext('2d'), chart = $('chart'), cctx = chart.getContext('2d');
 
-const trajectory = (x) => 100 * Math.exp(-((x - 400) ** 2) / (2 * 100 ** 2)) + 100;
-const points = [];
-for (let x = 50; x <= 750; x += 2) points.push([x, 400 - trajectory(x)]); // flip y: canvas y points down
-
-const plane = new Image();
-plane.src = 'airplane.png';
-
-let bx, by, idx, xSpeed, ySpeed, velocity, angle, elevation, prevYSpeed, vAccel, g, running = true;
+const P = { v0: 200, npull: 1.8, ang: 45 * DEG, ts: 2 };
+let st, hist, trail, running = true;
 
 function reset() {
-  idx = 0; [bx, by] = points[0];
-  xSpeed = ySpeed = velocity = angle = 0;
-  elevation = 400 - by;
-  prevYSpeed = 0; vAccel = 0; g = 1;
+  st = { V: P.v0, gam: 0, h: 0, x: 0, t: 0, phase: 'cruise', pt: 0, zeroT: 0, lastZero: 0, count: 0, n: 1 };
+  hist = []; trail = [];
 }
 
-function step() {
-  if (idx >= points.length - 1) { reset(); return; }
-  const [tx, ty] = points[idx + 1];
-  let dx = tx - bx, dy = ty - by;
-  const dist = Math.hypot(dx, dy);
-  if (dist <= SPEED) { bx = tx; by = ty; idx++; }
-  else { bx += (dx / dist) * SPEED; by += (dy / dist) * SPEED; }
-
-  if (idx < points.length - 2) {
-    const [nx, ny] = points[idx + 1], [fx, fy] = points[idx + 2];
-    dx = fx - nx; dy = fy - ny;
-    const d = Math.hypot(dx, dy);
-    const ux = dx / d, uy = dy / d;
-    xSpeed = ux * SPEED;
-    ySpeed = -uy * SPEED; // negative: canvas y increases downward
-    velocity = Math.hypot(xSpeed, ySpeed);
-    angle = (Math.atan2(ySpeed, xSpeed) * 180) / Math.PI;
-    if (ySpeed !== prevYSpeed) {
-      vAccel = (ySpeed - prevYSpeed) / DT;
-      prevYSpeed = ySpeed;
-      g = vAccel + 1; // only updated when the acceleration changes, as in the original
-    }
-  }
-  elevation = 400 - by;
-}
-
-const pad = (v, w, d) => v.toFixed(d).padStart(w);
-function draw() {
-  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 800, 500);
-  ctx.strokeStyle = 'brown'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(50, 400); ctx.lineTo(750, 400); ctx.stroke();
-  ctx.strokeStyle = '#b5179e'; ctx.lineWidth = 3; ctx.lineJoin = 'round';
-  ctx.beginPath();
-  points.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
-  ctx.stroke();
-  if (plane.complete && plane.naturalWidth) {
-    const w = plane.naturalWidth / 2, h = plane.naturalHeight / 2; // subsample(2, 2)
-    ctx.drawImage(plane, bx - w / 2, by - h / 2, w, h);
+function step(dt) {
+  let n = 1;
+  if (st.phase === 'cruise') {            // level flight for a few seconds between parabolas
+    n = 1; st.gam = 0; st.pt += dt; st.V = P.v0 + (st.V - P.v0) * 0.98;
+    if (st.pt > 4) { st.phase = 'pullup'; st.pt = 0; st.V = P.v0; }
+  } else if (st.phase === 'pullup') {
+    n = P.npull;
+    if (st.gam >= P.ang) { st.phase = 'zero'; st.zeroT = 0; }
+  } else if (st.phase === 'zero') {       // free fall: the load factor is 0 and the path is a parabola
+    n = 0; st.zeroT += dt;
+    if (st.gam <= -P.ang) { st.phase = 'pullout'; st.lastZero = st.zeroT; }
   } else {
-    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(bx, by, 10, 0, 7); ctx.fill();
+    n = P.npull;
+    if (st.gam >= 0) { st.phase = 'cruise'; st.gam = 0; st.pt = 0; st.count++; }
   }
-  document.getElementById('info').textContent =
-    'FLIGHT DATA\n\n' +
-    `Elevation:       ${pad(elevation, 6, 1)} ft\n` +
-    `X Speed:         ${pad(xSpeed, 6, 2)} mph\n` +
-    `Y Speed:         ${pad(ySpeed, 6, 2)} mph\n` +
-    `Speed:           ${pad(velocity, 6, 2)} mph\n` +
-    `Angle:           ${pad(angle, 6, 1)}°\n` +
-    `Vertical Accel:  ${pad(vAccel, 6, 2)} ft/s²\n` +
-    `G-Force:         ${pad(g, 6, 2)} G`;
+  st.n = n;
+  st.gam += (G * (n - Math.cos(st.gam)) / st.V) * dt;
+  st.V += -G * Math.sin(st.gam) * dt;
+  st.x += st.V * Math.cos(st.gam) * dt;
+  st.h += st.V * Math.sin(st.gam) * dt;
+  st.t += dt;
 }
 
-let last = performance.now(), acc = 0;
+// ---------- drawing ----------
+const SCALE = 0.2;                         // pixels per metre
+const PX = 0.35;                           // plane sits 35% from the left
+const col = (n) => (n < 0.05 ? '#5ee6a8' : n > 1.05 ? '#ffb454' : '#8592a6');
+
+function drawPlane(ctx, angle) {
+  ctx.save();
+  ctx.rotate(-angle);
+  ctx.fillStyle = '#e8eefc'; ctx.strokeStyle = '#0e1116'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.ellipse(0, 0, 34, 6, 0, 0, 7); ctx.fill(); ctx.stroke();           // fuselage
+  ctx.beginPath(); ctx.moveTo(-22, -3); ctx.lineTo(-36, -19); ctx.lineTo(-27, -19); ctx.lineTo(-14, -4); ctx.closePath(); ctx.fill(); ctx.stroke(); // tail fin
+  ctx.fillStyle = '#b9c3d6';
+  ctx.beginPath(); ctx.moveTo(10, 2); ctx.lineTo(-8, 2); ctx.lineTo(-22, 14); ctx.lineTo(-10, 14); ctx.closePath(); ctx.fill(); ctx.stroke(); // wing
+  ctx.fillStyle = '#4aa3ff'; ctx.beginPath(); ctx.ellipse(22, -1.5, 5, 2.2, 0, 0, 7); ctx.fill(); // cockpit
+  ctx.restore();
+}
+
+function drawSky() {
+  const W = sky.width, H = sky.height;
+  const g = sctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#0b1020'); g.addColorStop(1, '#16213a');
+  sctx.fillStyle = g; sctx.fillRect(0, 0, W, H);
+  const px = W * PX, py = H / 2;
+  const sx = (x) => px + (x - st.x) * SCALE, sy = (h) => py - (h - st.h) * SCALE;
+
+  // altitude grid and distance ticks
+  sctx.lineWidth = 1; sctx.font = '12px system-ui, sans-serif'; sctx.fillStyle = '#6b7688';
+  const hLo = st.h - py / SCALE, hHi = st.h + py / SCALE;
+  for (let h = Math.ceil(hLo / 250) * 250; h <= hHi; h += 250) {
+    sctx.strokeStyle = 'rgba(133,146,166,0.16)'; sctx.beginPath(); sctx.moveTo(0, sy(h)); sctx.lineTo(W, sy(h)); sctx.stroke();
+    sctx.fillText(`${(H0 + h).toLocaleString('en-US')} m`, 8, sy(h) - 4);
+  }
+  const xLo = st.x - px / SCALE, xHi = st.x + (W - px) / SCALE;
+  for (let x = Math.ceil(xLo / 500) * 500; x <= xHi; x += 500) {
+    sctx.strokeStyle = 'rgba(133,146,166,0.10)'; sctx.beginPath(); sctx.moveTo(sx(x), 0); sctx.lineTo(sx(x), H); sctx.stroke();
+  }
+
+  // trail, colored by felt gravity
+  sctx.lineWidth = 3; sctx.lineCap = 'round';
+  for (let i = 1; i < trail.length; i++) {
+    const a = trail[i - 1], b = trail[i];
+    sctx.strokeStyle = col(b.n); sctx.setLineDash(b.n < 0.05 ? [] : [2, 7]);
+    sctx.beginPath(); sctx.moveTo(sx(a.x), sy(a.h)); sctx.lineTo(sx(b.x), sy(b.h)); sctx.stroke();
+  }
+  sctx.setLineDash([]);
+
+  sctx.save(); sctx.translate(px, py); drawPlane(sctx, st.gam); sctx.restore();
+
+  // phase banner
+  const banner = st.phase === 'zero' ? ['ZERO-G', '#5ee6a8'] : st.phase === 'pullup' ? [`PULL-UP  ${P.npull.toFixed(1)} g`, '#ffb454'] : st.phase === 'pullout' ? [`PULL-OUT  ${P.npull.toFixed(1)} g`, '#ffb454'] : ['LEVEL  1 g', '#8592a6'];
+  sctx.font = '700 30px system-ui, sans-serif'; sctx.fillStyle = banner[1]; sctx.fillText(banner[0], W - 280, 44);
+}
+
+function drawChart() {
+  const W = chart.width, H = chart.height, L = 44, R = 10, T = 12, B = 22, pw = W - L - R, ph = H - T - B;
+  cctx.fillStyle = '#0e1116'; cctx.fillRect(0, 0, W, H);
+  const Y = (n) => T + ph - (Math.max(0, Math.min(2.5, n)) / 2.5) * ph;
+  cctx.font = '11px system-ui, sans-serif'; cctx.fillStyle = '#6b7688'; cctx.lineWidth = 1;
+  for (const v of [0, 1, 2]) {
+    cctx.strokeStyle = v === 1 ? 'rgba(133,146,166,0.45)' : 'rgba(133,146,166,0.18)';
+    cctx.beginPath(); cctx.moveTo(L, Y(v)); cctx.lineTo(L + pw, Y(v)); cctx.stroke();
+    cctx.fillText(`${v} g`, 8, Y(v) + 4);
+  }
+  const span = 60, t1 = st.t, t0 = t1 - span;
+  const X = (t) => L + ((t - t0) / span) * pw;
+  cctx.fillStyle = 'rgba(94,230,168,0.10)'; cctx.fillRect(L, Y(0.05), pw, Y(0) - Y(0.05));
+  cctx.lineWidth = 2.5; cctx.lineJoin = 'round';
+  for (let i = 1; i < hist.length; i++) {
+    const a = hist[i - 1], b = hist[i];
+    if (b.t < t0) continue;
+    cctx.strokeStyle = col(b.n);
+    cctx.beginPath(); cctx.moveTo(X(a.t), Y(a.n)); cctx.lineTo(X(b.t), Y(b.n)); cctx.stroke();
+  }
+  cctx.fillStyle = '#6b7688'; cctx.fillText('felt gravity (last 60 s)', L + 6, T + 10);
+}
+
+function readouts() {
+  $('r-phase').textContent = { cruise: 'Level', pullup: 'Pull-up', zero: 'Zero-G', pullout: 'Pull-out' }[st.phase];
+  const g = $('r-g'); g.textContent = `${st.n.toFixed(2)} g`; g.classList.toggle('zero', st.n < 0.05);
+  $('r-alt').textContent = `${Math.round(H0 + st.h).toLocaleString('en-US')} m`;
+  $('r-speed').textContent = `${st.V.toFixed(0)} m/s`;
+  $('r-gam').textContent = `${(st.gam / DEG).toFixed(1)}°`;
+  $('r-zt').textContent = `${(st.phase === 'zero' ? st.zeroT : st.lastZero).toFixed(1)} s`;
+  $('r-n').textContent = st.count;
+}
+
+// ---------- loop ----------
+let last = performance.now(), sample = 0;
 function frame(now) {
-  acc += Math.min(now - last, 100); last = now;
-  while (acc >= STEP_MS) { if (running) step(); acc -= STEP_MS; }
-  draw();
+  const real = Math.min((now - last) / 1000, 0.1); last = now;
+  if (running) {
+    let left = real * P.ts;
+    while (left > 1e-9) {
+      const dt = Math.min(1 / 120, left); step(dt); left -= dt; sample += dt;
+      if (sample >= 0.1) { sample = 0; trail.push({ x: st.x, h: st.h, n: st.n }); hist.push({ t: st.t, n: st.n }); }
+    }
+    if (trail.length > 900) trail.shift();
+    if (hist.length > 1200) hist.shift();
+  }
+  drawSky(); drawChart(); readouts();
   requestAnimationFrame(frame);
 }
-document.getElementById('pause').addEventListener('click', (e) => {
-  running = !running;
-  e.target.textContent = running ? 'Pause' : 'Resume';
-});
+
+function bind(id, out, fmt, set) {
+  const el = $(id), o = $(out);
+  const upd = () => { const v = parseFloat(el.value); set(v); o.textContent = fmt(v); };
+  el.addEventListener('input', upd); upd();
+}
+bind('v0', 'v0v', (v) => `${v} m/s`, (v) => (P.v0 = v));
+bind('npull', 'npullv', (v) => `${v.toFixed(1)} g`, (v) => (P.npull = v));
+bind('ang', 'angv', (v) => `${v}°`, (v) => (P.ang = v * DEG));
+$('ts').addEventListener('change', (e) => (P.ts = parseFloat(e.target.value)));
+$('reset').addEventListener('click', reset);
+$('pause').addEventListener('click', () => { running = !running; $('pause').textContent = running ? 'Pause' : 'Resume'; });
+
 reset();
 requestAnimationFrame(frame);
 </script>
