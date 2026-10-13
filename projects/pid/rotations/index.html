@@ -53,8 +53,8 @@
       <canvas id="axes" width="360" height="360" aria-label="Fixed axes (grey) and body axes (colored)"></canvas>
     </div>
     <div class="modes" role="group" aria-label="Rotation about fixed or body axes">
-      <button type="button" data-mode="fixed" class="on">Fixed axes</button>
-      <button type="button" data-mode="body">Body axes</button>
+      <button type="button" data-mode="fixed" class="on" aria-pressed="true">Fixed axes</button>
+      <button type="button" data-mode="body" aria-pressed="false">Body axes</button>
     </div>
     <div class="sliders">
       <label>Yaw ψ (z) <input id="psi" type="range" min="-360" max="360" step="1" value="0" /><input id="psi-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Yaw ψ degrees" /><button type="button" data-zero="psi" title="Rotate back to 0">0</button></label>
@@ -129,7 +129,7 @@ function renderSide(mode) {
 let mode = 'fixed'; // default: fixed axes
 document.querySelectorAll('[data-mode]').forEach((btn) => btn.addEventListener('click', () => {
   mode = btn.dataset.mode;
-  document.querySelectorAll('[data-mode]').forEach((b) => b.classList.toggle('on', b === btn));
+  document.querySelectorAll('[data-mode]').forEach((b) => { b.classList.toggle('on', b === btn); b.setAttribute('aria-pressed', b === btn); });
   renderSide(mode);
   draw();
 }));
@@ -162,16 +162,19 @@ const ids = ['psi', 'lam', 'phi'];
 const sliders = ids.map((id) => document.getElementById(id));
 const boxes = ids.map((id) => document.getElementById(id + '-n'));
 const clamp = (v) => Math.max(-360, Math.min(360, v));
-sliders.forEach((s, i) => s.addEventListener('input', () => { boxes[i].value = s.value; draw(); }));
+const anim = [0, 0, 0]; // running zero-animation id per axis; bumping it cancels that animation
+sliders.forEach((s, i) => s.addEventListener('input', () => { anim[i]++; boxes[i].value = s.value; draw(); }));
 boxes.forEach((b, i) => b.addEventListener('input', () => {
+  anim[i]++;
   const v = parseFloat(b.value);
   if (isFinite(v)) { sliders[i].value = clamp(v); draw(); } // typing keeps what you typed until you leave the box
 }));
 // Zero button: ease the slider back to 0
 document.querySelectorAll('[data-zero]').forEach((btn) => btn.addEventListener('click', () => {
   const i = ids.indexOf(btn.dataset.zero);
-  const from = parseFloat(sliders[i].value), t0 = performance.now(), T = 450;
+  const from = parseFloat(sliders[i].value), t0 = performance.now(), T = 450, id = ++anim[i];
   const tick = (now) => {
+    if (anim[i] !== id) return; // the user moved this angle (or pressed 0 again): stop animating
     const k = Math.min(1, (now - t0) / T), e = 1 - (1 - k) ** 3; // ease-out
     const v = from * (1 - e);
     sliders[i].value = v; boxes[i].value = k < 1 ? Math.round(v * 10) / 10 : 0;
@@ -188,7 +191,7 @@ boxes.forEach((b, i) => b.addEventListener('change', () => { // out of range or 
 
 function draw() {
   const [psi, lam, phi] = sliders.map((s) => parseFloat(s.value) * RAD);
-  // psi about z, lambda about y, phi about x: R = Rz(psi) · Ry(lambda) · Rx(phi)
+  // yaw psi about z, pitch theta about y, roll phi about x, composed in the order set by `mode`:
   // fixed axes: psi about z first, then theta about y, then phi about x (all fixed): R = Rx·Ry·Rz
   // body axes: same three turns about the rotating axes: R = Rz·Ry·Rx
   const R = mode === 'fixed' ? mul(Rx(phi), mul(Ry(lam), Rz(psi))) : mul(Rz(psi), mul(Ry(lam), Rx(phi)));
