@@ -27,7 +27,10 @@
   .modes { display: flex; gap: 0; }
   .modes button { padding: 6px 16px; border-radius: 0; }
   .modes button:first-child { border-radius: 6px 0 0 6px; }
-  .modes button:last-child { border-radius: 0 6px 6px 0; border-left: 0; }
+  .modes button + button { border-left: 0; }
+  .modes button:last-child { border-radius: 0 6px 6px 0; }
+  #reset-orient { padding: 6px 16px; }
+  .rnum { font-size: 14px; }
   .modes button.on { background: #1f3550; border-color: #4aa3ff; color: #fff; }
   .intro { text-align: left; font-size: 13px; line-height: 1.4; }
   .eq-sign { padding: 0 2px; }
@@ -55,11 +58,13 @@
     <div class="modes" role="group" aria-label="Rotation about fixed or body axes">
       <button type="button" data-mode="fixed" class="on" aria-pressed="true">Fixed axes</button>
       <button type="button" data-mode="body" aria-pressed="false">Body axes</button>
+      <button type="button" data-mode="inc" aria-pressed="false" title="Each drag turns the ball about its own current axis">Body rotations</button>
     </div>
+    <button type="button" id="reset-orient" hidden>Reset orientation</button>
     <div class="sliders">
-      <label>Yaw ψ (z) <input id="psi" type="range" min="-360" max="360" step="1" value="0" /><input id="psi-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Yaw ψ degrees" /><button type="button" data-zero="psi" title="Rotate back to 0">0</button></label>
-      <label>Pitch θ (y) <input id="lam" type="range" min="-360" max="360" step="1" value="0" /><input id="lam-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Pitch θ degrees" /><button type="button" data-zero="lam" title="Rotate back to 0">0</button></label>
-      <label>Roll φ (x) <input id="phi" type="range" min="-360" max="360" step="1" value="0" /><input id="phi-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Roll φ degrees" /><button type="button" data-zero="phi" title="Rotate back to 0">0</button></label>
+      <label><span class="lbl" data-base="Yaw ψ" data-axis="z">Yaw ψ (z)</span> <input id="psi" type="range" min="-360" max="360" step="1" value="0" /><input id="psi-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Yaw ψ degrees" /><button type="button" data-zero="psi" title="Rotate back to 0">0</button></label>
+      <label><span class="lbl" data-base="Pitch θ" data-axis="y">Pitch θ (y)</span> <input id="lam" type="range" min="-360" max="360" step="1" value="0" /><input id="lam-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Pitch θ degrees" /><button type="button" data-zero="lam" title="Rotate back to 0">0</button></label>
+      <label><span class="lbl" data-base="Roll φ" data-axis="x">Roll φ (x)</span> <input id="phi" type="range" min="-360" max="360" step="1" value="0" /><input id="phi-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Roll φ degrees" /><button type="button" data-zero="phi" title="Rotate back to 0">0</button></label>
     </div>
   </div>
 
@@ -116,7 +121,23 @@ const expandedLine = (axis, row) => {
   return `<div class="line">v<sub>${axis}3</sub> = ${out}</div>`;
 };
 
+const f3 = (x) => (Math.abs(x) < 5e-4 ? '0' : x.toFixed(3)).replace('-', '−');
+function renderRNum(R) {
+  const el = document.getElementById('rnum');
+  if (el) el.innerHTML = `<div class="step">${V(3)}<span class="eq-sign">=</span>${mat(R.map((r) => r.map(f3)))}${V0}</div><div class="cap">current orientation R (ball → fixed), updated live</div>`;
+}
 function renderSide(mode) {
+  if (mode === 'inc') {
+    document.getElementById('side').innerHTML =
+      `<div class="cap intro">Body rotations: every move turns the ball about its <b>own current axis</b>: yaw about z′, pitch about y′, roll about x′. Each drag of Δ applies the matching turn on the right of the orientation, so the order you move things in is remembered.</div>` +
+      `<div class="group"><div class="step"><span>R ← R · L<sub>z′</sub>(Δψ)</span></div><div class="cap">yaw, about the ball's z′</div></div>` +
+      `<div class="group"><div class="step"><span>R ← R · L<sub>y′</sub>(Δθ)</span></div><div class="cap">pitch, about the ball's y′</div></div>` +
+      `<div class="group"><div class="step"><span>R ← R · L<sub>x′</sub>(Δφ)</span></div><div class="cap">roll, about the ball's x′</div></div>` +
+      `<div class="total rnum" id="rnum"></div>` +
+      `<div class="cap intro">The numbers beside the sliders are the running total turned about each axis. They are not Euler angles here, so there is no closed-form matrix in ψ, θ, φ. Use Reset orientation to start over.</div>`;
+    renderRNum(inc.R);
+    return;
+  }
   const d = SETS[mode];
   document.getElementById('side').innerHTML =
     `<div class="cap intro">${d.intro}</div>` +
@@ -127,12 +148,60 @@ function renderSide(mode) {
 }
 
 let mode = 'fixed'; // default: fixed axes
-document.querySelectorAll('[data-mode]').forEach((btn) => btn.addEventListener('click', () => {
-  mode = btn.dataset.mode;
-  document.querySelectorAll('[data-mode]').forEach((b) => { b.classList.toggle('on', b === btn); b.setAttribute('aria-pressed', b === btn); });
+const I3 = () => [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+const inc = { R: I3(), prev: [0, 0, 0] };   // "Body rotations" mode: accumulated orientation and slider totals
+let saved = [0, 0, 0];                       // slider angles of the fixed/body modes, kept while in 'inc'
+const bodyTurn = (i, a) => [Rz, Ry, Rx][i](a); // yaw about z', pitch about y', roll about x' (i = slider)
+
+// Re-orthonormalise so many small turns don't drift (Gram-Schmidt on the columns).
+function orthonormalize(R) {
+  const c = [0, 1, 2].map((j) => [R[0][j], R[1][j], R[2][j]]);
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const nrm = (a) => { const l = Math.hypot(...a); return a.map((v) => v / l); };
+  const x = nrm(c[0]);
+  const y = nrm(c[1].map((v, i) => v - dot(c[1], x) * x[i]));
+  const z = [x[1] * y[2] - x[2] * y[1], x[2] * y[0] - x[0] * y[2], x[0] * y[1] - x[1] * y[0]];
+  return [0, 1, 2].map((i) => [x[i], y[i], z[i]]);
+}
+// current ball rotation for the mode (used to hand the orientation over when entering 'inc')
+const currentR = () => {
+  const [psi, lam, phi] = sliders.map((s) => parseFloat(s.value) * RAD);
+  return mode === 'fixed' ? mul(Rx(phi), mul(Ry(lam), Rz(psi))) : mul(Rz(psi), mul(Ry(lam), Rx(phi)));
+};
+function setSliders(vals) { vals.forEach((v, i) => { sliders[i].value = v; boxes[i].value = v; }); }
+
+function setMode(next) {
+  if (next === mode) return;
+  if (next === 'inc') {            // start from whatever orientation is showing
+    saved = sliders.map((s) => parseFloat(s.value));
+    inc.R = currentR(); inc.prev = [0, 0, 0];
+    setSliders([0, 0, 0]);
+  } else if (mode === 'inc') {     // go back to the angles the other modes had
+    setSliders(saved);
+  }
+  mode = next;
+  document.querySelectorAll('[data-mode]').forEach((b) => { b.classList.toggle('on', b.dataset.mode === mode); b.setAttribute('aria-pressed', b.dataset.mode === mode); });
+  const isInc = mode === 'inc';
+  document.getElementById('reset-orient').hidden = !isInc;
+  document.querySelectorAll('[data-zero]').forEach((b) => { b.style.visibility = isInc ? 'hidden' : 'visible'; });
+  document.querySelectorAll('.lbl').forEach((l) => { l.textContent = `${l.dataset.base} (${l.dataset.axis}${isInc ? '′' : ''})`; });
   renderSide(mode);
   draw();
-}));
+}
+document.querySelectorAll('[data-mode]').forEach((btn) => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
+document.getElementById('reset-orient').addEventListener('click', () => {
+  inc.R = I3(); inc.prev = [0, 0, 0]; setSliders([0, 0, 0]); renderSide(mode); draw();
+});
+
+// A slider/box changed: in 'inc' mode apply the change as a turn about that body axis.
+function onAngle(i) {
+  if (mode === 'inc') {
+    const v = parseFloat(sliders[i].value);
+    inc.R = orthonormalize(mul(inc.R, bodyTurn(i, (v - inc.prev[i]) * RAD)));
+    inc.prev[i] = v;
+  }
+  draw();
+}
 renderSide(mode);
 
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
@@ -163,11 +232,11 @@ const sliders = ids.map((id) => document.getElementById(id));
 const boxes = ids.map((id) => document.getElementById(id + '-n'));
 const clamp = (v) => Math.max(-360, Math.min(360, v));
 const anim = [0, 0, 0]; // running zero-animation id per axis; bumping it cancels that animation
-sliders.forEach((s, i) => s.addEventListener('input', () => { anim[i]++; boxes[i].value = s.value; draw(); }));
+sliders.forEach((s, i) => s.addEventListener('input', () => { anim[i]++; boxes[i].value = s.value; onAngle(i); }));
 boxes.forEach((b, i) => b.addEventListener('input', () => {
   anim[i]++;
   const v = parseFloat(b.value);
-  if (isFinite(v)) { sliders[i].value = clamp(v); draw(); } // typing keeps what you typed until you leave the box
+  if (isFinite(v)) { sliders[i].value = clamp(v); onAngle(i); } // typing keeps what you typed until you leave the box
 }));
 // Zero button: ease the slider back to 0
 document.querySelectorAll('[data-zero]').forEach((btn) => btn.addEventListener('click', () => {
@@ -186,7 +255,7 @@ document.querySelectorAll('[data-zero]').forEach((btn) => btn.addEventListener('
 boxes.forEach((b, i) => b.addEventListener('change', () => { // out of range or blank: snap back to the slider
   const v = parseFloat(b.value);
   b.value = isFinite(v) ? clamp(v) : sliders[i].value;
-  sliders[i].value = b.value; draw();
+  sliders[i].value = b.value; onAngle(i);
 }));
 
 function draw() {
@@ -194,7 +263,7 @@ function draw() {
   // yaw psi about z, pitch theta about y, roll phi about x, composed in the order set by `mode`:
   // fixed axes: psi about z first, then theta about y, then phi about x (all fixed): R = Rx·Ry·Rz
   // body axes: same three turns about the rotating axes: R = Rz·Ry·Rx
-  const R = mode === 'fixed' ? mul(Rx(phi), mul(Ry(lam), Rz(psi))) : mul(Rz(psi), mul(Ry(lam), Rx(phi)));
+  const R = mode === 'inc' ? inc.R : mode === 'fixed' ? mul(Rx(phi), mul(Ry(lam), Rz(psi))) : mul(Rz(psi), mul(Ry(lam), Rx(phi)));
   const M = mul(VIEW, R);
 
   const W = cv.width, c = W / 2, r = W * 0.4;
@@ -226,6 +295,7 @@ function draw() {
   }
   ctx.globalAlpha = 1; ctx.setLineDash([]);
   drawAxes(R);
+  if (mode === 'inc') renderRNum(R);
 }
 
 // Axis widget: the fixed x y z (grey, never moves) and the body x' y' z' (colored, carried by the ball).
