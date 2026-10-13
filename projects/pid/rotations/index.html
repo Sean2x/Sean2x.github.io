@@ -33,6 +33,9 @@
   #reset-orient { padding: 6px 16px; }
   .rnum { font-size: 14px; }
   .modes button.on { background: #1f3550; border-color: #4aa3ff; color: #fff; }
+  .eulers { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 8px; font: 14px system-ui, sans-serif; color: #8592a6; }
+  .eulers b { color: #d7dee9; font-variant-numeric: tabular-nums; }
+  .cap.lock { color: #ffb454; margin-top: 8px; }
   .intro { text-align: left; font-size: 13px; line-height: 1.4; }
   .eq-sign { padding: 0 2px; }
   .m { display: inline-grid; gap: 4px 14px; padding: 3px 10px; font-style: italic; text-align: center;
@@ -66,6 +69,7 @@
     <div class="modes" role="group" aria-label="Rotation about fixed or body axes">
       <button type="button" data-mode="body" class="on" aria-pressed="true" title="Yaw about the vehicle z, pitch about the new y, roll about the new x: the flight-dynamics convention">Aircraft (body axes)</button>
       <button type="button" data-mode="inc" aria-pressed="false" title="Each drag turns the ball about its own current axis">Body rotations</button>
+      <button type="button" data-mode="track" aria-pressed="false" title="The nose follows your cursor">Tracker</button>
     </div>
     <button type="button" id="reset-orient" hidden>Reset orientation</button>
     <div class="sliders">
@@ -90,6 +94,7 @@
     <li><b>How many conventions.</b> 12 axis orders (6 like yaw-pitch-roll with three different axes, 6 like z-x-z with a repeated axis) × fixed or body = 24, but each fixed convention equals a body one in reverse order, so there are 12 distinct rotation formulas. Active vs passive, row vs column vectors, angle sign and handedness change the notation, not the ball.</li>
     <li><b>Frames and names.</b> The <b>vehicle frame</b> has its origin at the vehicle's center but its axes never turn: x north, y east, z down (the direction gravity pulls). The <b>body frame</b> is attached to the vehicle: x out the nose, y out the right wing, z down through the belly (not up). Both are right-handed. In the class sequence, v<sub>1</sub> is in the vehicle-1 frame (after the yaw), v<sub>2</sub> in the vehicle-2 frame (after the pitch), and v<sub>3</sub> in the body frame (after the roll). On this page the grey axes are the vehicle frame and the colored x′, y′, z′ are the body frame.</li>
     <li><b>Gravity in each frame.</b> In the vehicle frame gravity is (0, 0, g). In the body frame it is L<sub>3</sub>·L<sub>2</sub>·L<sub>1</sub>·(0, 0, g) = g·(−sθ, sφcθ, cφcθ). Level flight (θ = 0, φ = 0) puts all of it on body z; pitching the nose up puts part of it on −x, and banking puts part on y. An accelerometer measures exactly this, which is how an aircraft finds its pitch and roll. The picture on this page uses the aerospace layout: x (nose / north) to the right, z (down / gravity) down the screen, and y (right wing / east) toward you, so a positive pitch lifts the nose.</li>
+    <li><b>Tracker mode: the shortest turn.</b> To point the nose at a target, rotate about the axis n × t (the nose direction crossed with the target direction) by the angle between them. That single turn has no twist about the nose, so it is the smallest rotation that does the job. The yaw, pitch and roll it produces are read back from the matrix: ψ = atan2(R<sub>21</sub>, R<sub>11</sub>), θ = −asin(R<sub>31</sub>), φ = atan2(R<sub>32</sub>, R<sub>33</sub>). Sweep the nose through straight up or down (θ = ±90°) and ψ and φ jump or become undefined, which is gimbal lock seen live.</li>
   </ol>
   <h3>Class-notes matrices (body axes, passive)</h3>
   <div class="side" id="notes-matrices"></div>
@@ -137,7 +142,30 @@ function renderRNum(R) {
   const el = document.getElementById('rnum');
   if (el) el.innerHTML = `<div class="step">${V(3)}<span class="eq-sign">=</span>${mat(R.map((r) => r.map(f3)))}${V0}</div><div class="cap">current orientation R (ball → fixed), updated live</div>`;
 }
+// Aircraft yaw-pitch-roll that would produce R = Rz(psi)·Ry(theta)·Rx(phi), in degrees.
+function eulerOf(R) {
+  const s20 = Math.max(-1, Math.min(1, -R[2][0]));
+  const theta = Math.asin(s20);
+  if (Math.abs(s20) > 0.9999) return { psi: 0, theta: theta / RAD, phi: Math.atan2(-R[1][2], R[1][1]) / RAD, lock: true };
+  return { psi: Math.atan2(R[1][0], R[0][0]) / RAD, theta: theta / RAD, phi: Math.atan2(R[2][1], R[2][2]) / RAD, lock: false };
+}
+function renderTrack(R) {
+  const e = eulerOf(R);
+  const el = document.getElementById('trk');
+  if (!el) return;
+  el.innerHTML = `<div class="step">${V(3)}<span class="eq-sign">=</span>${mat(R.map((r) => r.map(f3)))}${V0}</div><div class="cap">current orientation R (ball → fixed)</div>` +
+    `<div class="eulers"><span>ψ yaw <b>${e.psi.toFixed(1)}°</b></span><span>θ pitch <b>${e.theta.toFixed(1)}°</b></span><span>φ roll <b>${e.phi.toFixed(1)}°</b></span></div>` +
+    (e.lock ? `<div class="cap lock">Gimbal lock: the nose is straight up or down, so yaw and roll are no longer separate. The attitude is fine, but the angles are not defined.</div>` : '');
+}
 function renderSide(mode) {
+  if (mode === 'track') {
+    document.getElementById('side').innerHTML =
+      `<div class="cap intro">Tracker: the nose (the red dot) turns toward your cursor by the <b>shortest turn</b>: one rotation about the axis n × t, with no twist about the nose. Move the mouse (or your finger) anywhere on the page. The white ring shows where the cursor is pointing.</div>` +
+      `<div class="total rnum" id="trk"></div>` +
+      `<div class="cap intro">The yaw, pitch and roll shown are what the aircraft sequence would read for this attitude. Sweep the nose straight up or down (pitch ±90°) and watch yaw and roll jump around: that is gimbal lock.</div>`;
+    renderTrack(track.R);
+    return;
+  }
   if (mode === 'inc') {
     document.getElementById('side').innerHTML =
       `<div class="cap intro">Body rotations: every move turns the ball about its <b>own current axis</b>: yaw about z′, pitch about y′, roll about x′. Each drag of Δ applies the matching turn on the right of the orientation, so the order you move things in is remembered.</div>` +
@@ -171,7 +199,8 @@ renderNotesMatrices();
 let mode = 'body'; // default: the aircraft (flight dynamics) convention, body axes 3-2-1
 const I3 = () => [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
 const inc = { R: I3(), prev: [0, 0, 0] };   // "Body rotations" mode: accumulated orientation and slider totals
-let saved = [0, 0, 0];                       // slider angles of the fixed/body modes, kept while in 'inc'
+let saved = [0, 0, 0];                       // slider angles of the aircraft mode, kept while in 'inc' / 'track'
+const track = { R: I3(), t: null };         // Tracker mode: orientation and the unit direction the nose is chasing
 const bodyTurn = (i, a) => [Rz, Ry, Rx][i](a); // yaw about z', pitch about y', roll about x' (i = slider)
 
 // Re-orthonormalise so many small turns don't drift (Gram-Schmidt on the columns).
@@ -193,21 +222,22 @@ const currentR = () => {
 };
 function setSliders(vals) { vals.forEach((v, i) => { sliders[i].value = v; boxes[i].value = v; }); }
 
+const rotationOf = (m) => (m === 'inc' ? inc.R : m === 'track' ? track.R : currentR());
 function setMode(next) {
   if (next === mode) return;
-  if (next === 'inc') {            // start from whatever orientation is showing
-    saved = sliders.map((s) => parseFloat(s.value));
-    inc.R = currentR(); inc.prev = [0, 0, 0];
-    setSliders([0, 0, 0]);
-  } else if (mode === 'inc') {     // go back to the angles the other modes had
-    setSliders(saved);
-  }
+  const carry = rotationOf(mode);                       // the orientation showing now carries over to the next mode
+  if (mode === 'body') saved = sliders.map((s) => parseFloat(s.value));
+  if (next === 'body') setSliders(saved);               // back to the angles the aircraft mode had
+  if (next === 'inc') { inc.R = carry; inc.prev = [0, 0, 0]; setSliders([0, 0, 0]); }
+  if (next === 'track') { track.R = carry; track.t = null; setSliders([0, 0, 0]); }
   mode = next;
   document.querySelectorAll('[data-mode]').forEach((b) => { b.classList.toggle('on', b.dataset.mode === mode); b.setAttribute('aria-pressed', b.dataset.mode === mode); });
-  const isInc = mode === 'inc';
+  const isInc = mode === 'inc', isTrack = mode === 'track';
   document.getElementById('reset-orient').hidden = !isInc;
-  document.querySelectorAll('[data-zero]').forEach((b) => { b.style.visibility = isInc ? 'hidden' : 'visible'; });
+  document.querySelectorAll('[data-zero]').forEach((b) => { b.style.visibility = isInc || isTrack ? 'hidden' : 'visible'; });
   document.querySelectorAll('.lbl').forEach((l) => { l.textContent = `${l.dataset.base} (${l.dataset.axis}${isInc ? '′' : ''})`; });
+  [...sliders, ...boxes].forEach((el) => { el.disabled = isTrack; });   // in Tracker mode the cursor drives the ball
+  document.querySelector('.sliders').style.opacity = isTrack ? 0.55 : 1;
   renderSide(mode);
   draw();
 }
@@ -286,7 +316,7 @@ function draw() {
   const [psi, lam, phi] = sliders.map((s) => parseFloat(s.value) * RAD);
   // aircraft: psi about z, then theta about the NEW y, then phi about the NEW x  =>  R = Rz·Ry·Rx
   // body rotations: R is accumulated from the turns you make (see onAngle)
-  const R = mode === 'inc' ? inc.R : attitude(psi, lam, phi);
+  const R = mode === 'inc' ? inc.R : mode === 'track' ? track.R : attitude(psi, lam, phi);
   const M = mul(VIEW, R);
 
   const W = cv.width, c = W / 2, r = W * 0.4;
@@ -327,8 +357,17 @@ function draw() {
   ctx.lineWidth = 4; ctx.strokeStyle = nearNose ? '#ffffff' : 'rgba(255,255,255,0.4)';
   ctx.stroke();
   ctx.globalAlpha = 1;
+  if (mode === 'track' && track.t) {           // where the cursor is pointing on the ball
+    // the target is a direction in the fixed frame, so it is projected directly (not through the ball's rotation)
+    const tx = c + track.t[0] * r, ty = c + track.t[2] * r, td = -track.t[1];
+    ctx.lineWidth = 4; ctx.strokeStyle = td < 1e-6 ? '#ffffff' : 'rgba(255,255,255,0.4)';
+    ctx.beginPath(); ctx.arc(tx, ty, 18, 0, 2 * Math.PI); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(tx - 28, ty); ctx.lineTo(tx - 10, ty); ctx.moveTo(tx + 10, ty); ctx.lineTo(tx + 28, ty);
+    ctx.moveTo(tx, ty - 28); ctx.lineTo(tx, ty - 10); ctx.moveTo(tx, ty + 10); ctx.lineTo(tx, ty + 28); ctx.stroke();
+  }
   drawAxes(R);
   if (mode === 'inc') renderRNum(R);
+  if (mode === 'track') renderTrack(R);
 }
 
 // Axis widget: the fixed x y z (grey, never moves) and the body x' y' z' (colored, carried by the ball).
@@ -356,6 +395,49 @@ function drawAxes(R) {
   ['x', 'y', 'z'].forEach((n, i) => arrow(E[i], '#6b7688', 4, n)); // fixed
   ['x′', 'y′', 'z′'].forEach((n, i) => arrow(apply(R, E[i]), BODY_COLORS[i], 7, n)); // body
 }
+
+// ---- Tracker mode: the nose (x') chases the cursor by the shortest turn ----
+const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const cross3 = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+function rodrigues(k, a) {                      // rotation by angle a about the unit axis k
+  const c = Math.cos(a), sn = Math.sin(a), v = 1 - c;
+  return [
+    [c + k[0] * k[0] * v, k[0] * k[1] * v - k[2] * sn, k[0] * k[2] * v + k[1] * sn],
+    [k[1] * k[0] * v + k[2] * sn, c + k[1] * k[1] * v, k[1] * k[2] * v - k[0] * sn],
+    [k[2] * k[0] * v - k[1] * sn, k[2] * k[1] * v + k[0] * sn, c + k[2] * k[2] * v],
+  ];
+}
+window.addEventListener('pointermove', (e) => {
+  if (mode !== 'track') return;
+  const r = cv.getBoundingClientRect();
+  const rad = r.width * 0.4;                    // ball radius on screen
+  let u = (e.clientX - (r.left + r.width / 2)) / rad;   // right  = +x
+  let v = (e.clientY - (r.top + r.height / 2)) / rad;   // down   = +z (toward gravity)
+  const l = Math.hypot(u, v);
+  if (l > 1) { u /= l; v /= l; }                // off the ball: aim at the edge
+  track.t = [u, Math.sqrt(Math.max(0, 1 - u * u - v * v)), v];   // +y points toward the viewer
+  draw();
+});
+let lastTick = performance.now();
+function trackTick(now) {
+  const dt = Math.min((now - lastTick) / 1000, 0.05); lastTick = now;
+  if (mode === 'track' && track.t) {
+    const n = [track.R[0][0], track.R[1][0], track.R[2][0]];   // where the nose points now
+    const ang = Math.acos(Math.max(-1, Math.min(1, dot3(n, track.t))));
+    if (ang > 1e-4) {
+      let ax = cross3(n, track.t), l = Math.hypot(...ax);
+      if (l < 1e-6) { ax = cross3(n, Math.abs(n[2]) < 0.9 ? [0, 0, 1] : [0, 1, 0]); l = Math.hypot(...ax); } // exactly opposite: any perpendicular axis
+      ax = ax.map((x) => x / l);
+      const step = Math.min(ang * (1 - Math.exp(-10 * dt)), 8 * dt); // eases in, capped at 8 rad/s
+      track.R = orthonormalize(mul(rodrigues(ax, step), track.R));
+      const e = eulerOf(track.R);
+      setSliders([e.psi, e.theta, e.phi].map((x) => Math.round(x * 10) / 10));
+      draw();
+    }
+  }
+  requestAnimationFrame(trackTick);
+}
+requestAnimationFrame(trackTick);
 draw();
 </script>
 </body>
