@@ -6,37 +6,65 @@
 <title>Rotations</title>
 <style>
   * { box-sizing: border-box; }
-  body { margin: 0; background: #0e1116; color: #d7dee9; font: 15px system-ui, sans-serif;
-         display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px; }
-  canvas { width: min(92vw, 520px); aspect-ratio: 1; }
-  .sliders { width: min(92vw, 520px); display: grid; gap: 10px; }
+  body { margin: 0; background: #0e1116; color: #d7dee9; font: 15px system-ui, sans-serif; padding: 16px; }
+  .page { max-width: 1060px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: start; }
+  .left { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  canvas { width: min(100%, 500px); aspect-ratio: 1; }
+  .sliders { width: min(100%, 500px); display: grid; gap: 10px; }
   label { display: grid; grid-template-columns: 96px 1fr 84px 44px; align-items: center; gap: 10px; }
   input[type=number] { width: 100%; padding: 4px 6px; background: #1b2230; color: inherit; border: 1px solid #2c3647; border-radius: 6px; font: inherit; text-align: right; }
   input { width: 100%; }
   button { background: #1b2230; color: inherit; border: 1px solid #2c3647; border-radius: 6px; padding: 4px 0; font: inherit; cursor: pointer; }
   button:hover { border-color: #4aa3ff; }
-  .eq { display: flex; align-items: center; justify-content: center; gap: 10px; font: 22px/1.2 "Cambria Math", "STIX Two Math", Georgia, serif; flex-wrap: wrap; }
-  .eq sub { font-size: 0.65em; }
-  .row-vec { display: inline-flex; gap: 14px; padding: 2px 12px; border-left: 2px solid currentColor; border-right: 2px solid currentColor; border-radius: 6px / 10px; font-style: italic; }
-  .vec { display: inline-flex; flex-direction: column; align-items: center; padding: 2px 10px; border: 2px solid currentColor; border-top-color: currentColor; border-radius: 6px / 10px; border-left-width: 2px; border-right-width: 2px; border-top: 0; border-bottom: 0; font-style: italic; }
+
+  /* Typed-out matrices */
+  .side { display: grid; gap: 14px; font: 15px/1.2 "Cambria Math", "STIX Two Math", Georgia, serif; }
+  .step { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .cap { text-align: center; font-size: 13px; color: #8592a6; margin-top: 2px; font-family: system-ui, sans-serif; }
+  .group { padding-bottom: 6px; border-bottom: 1px solid #232b38; }
+  .eq-sign { padding: 0 2px; }
+  .m { display: inline-grid; gap: 4px 14px; padding: 3px 10px; font-style: italic; text-align: center;
+       border-left: 2px solid currentColor; border-right: 2px solid currentColor; border-radius: 8px / 14px; align-items: center; }
+  .m.v { grid-template-columns: auto; }
+  .m.t { grid-template-columns: repeat(3, auto); }
+  .m span { white-space: nowrap; }
+  sub { font-size: 0.7em; font-style: normal; }
+  .total { padding: 10px; border: 1px solid #4aa3ff; border-radius: 10px; background: rgba(74,163,255,.06); }
+  .total .cap { color: #4aa3ff; font-size: 14px; }
+  @media (max-width: 860px) { .page { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
 <body>
-<canvas id="c" width="1040" height="1040"></canvas>
-<div class="sliders">
-  <label>Yaw ψ (z) <input id="psi" type="range" min="-360" max="360" step="1" value="0" /><input id="psi-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Yaw ψ degrees" /><button type="button" data-zero="psi" title="Rotate back to 0">0</button></label>
-  <label>Pitch θ (y) <input id="lam" type="range" min="-360" max="360" step="1" value="0" /><input id="lam-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Pitch θ degrees" /><button type="button" data-zero="lam" title="Rotate back to 0">0</button></label>
-  <label>Roll φ (x) <input id="phi" type="range" min="-360" max="360" step="1" value="0" /><input id="phi-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Roll φ degrees" /><button type="button" data-zero="phi" title="Rotate back to 0">0</button></label>
-</div>
-<div class="eq" aria-label="x y z times L1(psi) L2(theta) L3(phi) equals x1 y1 z1">
-  <span class="row-vec"><span>x</span><span>y</span><span>z</span></span>
-  <span>·</span>
-  <span>L<sub>1</sub>(ψ) · L<sub>2</sub>(θ) · L<sub>3</sub>(φ)</span>
-  <span>=</span>
-  <span class="row-vec"><span>x<sub>1</sub></span><span>y<sub>1</sub></span><span>z<sub>1</sub></span></span>
+<div class="page">
+  <div class="left">
+    <canvas id="c" width="1040" height="1040"></canvas>
+    <div class="sliders">
+      <label>Yaw ψ (z) <input id="psi" type="range" min="-360" max="360" step="1" value="0" /><input id="psi-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Yaw ψ degrees" /><button type="button" data-zero="psi" title="Rotate back to 0">0</button></label>
+      <label>Pitch θ (y) <input id="lam" type="range" min="-360" max="360" step="1" value="0" /><input id="lam-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Pitch θ degrees" /><button type="button" data-zero="lam" title="Rotate back to 0">0</button></label>
+      <label>Roll φ (x) <input id="phi" type="range" min="-360" max="360" step="1" value="0" /><input id="phi-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Roll φ degrees" /><button type="button" data-zero="phi" title="Rotate back to 0">0</button></label>
+    </div>
+  </div>
+
+  <div class="side" id="side" aria-label="Rotation matrices"></div>
 </div>
 
 <script>
+// ---- typed-out matrices (column vectors; each rotation is applied to the previous result) ----
+const col = (a, b, c) => `<div class="m v"><span>${a}</span><span>${b}</span><span>${c}</span></div>`;
+const mat = (rows) => `<div class="m t">${rows.flat().map((e) => `<span>${e}</span>`).join('')}</div>`;
+const V = (n) => col(`v<sub>x${n}</sub>`, `v<sub>y${n}</sub>`, `v<sub>z${n}</sub>`);
+const step = (to, M, from, label) => `<div class="group"><div class="step">${V(to)}<span class="eq-sign">=</span>${mat(M)}${V(from)}</div><div class="cap">${label}</div></div>`;
+const V0 = col('v<sub>x</sub>', 'v<sub>y</sub>', 'v<sub>z</sub>');
+document.getElementById('side').innerHTML =
+  `<div class="group"><div class="step">${V(1)}<span class="eq-sign">=</span>${mat([['cψ', 'sψ', '0'], ['−sψ', 'cψ', '0'], ['0', '0', '1']])}${V0}</div><div class="cap">L<sub>1</sub>(ψ), yaw about z</div></div>` +
+  step(2, [['cθ', '0', '−sθ'], ['0', '1', '0'], ['sθ', '0', 'cθ']], 1, 'L<sub>2</sub>(θ), pitch about y') +
+  step(3, [['1', '0', '0'], ['0', 'cφ', 'sφ'], ['0', '−sφ', 'cφ']], 2, 'L<sub>3</sub>(φ), roll about x') +
+  `<div class="total"><div class="step">${V(3)}<span class="eq-sign">=</span>${mat([
+    ['cθcψ', 'cθsψ', '−sθ'],
+    ['sφsθcψ − cφsψ', 'sφsθsψ + cφcψ', 'sφcθ'],
+    ['cφsθcψ + sφsψ', 'cφsθsψ − sφcψ', 'cφcθ'],
+  ])}${V0}</div><div class="cap">L<sub>3</sub> · L<sub>2</sub> · L<sub>1</sub> = transformation matrix (L<sub>1</sub> is applied first)</div></div>`;
+
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 const RAD = Math.PI / 180;
 
