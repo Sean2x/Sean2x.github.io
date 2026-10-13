@@ -62,7 +62,7 @@
       <canvas id="c" width="1040" height="1040"></canvas>
       <canvas id="axes" width="360" height="360" aria-label="Fixed axes (grey) and body axes (colored)"></canvas>
     </div>
-    <div class="ringkey">Each dotted ring is the equator of the axis with its color: <b style="color:#ff5d73">x′ red</b>, <b style="color:#5ee6a8">y′ green</b>, <b style="color:#4aa3ff">z′ blue</b>.</div>
+    <div class="ringkey">Each dotted ring is the equator of the axis with its color: <b style="color:#ff5d73">x′ red</b>, <b style="color:#5ee6a8">y′ green</b>, <b style="color:#4aa3ff">z′ blue</b>. The big red dot is the nose, where x′ meets the ball (faded when it is on the far side).</div>
     <div class="modes" role="group" aria-label="Rotation about fixed or body axes">
       <button type="button" data-mode="fixed" class="on" aria-pressed="true">Fixed axes</button>
       <button type="button" data-mode="inc" aria-pressed="false" title="Each drag turns the ball about its own current axis">Body rotations</button>
@@ -327,6 +327,16 @@ function draw() {
     }
   }
   ctx.globalAlpha = 1; ctx.setLineDash([]);
+
+  // Large red dot on the nose: the ball's +x axis (x') where it pierces the surface.
+  const [nx, ny, nd] = proj([1, 0, 0]);
+  const nearNose = nd < 1e-6; // at zero rotation the nose sits right on the edge: count it as in front
+  ctx.globalAlpha = nearNose ? 1 : 0.45;
+  ctx.fillStyle = '#ff2d4d';
+  ctx.beginPath(); ctx.arc(nx, ny, 26, 0, 2 * Math.PI); ctx.fill();
+  ctx.lineWidth = 4; ctx.strokeStyle = nearNose ? '#ffffff' : 'rgba(255,255,255,0.4)';
+  ctx.stroke();
+  ctx.globalAlpha = 1;
   drawAxes(R);
   if (mode === 'inc') renderRNum(R);
 }
