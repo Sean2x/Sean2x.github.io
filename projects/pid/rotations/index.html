@@ -24,6 +24,7 @@
   .step { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
   .cap { text-align: center; font-size: 13px; color: #8592a6; margin-top: 2px; font-family: system-ui, sans-serif; }
   .group { padding-bottom: 6px; border-bottom: 1px solid #232b38; }
+  .ringkey { font-size: 13px; color: #8592a6; text-align: center; max-width: 500px; }
   .modes { display: flex; gap: 0; }
   .modes button { padding: 6px 16px; border-radius: 0; }
   .modes button:first-child { border-radius: 6px 0 0 6px; }
@@ -61,6 +62,7 @@
       <canvas id="c" width="1040" height="1040"></canvas>
       <canvas id="axes" width="360" height="360" aria-label="Fixed axes (grey) and body axes (colored)"></canvas>
     </div>
+    <div class="ringkey">Each dotted ring is the equator of the axis with its color: <b style="color:#ff5d73">x′ red</b>, <b style="color:#5ee6a8">y′ green</b>, <b style="color:#4aa3ff">z′ blue</b>.</div>
     <div class="modes" role="group" aria-label="Rotation about fixed or body axes">
       <button type="button" data-mode="fixed" class="on" aria-pressed="true">Fixed axes</button>
       <button type="button" data-mode="inc" aria-pressed="false" title="Each drag turns the ball about its own current axis">Body rotations</button>
@@ -251,9 +253,10 @@ const VIEW = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
 const N = 180;
 const circle = (f) => Array.from({ length: N + 1 }, (_, i) => f((i / N) * 2 * Math.PI));
 const CIRCLES = [
-  { color: '#4aa3ff', pts: circle((t) => [Math.cos(t), Math.sin(t), 0]) }, // xy plane
-  { color: '#5ee6a8', pts: circle((t) => [Math.cos(t), 0, Math.sin(t)]) }, // xz plane
-  { color: '#ffb454', pts: circle((t) => [0, Math.cos(t), Math.sin(t)]) }, // yz plane
+  // Each ring is the equator of the axis it is colored after (same colors as the axis widget: x red, y green, z blue).
+  { color: '#4aa3ff', pts: circle((t) => [Math.cos(t), Math.sin(t), 0]) }, // xy plane: equator of z (blue)
+  { color: '#5ee6a8', pts: circle((t) => [Math.cos(t), 0, Math.sin(t)]) }, // xz plane: equator of y (green)
+  { color: '#ff5d73', pts: circle((t) => [0, Math.cos(t), Math.sin(t)]) }, // yz plane: equator of x (red)
 ];
 
 const ids = ['psi', 'lam', 'phi'];
