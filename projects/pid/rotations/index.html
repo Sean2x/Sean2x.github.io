@@ -7,7 +7,7 @@
 <style>
   * { box-sizing: border-box; }
   body { margin: 0; background: #0e1116; color: #d7dee9; font: 15px system-ui, sans-serif; padding: 16px; }
-  .page { max-width: 1060px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: start; }
+  .page { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 480px; gap: 24px; align-items: start; }
   .left { display: flex; flex-direction: column; align-items: center; gap: 16px; }
   canvas { width: min(100%, 500px); aspect-ratio: 1; }
   .sliders { width: min(100%, 500px); display: grid; gap: 10px; }
@@ -22,6 +22,12 @@
   .step { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
   .cap { text-align: center; font-size: 13px; color: #8592a6; margin-top: 2px; font-family: system-ui, sans-serif; }
   .group { padding-bottom: 6px; border-bottom: 1px solid #232b38; }
+  .modes { display: flex; gap: 0; }
+  .modes button { padding: 6px 16px; border-radius: 0; }
+  .modes button:first-child { border-radius: 6px 0 0 6px; }
+  .modes button:last-child { border-radius: 0 6px 6px 0; border-left: 0; }
+  .modes button.on { background: #1f3550; border-color: #4aa3ff; color: #fff; }
+  .intro { text-align: left; font-size: 13px; line-height: 1.4; }
   .eq-sign { padding: 0 2px; }
   .m { display: inline-grid; gap: 4px 14px; padding: 3px 10px; font-style: italic; text-align: center;
        border-left: 2px solid currentColor; border-right: 2px solid currentColor; border-radius: 8px / 14px; align-items: center; }
@@ -29,6 +35,7 @@
   .m.t { grid-template-columns: repeat(3, auto); }
   .m span { white-space: nowrap; }
   sub { font-size: 0.7em; font-style: normal; }
+  .total .m.t { gap: 4px 10px; }
   .total { padding: 10px; border: 1px solid #4aa3ff; border-radius: 10px; background: rgba(74,163,255,.06); }
   .total .cap { color: #4aa3ff; font-size: 14px; }
   .expanded { padding: 8px 6px; }
@@ -40,6 +47,10 @@
 <div class="page">
   <div class="left">
     <canvas id="c" width="1040" height="1040"></canvas>
+    <div class="modes" role="group" aria-label="Rotation about fixed or body axes">
+      <button type="button" data-mode="fixed" class="on">Fixed axes</button>
+      <button type="button" data-mode="body">Body axes</button>
+    </div>
     <div class="sliders">
       <label>Yaw ψ (z) <input id="psi" type="range" min="-360" max="360" step="1" value="0" /><input id="psi-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Yaw ψ degrees" /><button type="button" data-zero="psi" title="Rotate back to 0">0</button></label>
       <label>Pitch θ (y) <input id="lam" type="range" min="-360" max="360" step="1" value="0" /><input id="lam-n" type="number" min="-360" max="360" step="any" value="0" aria-label="Pitch θ degrees" /><button type="button" data-zero="lam" title="Rotate back to 0">0</button></label>
@@ -55,26 +66,69 @@
 const col = (a, b, c) => `<div class="m v"><span>${a}</span><span>${b}</span><span>${c}</span></div>`;
 const mat = (rows) => `<div class="m t">${rows.flat().map((e) => `<span>${e}</span>`).join('')}</div>`;
 const V = (n) => col(`v<sub>x${n}</sub>`, `v<sub>y${n}</sub>`, `v<sub>z${n}</sub>`);
-const step = (to, M, from, label) => `<div class="group"><div class="step">${V(to)}<span class="eq-sign">=</span>${mat(M)}${V(from)}</div><div class="cap">${label}</div></div>`;
 const V0 = col('v<sub>x</sub>', 'v<sub>y</sub>', 'v<sub>z</sub>');
-document.getElementById('side').innerHTML =
-  `<div class="group"><div class="step">${V(1)}<span class="eq-sign">=</span>${mat([['cψ', 'sψ', '0'], ['−sψ', 'cψ', '0'], ['0', '0', '1']])}${V0}</div><div class="cap">L<sub>1</sub>(ψ), yaw about z</div></div>` +
-  step(2, [['cθ', '0', '−sθ'], ['0', '1', '0'], ['sθ', '0', 'cθ']], 1, 'L<sub>2</sub>(θ), pitch about y') +
-  step(3, [['1', '0', '0'], ['0', 'cφ', 'sφ'], ['0', '−sφ', 'cφ']], 2, 'L<sub>3</sub>(φ), roll about x') +
-  `<div class="total"><div class="step">${V(3)}<span class="eq-sign">=</span>${mat([
-    ['cθcψ', 'cθsψ', '−sθ'],
-    ['sφsθcψ − cφsψ', 'sφsθsψ + cφcψ', 'sφcθ'],
-    ['cφsθcψ + sφsψ', 'cφsθsψ − sφcψ', 'cφcθ'],
-  ])}${V0}</div><div class="cap">L<sub>3</sub> · L<sub>2</sub> · L<sub>1</sub> = transformation matrix (L<sub>1</sub> is applied first)</div></div>` +
-  `<div class="expanded"><div class="cap">Expanded</div>` +
-  [
-    ['x', 'cθcψ', 'cθsψ', '−sθ'],
-    ['y', 'sφsθcψ − cφsψ', 'sφsθsψ + cφcψ', 'sφcθ'],
-    ['z', 'cφsθcψ + sφsψ', 'cφsθsψ − sφcψ', 'cφcθ'],
-  ].map(([a, c1, c2, c3]) => {
-    const t = (c) => (c.includes(' ') ? `(${c})` : c);
-    return `<div class="line">v<sub>${a}3</sub> = ${t(c1)}·v<sub>x</sub> + ${t(c2)}·v<sub>y</sub> ${c3.startsWith('−') ? '−' : '+'} ${t(c3.replace('−', ''))}·v<sub>z</sub></div>`;
-  }).join('') + `</div>`;
+
+// Fixed axes: each rotation turns the vector about the fixed x / y / z axes (applied in order psi, theta, phi).
+// Body axes: each rotation turns the axes themselves, about the already-rotated y' / x'' (the notes' L1, L2, L3).
+const SETS = {
+  fixed: {
+    intro: 'Fixed axes: ψ about the fixed z, then θ about the fixed y, then φ about the fixed x. Each matrix turns the vector itself.',
+    steps: [
+      [[['cψ', '−sψ', '0'], ['sψ', 'cψ', '0'], ['0', '0', '1']], 'L<sub>1</sub>(ψ), yaw about fixed z'],
+      [[['cθ', '0', 'sθ'], ['0', '1', '0'], ['−sθ', '0', 'cθ']], 'L<sub>2</sub>(θ), pitch about fixed y'],
+      [[['1', '0', '0'], ['0', 'cφ', '−sφ'], ['0', 'sφ', 'cφ']], 'L<sub>3</sub>(φ), roll about fixed x'],
+    ],
+    total: [
+      ['cθcψ', '−cθsψ', 'sθ'],
+      ['cφsψ + sφsθcψ', 'cφcψ − sφsθsψ', '−sφcθ'],
+      ['sφsψ − cφsθcψ', 'sφcψ + cφsθsψ', 'cφcθ'],
+    ],
+  },
+  body: {
+    intro: 'Body axes: ψ about z, then θ about the new y, then φ about the new x. Each matrix re-expresses the vector in the turned axes.',
+    steps: [
+      [[['cψ', 'sψ', '0'], ['−sψ', 'cψ', '0'], ['0', '0', '1']], 'L<sub>1</sub>(ψ), yaw about z'],
+      [[['cθ', '0', '−sθ'], ['0', '1', '0'], ['sθ', '0', 'cθ']], 'L<sub>2</sub>(θ), pitch about y'],
+      [[['1', '0', '0'], ['0', 'cφ', 'sφ'], ['0', '−sφ', 'cφ']], 'L<sub>3</sub>(φ), roll about x'],
+    ],
+    total: [
+      ['cθcψ', 'cθsψ', '−sθ'],
+      ['sφsθcψ − cφsψ', 'sφsθsψ + cφcψ', 'sφcθ'],
+      ['cφsθcψ + sφsψ', 'cφsθsψ − sφcψ', 'cφcθ'],
+    ],
+  },
+};
+
+// "a·vx + b·vy − c·vz" with brackets around multi-term coefficients
+const expandedLine = (axis, row) => {
+  const vars = ['v<sub>x</sub>', 'v<sub>y</sub>', 'v<sub>z</sub>'];
+  const out = row.map((c, i) => {
+    const neg = c.startsWith('−');
+    const body = neg ? c.slice(1) : c;
+    const t = body.includes(' ') ? `(${body})` : body;
+    return { neg, text: `${t}·${vars[i]}` };
+  }).map((e, i) => (i === 0 ? (e.neg ? '−' : '') : e.neg ? ' − ' : ' + ') + e.text).join('');
+  return `<div class="line">v<sub>${axis}3</sub> = ${out}</div>`;
+};
+
+function renderSide(mode) {
+  const d = SETS[mode];
+  document.getElementById('side').innerHTML =
+    `<div class="cap intro">${d.intro}</div>` +
+    d.steps.map(([M, label], i) =>
+      `<div class="group"><div class="step">${V(i + 1)}<span class="eq-sign">=</span>${mat(M)}${i === 0 ? V0 : V(i)}</div><div class="cap">${label}</div></div>`).join('') +
+    `<div class="total"><div class="step">${V(3)}<span class="eq-sign">=</span>${mat(d.total)}${V0}</div><div class="cap">L<sub>3</sub> · L<sub>2</sub> · L<sub>1</sub> = transformation matrix (L<sub>1</sub> is applied first)</div></div>` +
+    `<div class="expanded"><div class="cap">Expanded</div>${['x', 'y', 'z'].map((a, i) => expandedLine(a, d.total[i])).join('')}</div>`;
+}
+
+let mode = 'fixed'; // default: fixed axes
+document.querySelectorAll('[data-mode]').forEach((btn) => btn.addEventListener('click', () => {
+  mode = btn.dataset.mode;
+  document.querySelectorAll('[data-mode]').forEach((b) => b.classList.toggle('on', b === btn));
+  renderSide(mode);
+  draw();
+}));
+renderSide(mode);
 
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 const RAD = Math.PI / 180;
@@ -130,7 +184,10 @@ boxes.forEach((b, i) => b.addEventListener('change', () => { // out of range or 
 function draw() {
   const [psi, lam, phi] = sliders.map((s) => parseFloat(s.value) * RAD);
   // psi about z, lambda about y, phi about x: R = Rz(psi) · Ry(lambda) · Rx(phi)
-  const M = mul(VIEW, mul(Rz(psi), mul(Ry(lam), Rx(phi))));
+  // fixed axes: psi about z first, then theta about y, then phi about x (all fixed): R = Rx·Ry·Rz
+  // body axes: same three turns about the rotating axes: R = Rz·Ry·Rx
+  const R = mode === 'fixed' ? mul(Rx(phi), mul(Ry(lam), Rz(psi))) : mul(Rz(psi), mul(Ry(lam), Rx(phi)));
+  const M = mul(VIEW, R);
 
   const W = cv.width, c = W / 2, r = W * 0.4;
   ctx.clearRect(0, 0, W, W);
