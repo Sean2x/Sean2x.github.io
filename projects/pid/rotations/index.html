@@ -31,6 +31,8 @@
   sub { font-size: 0.7em; font-style: normal; }
   .total { padding: 10px; border: 1px solid #4aa3ff; border-radius: 10px; background: rgba(74,163,255,.06); }
   .total .cap { color: #4aa3ff; font-size: 14px; }
+  .expanded { padding: 8px 6px; }
+  .expanded .line { font-style: italic; font-size: 15px; line-height: 1.7; overflow-x: auto; white-space: nowrap; }
   @media (max-width: 860px) { .page { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
@@ -63,7 +65,16 @@ document.getElementById('side').innerHTML =
     ['cθcψ', 'cθsψ', '−sθ'],
     ['sφsθcψ − cφsψ', 'sφsθsψ + cφcψ', 'sφcθ'],
     ['cφsθcψ + sφsψ', 'cφsθsψ − sφcψ', 'cφcθ'],
-  ])}${V0}</div><div class="cap">L<sub>3</sub> · L<sub>2</sub> · L<sub>1</sub> = transformation matrix (L<sub>1</sub> is applied first)</div></div>`;
+  ])}${V0}</div><div class="cap">L<sub>3</sub> · L<sub>2</sub> · L<sub>1</sub> = transformation matrix (L<sub>1</sub> is applied first)</div></div>` +
+  `<div class="expanded"><div class="cap">Expanded</div>` +
+  [
+    ['x', 'cθcψ', 'cθsψ', '−sθ'],
+    ['y', 'sφsθcψ − cφsψ', 'sφsθsψ + cφcψ', 'sφcθ'],
+    ['z', 'cφsθcψ + sφsψ', 'cφsθsψ − sφcψ', 'cφcθ'],
+  ].map(([a, c1, c2, c3]) => {
+    const t = (c) => (c.includes(' ') ? `(${c})` : c);
+    return `<div class="line">v<sub>${a}3</sub> = ${t(c1)}·v<sub>x</sub> + ${t(c2)}·v<sub>y</sub> ${c3.startsWith('−') ? '−' : '+'} ${t(c3.replace('−', ''))}·v<sub>z</sub></div>`;
+  }).join('') + `</div>`;
 
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 const RAD = Math.PI / 180;
