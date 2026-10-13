@@ -45,6 +45,12 @@
   .total .cap { color: #4aa3ff; font-size: 14px; }
   .expanded { padding: 8px 6px; }
   .expanded .line { font-style: italic; font-size: 15px; line-height: 1.7; overflow-x: auto; white-space: nowrap; }
+  .notes { max-width: 1120px; margin: 28px auto 0; padding: 18px 20px; background: #141922; border: 1px solid #232b38; border-radius: 12px; line-height: 1.55; }
+  .notes h2 { margin: 0 0 10px; font-size: 18px; }
+  .notes h3 { margin: 18px 0 8px; font-size: 15px; color: #8592a6; }
+  .notes ol { margin: 0; padding-left: 20px; display: grid; gap: 10px; }
+  .notes sub { font-size: 0.75em; }
+  .notes #notes-matrices { max-width: 480px; }
   @media (max-width: 860px) { .page { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
@@ -57,7 +63,6 @@
     </div>
     <div class="modes" role="group" aria-label="Rotation about fixed or body axes">
       <button type="button" data-mode="fixed" class="on" aria-pressed="true">Fixed axes</button>
-      <button type="button" data-mode="body" aria-pressed="false">Body axes</button>
       <button type="button" data-mode="inc" aria-pressed="false" title="Each drag turns the ball about its own current axis">Body rotations</button>
     </div>
     <button type="button" id="reset-orient" hidden>Reset orientation</button>
@@ -70,6 +75,20 @@
 
   <div class="side" id="side" aria-label="Rotation matrices"></div>
 </div>
+
+<section class="notes" aria-label="Notes">
+  <h2>Notes: what we learned</h2>
+  <ol>
+    <li><b>Rotations don't commute.</b> 90° about x then 90° about y is not the same as y then x. Take the point (0, 0, 1): x then y ends at (0, −1, 0); y then x ends at (1, 0, 0). In matrices, R<sub>y</sub>·R<sub>x</sub> ≠ R<sub>x</sub>·R<sub>y</sub>. Only turns about the same axis, or tiny angles, commute.</li>
+    <li><b>Fixed axes vs body (moving) axes.</b> The same angles in the same order give different orientations. A sequence about the moving axes equals the <i>reverse</i> sequence about the fixed axes: yaw ψ about z, pitch θ about the new y′, roll φ about the new x″ equals roll φ about fixed x, pitch θ about fixed y, yaw ψ about fixed z.</li>
+    <li><b>Which axis a slider spins about.</b> In a product of three rotation matrices, the leftmost factor acts about a fixed axis, the rightmost about the ball's own axis, and the middle one about something in between. In Fixed axes mode (R = R<sub>x</sub>(φ)·R<sub>y</sub>(θ)·R<sub>z</sub>(ψ)), roll spins about the fixed x, yaw about the ball's own z′, and pitch about the y axis tilted by the roll. With absolute angles you can't make all three sliders spin about the ball's own axes, which is why <b>Body rotations</b> mode exists: every drag is a small turn about the ball's current x′, y′ or z′, so it remembers the order you moved things in.</li>
+    <li><b>Class-notes convention (passive, column vectors, body axes).</b> v<sub>1</sub> = L<sub>1</sub>(ψ)v, v<sub>2</sub> = L<sub>2</sub>(θ)v<sub>1</sub>, v<sub>3</sub> = L<sub>3</sub>(φ)v<sub>2</sub>, so v<sub>3</sub> = L<sub>3</sub>·L<sub>2</sub>·L<sub>1</sub>·v. These re-express a vector's components in the turned axes. The Fixed axes matrices beside the ball are the transposes, in the opposite order, because they move the vector instead. The class matrices are kept below.</li>
+    <li><b>Turning about several axes at once.</b> Any rotation is a single turn about one tilted axis (Euler's rotation theorem). Angular velocities add as vectors, but Euler-angle rates don't map one-to-one onto x, y, z. For yaw-pitch-roll the body-frame rates are p = φ̇ − ψ̇ sθ, q = θ̇ cφ + ψ̇ sφ cθ, r = −θ̇ sφ + ψ̇ cφ cθ. At pitch θ = ±90° the yaw and roll axes line up (<b>gimbal lock</b>) and those formulas blow up, which is why quaternions are used instead.</li>
+    <li><b>How many conventions.</b> 12 axis orders (6 like yaw-pitch-roll with three different axes, 6 like z-x-z with a repeated axis) × fixed or body = 24, but each fixed convention equals a body one in reverse order, so there are 12 distinct rotation formulas. Active vs passive, row vs column vectors, angle sign and handedness change the notation, not the ball.</li>
+  </ol>
+  <h3>Class-notes matrices (body axes, passive)</h3>
+  <div class="side" id="notes-matrices"></div>
+</section>
 
 <script>
 // ---- typed-out matrices (column vectors; each rotation is applied to the previous result) ----
@@ -147,6 +166,16 @@ function renderSide(mode) {
     `<div class="expanded"><div class="cap">Expanded</div>${['x', 'y', 'z'].map((a, i) => expandedLine(a, d.total[i])).join('')}</div>`;
 }
 
+function renderNotesMatrices() {
+  const d = SETS.body;
+  document.getElementById('notes-matrices').innerHTML =
+    d.steps.map(([M, label], i) =>
+      `<div class="group"><div class="step">${V(i + 1)}<span class="eq-sign">=</span>${mat(M)}${i === 0 ? V0 : V(i)}</div><div class="cap">${label}</div></div>`).join('') +
+    `<div class="total"><div class="step">${V(3)}<span class="eq-sign">=</span>${mat(d.total)}${V0}</div><div class="cap">L<sub>3</sub> · L<sub>2</sub> · L<sub>1</sub> = transformation matrix (L<sub>1</sub> is applied first)</div></div>` +
+    `<div class="expanded"><div class="cap">Expanded</div>${['x', 'y', 'z'].map((a, i) => expandedLine(a, d.total[i])).join('')}</div>`;
+}
+renderNotesMatrices();
+
 let mode = 'fixed'; // default: fixed axes
 const I3 = () => [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
 const inc = { R: I3(), prev: [0, 0, 0] };   // "Body rotations" mode: accumulated orientation and slider totals
@@ -166,7 +195,7 @@ function orthonormalize(R) {
 // current ball rotation for the mode (used to hand the orientation over when entering 'inc')
 const currentR = () => {
   const [psi, lam, phi] = sliders.map((s) => parseFloat(s.value) * RAD);
-  return mode === 'fixed' ? mul(Rx(phi), mul(Ry(lam), Rz(psi))) : mul(Rz(psi), mul(Ry(lam), Rx(phi)));
+  return mul(Rx(phi), mul(Ry(lam), Rz(psi)));
 };
 function setSliders(vals) { vals.forEach((v, i) => { sliders[i].value = v; boxes[i].value = v; }); }
 
@@ -260,10 +289,9 @@ boxes.forEach((b, i) => b.addEventListener('change', () => { // out of range or 
 
 function draw() {
   const [psi, lam, phi] = sliders.map((s) => parseFloat(s.value) * RAD);
-  // yaw psi about z, pitch theta about y, roll phi about x, composed in the order set by `mode`:
-  // fixed axes: psi about z first, then theta about y, then phi about x (all fixed): R = Rx·Ry·Rz
-  // body axes: same three turns about the rotating axes: R = Rz·Ry·Rx
-  const R = mode === 'inc' ? inc.R : mode === 'fixed' ? mul(Rx(phi), mul(Ry(lam), Rz(psi))) : mul(Rz(psi), mul(Ry(lam), Rx(phi)));
+  // fixed axes: psi about the fixed z first, then theta about the fixed y, then phi about the fixed x: R = Rx·Ry·Rz
+  // body rotations: R is accumulated from the turns you make (see onAngle)
+  const R = mode === 'inc' ? inc.R : mul(Rx(phi), mul(Ry(lam), Rz(psi)));
   const M = mul(VIEW, R);
 
   const W = cv.width, c = W / 2, r = W * 0.4;
