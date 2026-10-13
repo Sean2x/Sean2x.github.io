@@ -9,7 +9,9 @@
   body { margin: 0; background: #0e1116; color: #d7dee9; font: 15px system-ui, sans-serif; padding: 16px; }
   .page { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 480px; gap: 24px; align-items: start; }
   .left { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-  canvas { width: min(100%, 500px); aspect-ratio: 1; }
+  .stage { position: relative; width: min(100%, 500px); }
+  canvas { width: 100%; aspect-ratio: 1; display: block; }
+  #axes { position: absolute; left: 0; top: 0; width: 34%; background: rgba(14,17,22,.7); border: 1px solid #232b38; border-radius: 10px; }
   .sliders { width: min(100%, 500px); display: grid; gap: 10px; }
   label { display: grid; grid-template-columns: 96px 1fr 84px 44px; align-items: center; gap: 10px; }
   input[type=number] { width: 100%; padding: 4px 6px; background: #1b2230; color: inherit; border: 1px solid #2c3647; border-radius: 6px; font: inherit; text-align: right; }
@@ -46,7 +48,10 @@
 <body>
 <div class="page">
   <div class="left">
-    <canvas id="c" width="1040" height="1040"></canvas>
+    <div class="stage">
+      <canvas id="c" width="1040" height="1040"></canvas>
+      <canvas id="axes" width="360" height="360" aria-label="Fixed axes (grey) and body axes (colored)"></canvas>
+    </div>
     <div class="modes" role="group" aria-label="Rotation about fixed or body axes">
       <button type="button" data-mode="fixed" class="on">Fixed axes</button>
       <button type="button" data-mode="body">Body axes</button>
@@ -217,6 +222,33 @@ function draw() {
     }
   }
   ctx.globalAlpha = 1; ctx.setLineDash([]);
+  drawAxes(R);
+}
+
+// Axis widget: the fixed x y z (grey, never moves) and the body x' y' z' (colored, carried by the ball).
+const ax = document.getElementById('axes'), actx = ax.getContext('2d');
+const BODY_COLORS = ['#ff5d73', '#5ee6a8', '#4aa3ff'];
+// Oblique view: x right, z up, y (into the screen) drawn up-and-right.
+const oblique = (v) => [v[0] + 0.38 * v[1], v[2] + 0.30 * v[1]];
+function drawAxes(R) {
+  const W = ax.width, c = W / 2, L = W * 0.34;
+  actx.clearRect(0, 0, W, W);
+  actx.lineCap = 'round'; actx.font = '600 28px system-ui, sans-serif'; actx.textAlign = 'center'; actx.textBaseline = 'middle';
+  const arrow = (v, color, width, label) => {
+    const [px, py] = oblique(v);
+    const x = c + px * L, y = c - py * L;
+    actx.strokeStyle = color; actx.fillStyle = color; actx.lineWidth = width;
+    actx.beginPath(); actx.moveTo(c, c); actx.lineTo(x, y); actx.stroke();
+    const a = Math.atan2(y - c, x - c);
+    actx.beginPath(); actx.moveTo(x + Math.cos(a) * 10, y + Math.sin(a) * 10);
+    actx.lineTo(x - Math.cos(a) * 12 + Math.sin(a) * 9, y - Math.sin(a) * 12 - Math.cos(a) * 9);
+    actx.lineTo(x - Math.cos(a) * 12 - Math.sin(a) * 9, y - Math.sin(a) * 12 + Math.cos(a) * 9);
+    actx.closePath(); actx.fill();
+    actx.fillText(label, x + Math.cos(a) * 30, y + Math.sin(a) * 30);
+  };
+  const E = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+  ['x', 'y', 'z'].forEach((n, i) => arrow(E[i], '#6b7688', 4, n)); // fixed
+  ['x′', 'y′', 'z′'].forEach((n, i) => arrow(apply(R, E[i]), BODY_COLORS[i], 7, n)); // body
 }
 draw();
 </script>
