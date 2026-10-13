@@ -24,7 +24,7 @@ const PROJECTS = [
     slug: "pid",
     title: "Controls Tooling",
     summary:
-      "Control-systems tools you can play with in the browser: a root locus explorer that shows why poles move when you turn a PID gain, a PID tuning demo, and a Zero-G flight simulator.",
+      "Control-systems tools you can play with in the browser: a root locus explorer that shows why poles move when you turn a PID gain, a PID tuning demo, a Zero-G flight simulator, and a rotation-matrix visualizer.",
     tags: ["TypeScript", "Controls", "Canvas", "PID"],
     light: "green",
     image: "assets/img/projects/pid.png",

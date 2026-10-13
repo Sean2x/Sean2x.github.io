@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Controls Tooling | Sean Lirazan</title>
-    <meta name="description" content="Control-systems tools by Sean Lirazan that run in the browser: a root locus explorer, a PID tuning demo, and a Zero-G flight simulator." />
+    <meta name="description" content="Control-systems tools by Sean Lirazan that run in the browser: a root locus explorer, a PID tuning demo, a Zero-G flight simulator, and a rotation-matrix visualizer." />
     <link rel="canonical" href="https://sean2x.github.io/projects/pid.html" />
     <link rel="icon" href="../assets/img/favicon.ico" type="image/x-icon" />
 
@@ -12,7 +12,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sean Lirazan" />
     <meta property="og:title" content="Controls Tooling | Sean Lirazan" />
-    <meta property="og:description" content="Control-systems tools by Sean Lirazan that run in the browser: a root locus explorer, a PID tuning demo, and a Zero-G flight simulator." />
+    <meta property="og:description" content="Control-systems tools by Sean Lirazan that run in the browser: a root locus explorer, a PID tuning demo, a Zero-G flight simulator, and a rotation-matrix visualizer." />
     <meta property="og:url" content="https://sean2x.github.io/projects/pid.html" />
     <meta property="og:image" content="https://sean2x.github.io/assets/img/projects/pid.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -105,6 +105,10 @@
             <i class="bi bi-sliders"></i>
             <span><strong>PID Demo</strong><small>Interactive · plays in your browser</small></span>
           </button>
+          <button class="tools-tab" role="tab" id="tab-rotations" aria-controls="rotations" data-hash="rotations">
+            <i class="bi bi-arrow-repeat"></i>
+            <span><strong>Rotation Matrices</strong><small>Interactive · plays in your browser</small></span>
+          </button>
         </div>
 
         <div class="tools-panels">
@@ -193,6 +197,27 @@
               The original was a Python/Tkinter program (<code>pid_demo.py</code>
               in the source folder); this page is a direct port of it.
             </p>
+          </section>
+        <section class="tools-panel" role="tabpanel" id="rotations" aria-labelledby="tab-rotations" hidden>
+            <h2>Rotation Matrices</h2>
+            <p>
+              A ball cut into 8 octants by three dotted circles, with sliders for
+              yaw ψ (about z), pitch θ (about y) and roll φ (about x), each from
+              −360° to 360°. Turn one angle at a time, then combine them, and
+              watch how the order of rotations matters. Type exact angles in the
+              boxes; the 0 buttons ease an angle back to zero.
+            </p>
+            <div class="tools-actions">
+              <a class="btn-terminal primary" href="pid/rotations/index.html" target="_blank">
+                Open full screen <i class="bi bi-box-arrow-up-right"></i>
+              </a>
+              <a class="btn-terminal" href="https://github.com/Sean2x/Sean2x.github.io/tree/main/projects/pid/rotations" target="_blank">
+                Source <i class="bi bi-github"></i>
+              </a>
+            </div>
+            <div class="tools-embed tall">
+              <iframe data-src="pid/rotations/index.html" title="Rotation Matrices" loading="lazy"></iframe>
+            </div>
           </section>
         </div>
       </div>
