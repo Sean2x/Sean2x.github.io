@@ -64,7 +64,8 @@
     </div>
     <div class="ringkey">Each dotted ring is the equator of the axis with its color: <b style="color:#ff5d73">x′ red</b>, <b style="color:#5ee6a8">y′ green</b>, <b style="color:#4aa3ff">z′ blue</b>. The big red dot is the nose, where x′ meets the ball (faded when it is on the far side).</div>
     <div class="modes" role="group" aria-label="Rotation about fixed or body axes">
-      <button type="button" data-mode="fixed" class="on" aria-pressed="true">Fixed axes</button>
+      <button type="button" data-mode="body" class="on" aria-pressed="true" title="Yaw about the vehicle z, pitch about the new y, roll about the new x: the flight-dynamics convention">Aircraft (body axes)</button>
+      <button type="button" data-mode="fixed" aria-pressed="false">Fixed axes</button>
       <button type="button" data-mode="inc" aria-pressed="false" title="Each drag turns the ball about its own current axis">Body rotations</button>
     </div>
     <button type="button" id="reset-orient" hidden>Reset orientation</button>
@@ -83,12 +84,13 @@
   <ol>
     <li><b>Rotations don't commute.</b> 90° about x then 90° about y is not the same as y then x. Take the point (0, 0, 1): x then y ends at (0, −1, 0); y then x ends at (1, 0, 0). In matrices, R<sub>y</sub>·R<sub>x</sub> ≠ R<sub>x</sub>·R<sub>y</sub>. Only turns about the same axis, or tiny angles, commute.</li>
     <li><b>Fixed axes vs body (moving) axes.</b> The same angles in the same order give different orientations. A sequence about the moving axes equals the <i>reverse</i> sequence about the fixed axes: yaw ψ about z, pitch θ about the new y′, roll φ about the new x″ equals roll φ about fixed x, pitch θ about fixed y, yaw ψ about fixed z.</li>
-    <li><b>Which axis a slider spins about.</b> In a product of three rotation matrices, the leftmost factor acts about a fixed axis, the rightmost about the ball's own axis, and the middle one about something in between. In Fixed axes mode (R = R<sub>x</sub>(φ)·R<sub>y</sub>(θ)·R<sub>z</sub>(ψ)), roll spins about the fixed x, yaw about the ball's own z′, and pitch about the y axis tilted by the roll. With absolute angles you can't make all three sliders spin about the ball's own axes, which is why <b>Body rotations</b> mode exists: every drag is a small turn about the ball's current x′, y′ or z′, so it remembers the order you moved things in.</li>
-    <li><b>Class-notes convention (passive, column vectors, body axes).</b> v<sub>1</sub> = L<sub>1</sub>(ψ)v, v<sub>2</sub> = L<sub>2</sub>(θ)v<sub>1</sub>, v<sub>3</sub> = L<sub>3</sub>(φ)v<sub>2</sub>, so v<sub>3</sub> = L<sub>3</sub>·L<sub>2</sub>·L<sub>1</sub>·v. These re-express a vector's components in the turned axes. The Fixed axes matrices beside the ball are the transposes, in the opposite order, because they move the vector instead. The class matrices are kept below.</li>
+    <li><b>What aircraft use.</b> Flight dynamics uses <b>body axes, yaw-pitch-roll (3-2-1)</b>: yaw ψ about the vehicle z (down), then pitch θ about the new y, then roll φ about the new x, with v<sub>body</sub> = L<sub>3</sub>·L<sub>2</sub>·L<sub>1</sub>·v<sub>vehicle</sub>. That is the default <b>Aircraft</b> mode, and it is exactly the class matrices below. <b>Fixed axes</b> mode uses the same three angles about the fixed axes in the order ψ, θ, φ, which is a <i>different</i> orientation for the same numbers, so it is not what aircraft use.</li>
+    <li><b>Which axis a slider spins about.</b> In a product of three rotation matrices, the leftmost factor acts about a fixed axis, the rightmost about the ball's own axis, and the middle one about something in between. In the Aircraft mode (R = R<sub>z</sub>(ψ)·R<sub>y</sub>(θ)·R<sub>x</sub>(φ)), yaw spins the whole ball about the vehicle z, roll spins it about its own nose axis x′, and pitch spins it about the y axis after the yaw. Fixed axes mode (R = R<sub>x</sub>(φ)·R<sub>y</sub>(θ)·R<sub>z</sub>(ψ)) is the mirror image: roll about the fixed x and yaw about z′. With absolute angles you can't make all three sliders spin about the ball's own axes, which is why <b>Body rotations</b> mode exists: every drag is a small turn about the ball's current x′, y′ or z′, so it remembers the order you moved things in.</li>
+    <li><b>Class-notes convention (passive, column vectors, body axes).</b> v<sub>1</sub> = L<sub>1</sub>(ψ)v, v<sub>2</sub> = L<sub>2</sub>(θ)v<sub>1</sub>, v<sub>3</sub> = L<sub>3</sub>(φ)v<sub>2</sub>, so v<sub>3</sub> = L<sub>3</sub>·L<sub>2</sub>·L<sub>1</sub>·v. These re-express a vector's components in the turned axes. The class matrices are the ones shown in Aircraft mode. The Fixed axes matrices are the transposes, in the opposite order, because they move the vector instead.</li>
     <li><b>Turning about several axes at once.</b> Any rotation is a single turn about one tilted axis (Euler's rotation theorem). Angular velocities add as vectors, but Euler-angle rates don't map one-to-one onto x, y, z. For yaw-pitch-roll the body-frame rates are p = φ̇ − ψ̇ sθ, q = θ̇ cφ + ψ̇ sφ cθ, r = −θ̇ sφ + ψ̇ cφ cθ. At pitch θ = ±90° the yaw and roll axes line up (<b>gimbal lock</b>) and those formulas blow up, which is why quaternions are used instead.</li>
     <li><b>How many conventions.</b> 12 axis orders (6 like yaw-pitch-roll with three different axes, 6 like z-x-z with a repeated axis) × fixed or body = 24, but each fixed convention equals a body one in reverse order, so there are 12 distinct rotation formulas. Active vs passive, row vs column vectors, angle sign and handedness change the notation, not the ball.</li>
     <li><b>Frames and names.</b> The <b>vehicle frame</b> has its origin at the vehicle's center but its axes never turn: x north, y east, z down (the direction gravity pulls). The <b>body frame</b> is attached to the vehicle: x out the nose, y out the right wing, z down through the belly (not up). Both are right-handed. In the class sequence, v<sub>1</sub> is in the vehicle-1 frame (after the yaw), v<sub>2</sub> in the vehicle-2 frame (after the pitch), and v<sub>3</sub> in the body frame (after the roll). On this page the grey axes are the vehicle frame and the colored x′, y′, z′ are the body frame.</li>
-    <li><b>Gravity in each frame.</b> In the vehicle frame gravity is (0, 0, g). In the body frame it is L<sub>3</sub>·L<sub>2</sub>·L<sub>1</sub>·(0, 0, g) = g·(−sθ, sφcθ, cφcθ). Level flight (θ = 0, φ = 0) puts all of it on body z; pitching the nose up puts part of it on −x, and banking puts part on y. An accelerometer measures exactly this, which is how an aircraft finds its pitch and roll. <b>Picture warning:</b> this page draws z pointing <i>up</i> on screen, the usual graphics habit, while aerospace draws z down. The algebra is identical, but the picture is mirrored from a flight textbook.</li>
+    <li><b>Gravity in each frame.</b> In the vehicle frame gravity is (0, 0, g). In the body frame it is L<sub>3</sub>·L<sub>2</sub>·L<sub>1</sub>·(0, 0, g) = g·(−sθ, sφcθ, cφcθ). Level flight (θ = 0, φ = 0) puts all of it on body z; pitching the nose up puts part of it on −x, and banking puts part on y. An accelerometer measures exactly this, which is how an aircraft finds its pitch and roll. The picture on this page uses the aerospace layout: x (nose / north) to the right, z (down / gravity) down the screen, and y (right wing / east) toward you, so a positive pitch lifts the nose.</li>
   </ol>
   <h3>Class-notes matrices (body axes, passive)</h3>
   <div class="side" id="notes-matrices"></div>
@@ -105,7 +107,7 @@ const V0 = col('v<sub>x</sub>', 'v<sub>y</sub>', 'v<sub>z</sub>');
 // Body axes: each rotation turns the axes themselves, about the already-rotated y' / x'' (the notes' L1, L2, L3).
 const SETS = {
   fixed: {
-    intro: 'Fixed axes: ψ about the fixed z, then θ about the fixed y, then φ about the fixed x. Each matrix turns the vector itself.',
+    intro: 'Fixed axes (not the aircraft convention): ψ about the fixed z, then θ about the fixed y, then φ about the fixed x. Each matrix turns the vector itself.',
     steps: [
       [[['cψ', '−sψ', '0'], ['sψ', 'cψ', '0'], ['0', '0', '1']], 'L<sub>1</sub>(ψ), yaw about fixed z'],
       [[['cθ', '0', 'sθ'], ['0', '1', '0'], ['−sθ', '0', 'cθ']], 'L<sub>2</sub>(θ), pitch about fixed y'],
@@ -118,7 +120,7 @@ const SETS = {
     ],
   },
   body: {
-    intro: 'Body axes: ψ about z, then θ about the new y, then φ about the new x. Each matrix re-expresses the vector in the turned axes.',
+    intro: 'Aircraft convention (flight dynamics): yaw ψ about the vehicle z, then pitch θ about the new y, then roll φ about the new x. Each matrix re-expresses the vector in the turned axes, so v₃ is in the body frame.',
     steps: [
       [[['cψ', 'sψ', '0'], ['−sψ', 'cψ', '0'], ['0', '0', '1']], 'L<sub>1</sub>(ψ), yaw about z'],
       [[['cθ', '0', '−sθ'], ['0', '1', '0'], ['sθ', '0', 'cθ']], 'L<sub>2</sub>(θ), pitch about y'],
@@ -180,7 +182,7 @@ function renderNotesMatrices() {
 }
 renderNotesMatrices();
 
-let mode = 'fixed'; // default: fixed axes
+let mode = 'body'; // default: the aircraft (flight dynamics) convention, body axes 3-2-1
 const I3 = () => [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
 const inc = { R: I3(), prev: [0, 0, 0] };   // "Body rotations" mode: accumulated orientation and slider totals
 let saved = [0, 0, 0];                       // slider angles of the fixed/body modes, kept while in 'inc'
@@ -197,9 +199,10 @@ function orthonormalize(R) {
   return [0, 1, 2].map((i) => [x[i], y[i], z[i]]);
 }
 // current ball rotation for the mode (used to hand the orientation over when entering 'inc')
+const attitude = (m, psi, lam, phi) => (m === 'fixed' ? mul(Rx(phi), mul(Ry(lam), Rz(psi))) : mul(Rz(psi), mul(Ry(lam), Rx(phi))));
 const currentR = () => {
   const [psi, lam, phi] = sliders.map((s) => parseFloat(s.value) * RAD);
-  return mul(Rx(phi), mul(Ry(lam), Rz(psi)));
+  return attitude(mode, psi, lam, phi);
 };
 function setSliders(vals) { vals.forEach((v, i) => { sliders[i].value = v; boxes[i].value = v; }); }
 
@@ -247,7 +250,7 @@ const Rz = (a) => [[Math.cos(a), -Math.sin(a), 0], [Math.sin(a), Math.cos(a), 0]
 const mul = (A, B) => A.map((r) => [0, 1, 2].map((j) => r[0] * B[0][j] + r[1] * B[1][j] + r[2] * B[2][j]));
 const apply = (M, p) => M.map((r) => r[0] * p[0] + r[1] * p[1] + r[2] * p[2]);
 
-// Straight-on view: screen right = +x, screen up = +z, looking along +y.
+// Aerospace picture (north-east-down): screen right = +x (north / nose), screen DOWN = +z (gravity), +y (east / right wing) toward the viewer.
 // At zero rotation the three circles line up square to the screen (one full circle, one horizontal and one vertical line).
 const VIEW = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
 
@@ -294,14 +297,15 @@ boxes.forEach((b, i) => b.addEventListener('change', () => { // out of range or 
 
 function draw() {
   const [psi, lam, phi] = sliders.map((s) => parseFloat(s.value) * RAD);
-  // fixed axes: psi about the fixed z first, then theta about the fixed y, then phi about the fixed x: R = Rx·Ry·Rz
+  // aircraft / body axes: psi about z, then theta about the NEW y, then phi about the NEW x: R = Rz·Ry·Rx
+  // fixed axes: the same three angles about the fixed axes in the order psi, theta, phi: R = Rx·Ry·Rz
   // body rotations: R is accumulated from the turns you make (see onAngle)
-  const R = mode === 'inc' ? inc.R : mul(Rx(phi), mul(Ry(lam), Rz(psi)));
+  const R = mode === 'inc' ? inc.R : attitude(mode, psi, lam, phi);
   const M = mul(VIEW, R);
 
   const W = cv.width, c = W / 2, r = W * 0.4;
   ctx.clearRect(0, 0, W, W);
-  const proj = (p) => { const q = apply(M, p); return [c + q[0] * r, c - q[2] * r, q[1]]; }; // depth = y (toward viewer is -y)
+  const proj = (p) => { const q = apply(M, p); return [c + q[0] * r, c + q[2] * r, -q[1]]; }; // z points down the screen; depth < 0 means toward the viewer (+y)
 
   // ball
   ctx.lineWidth = 3; ctx.setLineDash([]);
@@ -344,8 +348,8 @@ function draw() {
 // Axis widget: the fixed x y z (grey, never moves) and the body x' y' z' (colored, carried by the ball).
 const ax = document.getElementById('axes'), actx = ax.getContext('2d');
 const BODY_COLORS = ['#ff5d73', '#5ee6a8', '#4aa3ff'];
-// Oblique view: x right, z up, y (into the screen) drawn up-and-right.
-const oblique = (v) => [v[0] + 0.38 * v[1], v[2] + 0.30 * v[1]];
+// Oblique view: x right, z down, y (toward the viewer) drawn down-and-left.
+const oblique = (v) => [v[0] - 0.38 * v[1], -v[2] - 0.30 * v[1]];
 function drawAxes(R) {
   const W = ax.width, c = W / 2, L = W * 0.34;
   actx.clearRect(0, 0, W, W);
