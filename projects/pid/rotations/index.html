@@ -68,6 +68,7 @@
     <div class="ringkey">Each dotted ring is the equator of the axis with its color: <b style="color:#ff5d73">x′ red</b>, <b style="color:#5ee6a8">y′ green</b>, <b style="color:#4aa3ff">z′ blue</b>. The big red dot is the nose, where x′ meets the ball (faded when it is on the far side).</div>
     <div class="modes" role="group" aria-label="Rotation about fixed or body axes">
       <button type="button" data-mode="body" class="on" aria-pressed="true" title="Yaw about the vehicle z, pitch about the new y, roll about the new x: the flight-dynamics convention">Aircraft (body axes)</button>
+      <button type="button" data-mode="ned" aria-pressed="false" title="Each drag turns the ball about the fixed north, east or down axis">North-East-Down</button>
       <button type="button" data-mode="inc" aria-pressed="false" title="Each drag turns the ball about its own current axis">Body rotations</button>
       <button type="button" data-mode="track" aria-pressed="false" title="The nose follows your cursor">Tracker</button>
     </div>
@@ -95,6 +96,7 @@
     <li><b>Frames and names.</b> The <b>vehicle frame</b> has its origin at the vehicle's center but its axes never turn: x north, y east, z down (the direction gravity pulls). The <b>body frame</b> is attached to the vehicle: x out the nose, y out the right wing, z down through the belly (not up). Both are right-handed. In the class sequence, v<sub>1</sub> is in the vehicle-1 frame (after the yaw), v<sub>2</sub> in the vehicle-2 frame (after the pitch), and v<sub>3</sub> in the body frame (after the roll). On this page the grey axes are the vehicle frame and the colored x′, y′, z′ are the body frame.</li>
     <li><b>Gravity in each frame.</b> In the vehicle frame gravity is (0, 0, g). In the body frame it is L<sub>3</sub>·L<sub>2</sub>·L<sub>1</sub>·(0, 0, g) = g·(−sθ, sφcθ, cφcθ). Level flight (θ = 0, φ = 0) puts all of it on body z; pitching the nose up puts part of it on −x, and banking puts part on y. An accelerometer measures exactly this, which is how an aircraft finds its pitch and roll. The picture on this page uses the aerospace layout: x (nose / north) to the right, z (down / gravity) down the screen, and y (right wing / east) toward you, so a positive pitch lifts the nose.</li>
     <li><b>Tracker mode: the shortest turn.</b> To point the nose at a target, rotate about the axis n × t (the nose direction crossed with the target direction) by the angle between them. That single turn has no twist about the nose, so it is the smallest rotation that does the job. The yaw, pitch and roll it produces are read back from the matrix: ψ = atan2(R<sub>21</sub>, R<sub>11</sub>), θ = −asin(R<sub>31</sub>), φ = atan2(R<sub>32</sub>, R<sub>33</sub>). Sweep the nose through straight up or down (θ = ±90°) and ψ and φ jump or become undefined, which is gimbal lock seen live.</li>
+    <li><b>Left versus right multiplication.</b> A turn about a <i>fixed</i> axis multiplies on the left of the orientation, R ← R<sub>z</sub>(Δ)·R, and a turn about the ball's <i>own</i> axis multiplies on the right, R ← R·R<sub>z</sub>(Δ). That is the whole difference between the North-East-Down and Body rotations modes: the same slider and the same Δ end in different orientations once the ball is already tilted.</li>
   </ol>
   <h3>Class-notes matrices (body axes, passive)</h3>
   <div class="side" id="notes-matrices"></div>
@@ -158,6 +160,17 @@ function renderTrack(R) {
     (e.lock ? `<div class="cap lock">Gimbal lock: the nose is straight up or down, so yaw and roll are no longer separate. The attitude is fine, but the angles are not defined.</div>` : '');
 }
 function renderSide(mode) {
+  if (mode === 'ned') {
+    document.getElementById('side').innerHTML =
+      `<div class="cap intro">North-East-Down: every move turns the ball about a <b>fixed</b> vehicle axis, the grey ones: x north, y east, z down. A turn about a fixed axis is multiplied on the <b>left</b> of the orientation, so the order you move things in is remembered.</div>` +
+      `<div class="group"><div class="step"><span>R ← R<sub>z</sub>(Δ) · R</span></div><div class="cap">turn about Down (fixed z)</div></div>` +
+      `<div class="group"><div class="step"><span>R ← R<sub>y</sub>(Δ) · R</span></div><div class="cap">turn about East (fixed y)</div></div>` +
+      `<div class="group"><div class="step"><span>R ← R<sub>x</sub>(Δ) · R</span></div><div class="cap">turn about North (fixed x)</div></div>` +
+      `<div class="total rnum" id="trk"></div>` +
+      `<div class="cap intro">Compare with Body rotations, which multiplies on the <b>right</b> (R ← R · turn) and so turns about the ball's own axes. Left versus right is exactly fixed versus body. The numbers beside the sliders are the running total about each axis; the yaw, pitch and roll above are read back from the matrix.</div>`;
+    renderTrack(inc.R);
+    return;
+  }
   if (mode === 'track') {
     document.getElementById('side').innerHTML =
       `<div class="cap intro">Tracker: the nose (the red dot) turns toward your cursor by the <b>shortest turn</b>: one rotation about the axis n × t, with no twist about the nose. Move the mouse (or your finger) anywhere on the page.</div>` +
@@ -201,7 +214,7 @@ const I3 = () => [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
 const inc = { R: I3(), prev: [0, 0, 0] };   // "Body rotations" mode: accumulated orientation and slider totals
 let saved = [0, 0, 0];                       // slider angles of the aircraft mode, kept while in 'inc' / 'track'
 const track = { R: I3(), t: null };         // Tracker mode: orientation and the unit direction the nose is chasing
-const bodyTurn = (i, a) => [Rz, Ry, Rx][i](a); // yaw about z', pitch about y', roll about x' (i = slider)
+const bodyTurn = (i, a) => [Rz, Ry, Rx][i](a); // slider 0 / 1 / 2 turns about z / y / x (the ball's own axes in Body rotations, the fixed axes in North-East-Down)
 
 // Re-orthonormalise so many small turns don't drift (Gram-Schmidt on the columns).
 function orthonormalize(R) {
@@ -222,20 +235,26 @@ const currentR = () => {
 };
 function setSliders(vals) { vals.forEach((v, i) => { sliders[i].value = v; boxes[i].value = v; }); }
 
-const rotationOf = (m) => (m === 'inc' ? inc.R : m === 'track' ? track.R : currentR());
+const rotationOf = (m) => (m === 'inc' || m === 'ned' ? inc.R : m === 'track' ? track.R : currentR());
+const LABELS = {
+  body: ['Yaw ψ (z)', 'Pitch θ (y)', 'Roll φ (x)'],
+  track: ['Yaw ψ (z)', 'Pitch θ (y)', 'Roll φ (x)'],
+  inc: ['Yaw ψ (z′)', 'Pitch θ (y′)', 'Roll φ (x′)'],
+  ned: ['Down (z)', 'East (y)', 'North (x)'],
+};
 function setMode(next) {
   if (next === mode) return;
   const carry = rotationOf(mode);                       // the orientation showing now carries over to the next mode
   if (mode === 'body') saved = sliders.map((s) => parseFloat(s.value));
   if (next === 'body') setSliders(saved);               // back to the angles the aircraft mode had
-  if (next === 'inc') { inc.R = carry; inc.prev = [0, 0, 0]; setSliders([0, 0, 0]); }
+  if (next === 'inc' || next === 'ned') { inc.R = carry; inc.prev = [0, 0, 0]; setSliders([0, 0, 0]); }
   if (next === 'track') { track.R = carry; track.t = null; setSliders([0, 0, 0]); }
   mode = next;
   document.querySelectorAll('[data-mode]').forEach((b) => { b.classList.toggle('on', b.dataset.mode === mode); b.setAttribute('aria-pressed', b.dataset.mode === mode); });
-  const isInc = mode === 'inc', isTrack = mode === 'track';
+  const isInc = mode === 'inc' || mode === 'ned', isTrack = mode === 'track';
   document.getElementById('reset-orient').hidden = !isInc;
   document.querySelectorAll('[data-zero]').forEach((b) => { b.style.visibility = isInc || isTrack ? 'hidden' : 'visible'; });
-  document.querySelectorAll('.lbl').forEach((l) => { l.textContent = `${l.dataset.base} (${l.dataset.axis}${isInc ? '′' : ''})`; });
+  document.querySelectorAll('.lbl').forEach((l, i) => { l.textContent = LABELS[mode][i]; });
   [...sliders, ...boxes].forEach((el) => { el.disabled = isTrack; });   // in Tracker mode the cursor drives the ball
   document.querySelector('.sliders').style.opacity = isTrack ? 0.55 : 1;
   renderSide(mode);
@@ -248,9 +267,11 @@ document.getElementById('reset-orient').addEventListener('click', () => {
 
 // A slider/box changed: in 'inc' mode apply the change as a turn about that body axis.
 function onAngle(i) {
-  if (mode === 'inc') {
+  if (mode === 'inc' || mode === 'ned') {
     const v = parseFloat(sliders[i].value);
-    inc.R = orthonormalize(mul(inc.R, bodyTurn(i, (v - inc.prev[i]) * RAD)));
+    const turn = bodyTurn(i, (v - inc.prev[i]) * RAD);   // Rz / Ry / Rx for sliders 0 / 1 / 2
+    // body rotations multiply on the right (about the ball's own axes); North-East-Down multiplies on the left (about the fixed axes)
+    inc.R = orthonormalize(mode === 'inc' ? mul(inc.R, turn) : mul(turn, inc.R));
     inc.prev[i] = v;
   }
   draw();
@@ -316,7 +337,7 @@ function draw() {
   const [psi, lam, phi] = sliders.map((s) => parseFloat(s.value) * RAD);
   // aircraft: psi about z, then theta about the NEW y, then phi about the NEW x  =>  R = Rz·Ry·Rx
   // body rotations: R is accumulated from the turns you make (see onAngle)
-  const R = mode === 'inc' ? inc.R : mode === 'track' ? track.R : attitude(psi, lam, phi);
+  const R = mode === 'inc' || mode === 'ned' ? inc.R : mode === 'track' ? track.R : attitude(psi, lam, phi);
   const M = mul(VIEW, R);
 
   const W = cv.width, c = W / 2, r = W * 0.4;
@@ -359,7 +380,7 @@ function draw() {
   ctx.globalAlpha = 1;
   drawAxes(R);
   if (mode === 'inc') renderRNum(R);
-  if (mode === 'track') renderTrack(R);
+  if (mode === 'track' || mode === 'ned') renderTrack(R);
 }
 
 // Axis widget: the fixed x y z (grey, never moves) and the body x' y' z' (colored, carried by the ball).
