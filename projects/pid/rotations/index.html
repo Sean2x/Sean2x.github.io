@@ -160,7 +160,7 @@ function renderTrack(R) {
 function renderSide(mode) {
   if (mode === 'track') {
     document.getElementById('side').innerHTML =
-      `<div class="cap intro">Tracker: the nose (the red dot) turns toward your cursor by the <b>shortest turn</b>: one rotation about the axis n × t, with no twist about the nose. Move the mouse (or your finger) anywhere on the page. The white ring shows where the cursor is pointing.</div>` +
+      `<div class="cap intro">Tracker: the nose (the red dot) turns toward your cursor by the <b>shortest turn</b>: one rotation about the axis n × t, with no twist about the nose. Move the mouse (or your finger) anywhere on the page.</div>` +
       `<div class="total rnum" id="trk"></div>` +
       `<div class="cap intro">The yaw, pitch and roll shown are what the aircraft sequence would read for this attitude. Sweep the nose straight up or down (pitch ±90°) and watch yaw and roll jump around: that is gimbal lock.</div>`;
     renderTrack(track.R);
@@ -357,14 +357,6 @@ function draw() {
   ctx.lineWidth = 4; ctx.strokeStyle = nearNose ? '#ffffff' : 'rgba(255,255,255,0.4)';
   ctx.stroke();
   ctx.globalAlpha = 1;
-  if (mode === 'track' && track.t) {           // where the cursor is pointing on the ball
-    // the target is a direction in the fixed frame, so it is projected directly (not through the ball's rotation)
-    const tx = c + track.t[0] * r, ty = c + track.t[2] * r, td = -track.t[1];
-    ctx.lineWidth = 4; ctx.strokeStyle = td < 1e-6 ? '#ffffff' : 'rgba(255,255,255,0.4)';
-    ctx.beginPath(); ctx.arc(tx, ty, 18, 0, 2 * Math.PI); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(tx - 28, ty); ctx.lineTo(tx - 10, ty); ctx.moveTo(tx + 10, ty); ctx.lineTo(tx + 28, ty);
-    ctx.moveTo(tx, ty - 28); ctx.lineTo(tx, ty - 10); ctx.moveTo(tx, ty + 10); ctx.lineTo(tx, ty + 28); ctx.stroke();
-  }
   drawAxes(R);
   if (mode === 'inc') renderRNum(R);
   if (mode === 'track') renderTrack(R);
