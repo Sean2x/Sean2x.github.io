@@ -29,7 +29,7 @@ const PROJECTS = [
     light: "green",
     image: "assets/img/projects/pid.png",
     icon: "sliders",
-    video: "",
+    video: "assets/video/projects/pid-root-locus.mp4",
     play: "projects/pid.html#root-locus",
     playLabel: "Try it",
   },
